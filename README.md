@@ -1,1 +1,1 @@
-"# Collectible" 
+# Collectible
