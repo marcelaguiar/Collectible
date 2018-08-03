@@ -32,15 +32,22 @@
                     <a class="navbar-brand" href="{% url 'home' %}">Collectible</a>
                     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Link 1</a>
+                            <a class="nav-link" href="{% url 'CollectionTypes' %}">Categories</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Link 2</a>
                         </li>
                     </ul>
 
-                    <a class="navbar-brand" href="{% url 'home' %}">
-                        <i class="fas fa-user"></i>&nbsp; My Profile
+
+                    <a href="{% url 'home' %}">
+                        <button type="button" class="btn btn-outline-primary" >Log In</button>
+                    </a>&nbsp;
+                    <a href="{% url 'signup' %}">
+                        <button type="button" class="btn btn-primary" >Sign Up</button>
+                    </a>
+                    <a class="navbar-brand" href="{% url 'home' %}" style="display:none">
+                        <i class="fas fa-user"></i>&nbsp;My Profile
                     </a>
                 </div>
             </nav>

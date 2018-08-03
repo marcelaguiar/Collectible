@@ -17,7 +17,10 @@ from django.contrib import admin
 from django.urls import path, include
 from collectionsapp import views
 
+
 urlpatterns = [
-    path('', views.index, name='home'),
-    path('admin/', admin.site.urls)
+    path('admin/', admin.site.urls),
+    path('signup/', views.signup, name='signup'),
+    path('', views.home, name='home'),
+    path('CollectionTypes/', views.collection_types, name='CollectionTypes')
 ]
