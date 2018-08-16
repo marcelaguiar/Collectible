@@ -19,8 +19,10 @@ from collectionsapp import views
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('signup/', views.signup, name='signup'),
     path('', views.home, name='home'),
-    path('CollectionTypes/', views.collection_types, name='CollectionTypes')
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('admin/', admin.site.urls),
+    path('CollectionTypes/', views.collection_types, name='CollectionTypes'),
+    path('signup/', views.signup, name='signup'),
+    path('logout/', views.logout_view, name='logout')
 ]

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block body %}
+    <div align="center">
+        <!-- Header -->
+        <h3>Login</h3>
+
+        {% if form.errors %}
+        <p>There's something wrong with what you entered!</p>
+        {% endif %}
+
+        {% if next %}
+        <p>Hey, you can't access that page.</p>
+        {% endif %}
+
+        <div style="width: 300px;">
+            <form class="form-login" method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+
+                <label for="id_username" class="sr-only">Username</label>
+                <label for="id_password" class="sr-only">Password</label>
+                <input type="text" name="username" autofocus maxlength="254" required id="id_username" class="form-control"/>
+                <input type="password" name="password" required id="id_password" class="form-control"/>
+
+                <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" value="remember-me"> Remember me
+                    </label>
+                </div>
+
+                <button class="btn btn-lg btn-primary btn-block" type="submit" value="login">Sign in</button>
+                <input type="hidden" name="next" value="{{ next }}">
+            </form>
+        </div>
+    </div>
+{% endblock %}
