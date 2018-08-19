@@ -30,7 +30,7 @@
                     <a class="navbar-brand" href="{% url 'home' %}">Collectible</a>
                     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'CollectionTypes' %}">Categories</a>
+                            <a class="nav-link" href="{% url 'collection_types' %}">Collection Types</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Link 2</a>
@@ -38,6 +38,11 @@
                     </ul>
 
                     {% if user.is_authenticated %}
+                    {% if user.is_staff %}
+                    <a href="{% url 'site_management' %}">
+                        <button type="button" class="btn btn-outline-primary" >Manage Site</button>
+                    </a>&nbsp;
+                    {% endif %}
                     <div class="dropdown">
                         <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-user"></i>&nbsp;My Profile
@@ -61,7 +66,7 @@
             </nav>
         </header>
         <main>
-            <div id="body-wrapper">
+            <div class="body-wrapper">
                 {% block body %}
                 {% endblock %}
             </div>

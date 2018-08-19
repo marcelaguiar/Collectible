@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block body %}
+<h1 >Collection Types</h1>
+
+<ul>
+{% for collection_type in all_collection_types %}
+    <li><a href="{% url 'home' %}">{{ collection_type.name }}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}
