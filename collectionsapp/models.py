@@ -65,9 +65,9 @@ class BottleCap(CommonInfo):
 
     beverage_type = models.IntegerField(choices=BEVERAGE_TYPE_CHOICES, default=NONE_SELECTED)
     spares_available = models.BooleanField(default=False)
-    text = models.CharField(max_length=200)
-    underside = models.CharField(max_length=50)
-    image = models.ImageField()
+    text = models.CharField(max_length=200, blank=True)
+    underside = models.CharField(max_length=50, blank=True)
+    image = models.ImageField(blank=True)
 
     def __str__(self):
         return self.manufacturer + ' ' + self.variety
