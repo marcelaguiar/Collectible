@@ -10,9 +10,11 @@ from django.views.decorators.http import require_POST
 def home(request):
     return render(request, 'collectionsapp/home.html')
 
+
 def collection_types(request):
-    all_collection_types = {'all_collection_types' : CollectionType.objects.all()}
+    all_collection_types = {'all_collection_types': CollectionType.objects.all()}
     return render(request, 'collectionsapp/collection_types.html', all_collection_types)
+
 
 def signup(request):
     if request.method == 'POST':
@@ -31,13 +33,16 @@ def signup(request):
     context = {'form': form}
     return render(request, 'registration/signup.html', context)
 
+
 def logout_view(request):
     logout(request)
     return redirect(reverse(home))
 
+
 def site_management(request):
     collection_type_form = CollectionTypeForm
     return render(request, 'collectionsapp/site_management.html', {'CollectionTypeForm': collection_type_form})
+
 
 @require_POST
 def create_collection_type(request):

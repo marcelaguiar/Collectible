@@ -11,14 +11,14 @@ class CommonInfo(models.Model):
         abstract = True
 
 
-class CollectionType(models.Model):
+class CollectionType(CommonInfo):
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
 
 
-class Collection(models.Model):
+class Collection(CommonInfo):
     name = models.CharField(max_length=100)
     collection_type_id = models.ForeignKey('CollectionType', on_delete=models.PROTECT)
 
@@ -26,7 +26,7 @@ class Collection(models.Model):
         return self.name
 
 
-class BottleCap(models.Model):
+class BottleCap(CommonInfo):
     collection_id = models.ForeignKey('Collection', on_delete=models.PROTECT)
     manufacturer = models.CharField(max_length=100)
     variety = models.CharField(max_length=100)
@@ -73,7 +73,6 @@ class BottleCap(models.Model):
         return self.manufacturer + ' ' + self.variety
 
 
-class BottleCapIcon(models.Model):
+class BottleCapIcon(CommonInfo):
     name = models.CharField(max_length=50)
     bottle_cap = models.ManyToManyField(BottleCap)
-
