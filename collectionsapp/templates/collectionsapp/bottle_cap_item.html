@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block body %}
+    <h1>Item #{{ bottleCap.id }}</h1>
+    <p>{{ bottleCap.product }}</p>
+
+    <table>
+        {% for row in rows %}
+            <tr>
+                <td class="field-name">{{ row.attr }}</td>
+                <td class="field-value">{{ row.value }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

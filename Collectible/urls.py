@@ -26,5 +26,6 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('logout/', views.logout_view, name='logout'),
     path('site_management/', views.site_management, name='site_management'),
-    path('create_collection_type/', views.create_collection_type, name='create_collection_type')
+    path('create_collection_type/', views.create_collection_type, name='create_collection_type'),
+    path('bottle_cap_item/<int:item_id>/', views.bottle_cap_item, name='bottle_cap_item')
 ]

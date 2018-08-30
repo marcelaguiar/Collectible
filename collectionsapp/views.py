@@ -1,5 +1,5 @@
 from collectionsapp.forms import CollectionTypeForm
-from collectionsapp.models import CollectionType
+from collectionsapp.models import CollectionType, BottleCap
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
@@ -53,3 +53,24 @@ def create_collection_type(request):
         new_collection_type.save()
 
     return redirect('collection_types')
+
+
+def bottle_cap_item(request, item_id):
+
+    bottle_cap = BottleCap.objects.get(id=item_id)
+
+    fields = []
+
+    for field in BottleCap._meta.get_fields():
+        field_verbose_name = BottleCap._meta.get_field(field.name).verbose_name
+        field_value = getattr(bottle_cap, field.name)
+
+        fields.append({'attr': field_verbose_name, 'value': field_value})
+
+    context = {
+        'bottleCap': BottleCap.objects.get(id=item_id),
+        'fieldNames': [field.verbose_name for field in BottleCap._meta.get_fields()],
+        'rows': fields
+    }
+
+    return render(request, 'collectionsapp/bottle_cap_item.html', context)
