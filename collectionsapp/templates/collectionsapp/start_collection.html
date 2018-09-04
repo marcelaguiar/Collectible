@@ -3,19 +3,16 @@
 
 
 {% block body %}
-<h1>Manage</h1>
-
 <div class="management-utility">
     <h4>Create New Collection Type</h4>
 
-    <form action="{% url 'create_collection_type' %}" method="POST" role="form">
+    <form action="{% url 'create_collection' %}" method="POST" role="form">
         {% csrf_token %}
         <div class="input-form">
-            {{ collectionTypeForm.name }}
-            {{ collectionTypeForm.render_page_name }}
+            {{ collectionForm.name }}
+            {{ collectionForm.collection_type }}
             <button type="submit" class="btn btn-primary precedes-control">Create</button>
         </div>
     </form>
 </div>
-
 {% endblock %}

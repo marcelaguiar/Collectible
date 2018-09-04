@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import CollectionType, BottleCap, Collection
+from .models import BottleCap, CollectionType, Collection
+
 
 # Register your models here.
 admin.site.register(CollectionType)

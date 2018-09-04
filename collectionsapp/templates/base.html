@@ -32,7 +32,7 @@
                             <a class="nav-link" href="{% url 'collection_types' %}">Collection Types</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Link 2</a>
+                            <a class="nav-link" href="{% url 'start_collection' %}">Create Collection</a>
                         </li>
                     </ul>
 
@@ -47,6 +47,7 @@
                             <i class="fas fa-user"></i>&nbsp;My Profile
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'my_collections' %}">My Collections</a>
                             <a class="dropdown-item" href="#">Settings</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{% url 'logout' %}">Sign out</a>

@@ -31,3 +31,9 @@ body {
     margin-bottom: 10px;
     max-width: 500px;
 }
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 3px 3px 0px 1px;
+}

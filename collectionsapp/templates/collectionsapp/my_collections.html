@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block body %}
+    <h1>My Collections</h1>
+
+    {% if isEmpty %}
+        <p>You haven't started any collections.</p>
+    {% else %}
+        <ul>
+            {% for collection in usersCollections %}
+                <li><a href={% url 'explore_collection' item_id=collection.pk %}>{{ collection.name }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <a href="{% url 'start_collection' %}">Start new collection</a>
+
+
+{% endblock %}

@@ -3,10 +3,10 @@
 
 
 {% block body %}
-    <h1>Item #{{ bottleCap.id }}</h1>
-    <p>{{ bottleCap.product }}</p>
+    <h1>{{ bottleCap }}</h1>
+    <p>Item #{{ bottleCap.id }}/{{ itemsInCollection }} in {{ collectionName }} belonging to {{  }}</p>
 
-    <table>
+    <table class="item-info">
         {% for row in rows %}
             <tr>
                 <td class="field-name">{{ row.attr }}</td>
