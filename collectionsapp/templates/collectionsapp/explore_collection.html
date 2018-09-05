@@ -6,4 +6,11 @@
     <h1>{{ collection.name }}</h1>
 
     <p>To be built...</p>
+
+    <ul>
+        {% for item in collection %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}

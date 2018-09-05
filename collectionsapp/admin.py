@@ -6,3 +6,4 @@ from .models import BottleCap, CollectionType, Collection
 admin.site.register(CollectionType)
 admin.site.register(BottleCap)
 admin.site.register(Collection)
+

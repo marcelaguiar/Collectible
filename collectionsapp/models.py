@@ -1,6 +1,7 @@
 from datetime import date
 from django.contrib.auth.models import User
 from django.db import models
+from taggit.managers import TaggableManager
 
 
 UNKNOWN_USER_ID = 11
@@ -38,10 +39,6 @@ class Collection(CommonInfo):
 
     def __str__(self):
         return self.name
-
-
-class BottleCapIcon(CommonInfo):
-    name = models.CharField(max_length=50)
 
 
 class BottleCap(CommonInfo):
@@ -90,7 +87,7 @@ class BottleCap(CommonInfo):
     method_acquired = models.IntegerField(choices=METHOD_ACQUIRED_CHOICES, default=NONE_SELECTED,
                                           verbose_name='Method Acquired')
     spares_available = models.BooleanField(default=False, verbose_name='Spares Available')
-    icons = models.ManyToManyField(BottleCapIcon, verbose_name='Icons')
+    tags = TaggableManager(verbose_name='Tags')
     image = models.ImageField(blank=True, verbose_name='Image')
     number_in_collection = models.IntegerField(verbose_name='Number in collection')
 

@@ -3,19 +3,28 @@
 
 
 {% block body %}
-<h1>Manage</h1>
+    <h1>Manage</h1>
 
-<div class="management-utility">
-    <h4>Create New Collection Type</h4>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
-    <form action="{% url 'create_collection_type' %}" method="POST" role="form">
-        {% csrf_token %}
-        <div class="input-form">
-            {{ collectionTypeForm.name }}
-            {{ collectionTypeForm.render_page_name }}
-            <button type="submit" class="btn btn-primary precedes-control">Create</button>
-        </div>
-    </form>
-</div>
+    <div class="management-utility">
+        <h4>Create New Collection Type</h4>
+
+        <form action="{% url 'create_collection_type' %}" method="POST" role="form">
+            {% csrf_token %}
+            <div class="input-form">
+                {{ collectionTypeForm.name }}
+                {{ collectionTypeForm.render_page_name }}
+                <button type="submit" class="btn btn-primary precedes-control">Create</button>
+            </div>
+        </form>
+    </div>
+
 
 {% endblock %}

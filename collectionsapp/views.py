@@ -1,7 +1,9 @@
 from collectionsapp.forms import CollectionTypeForm, CollectionForm
 from collectionsapp.models import BottleCap, CollectionType, Collection
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
+from django.db import Error
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -126,18 +128,59 @@ def create_collection(request):
     if form.is_valid():
         name = request.POST['name']
         collection_type_id = request.POST['collection_type']
+
+        # If user decides to not enter a name, we generate a name for them
+        if not name:
+            name = CollectionType.objects.get(id=collection_type_id).name + ' collection'
+
         owner = request.user
         created_by = request.user
         modified_by = request.user
         new_collection = Collection(name=name, collection_type_id=collection_type_id, owner=owner,
                                     created_by=created_by, modified_by=modified_by)
-        new_collection.save()
+        try:
+            new_collection.save()
+            messages.add_message(request, messages.SUCCESS, name + ' collection created')
+        except Error:
+            messages.add_message(request, messages.ERROR, name + ' collection failed to create')
 
     return redirect('my_collections')
 
 
-def explore_collection(request, item_id):
+def explore_collection(request, collection_id):
+    BOTTLE_CAPS = 'Bottle Caps'
+
+    collection = Collection.objects.get(id=collection_id)
+
+    if collection.collection_type_id == CollectionType.objects.get(name=BOTTLE_CAPS).pk:
+        collection_items = BottleCap.objects.filter(collection_id=collection_id)
+    else:
+        collection_items = BottleCap.objects.filter(collection_id=collection_id)
+
     context = {
-        'collection': Collection.objects.get(id=item_id)
+        'collection': collection_items
     }
     return render(request, 'collectionsapp/explore_collection.html', context)
+
+
+def explore_collection_type(request, item_id):
+    context = {
+    }
+    return render(request, 'collectionsapp/explore_collection_type.html', context)
+
+
+def add_new_collection_item(request):
+    collections = Collection.objects.filter(owner=request.user).order_by('name')
+    collections_list = []
+    collection_dict = {}
+
+    for collection in collections:
+        collection_dict['id'] = collection.pk
+        collection_dict['url'] = collection.pk  # instead of this use corresponding form type
+        collection_dict['name'] = collection.name
+        collections_list.append(collection_dict)
+
+    context = {
+        'collections': collections_list
+    }
+    return render(request, 'collectionsapp/add_new_collection_item.html', context)

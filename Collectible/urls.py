@@ -31,5 +31,7 @@ urlpatterns = [
     path('my_collections/', views.my_collections, name='my_collections'),
     path('start_collection/', views.start_collection, name='start_collection'),
     path('create_collection/', views.create_collection, name='create_collection'),
-    path('explore_collection/<int:item_id>/', views.explore_collection, name='explore_collection')
+    path('explore_collection/<int:collection_id>/', views.explore_collection, name='explore_collection'),
+    path('explore_collection_type/<int:item_id>/', views.explore_collection_type, name='explore_collection_type'),
+    path('add_new_collection_item/', views.add_new_collection_item, name='add_new_collection_item')
 ]
