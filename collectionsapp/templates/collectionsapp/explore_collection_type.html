@@ -1,10 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
 
-</body>
-</html>
+
+{% block body %}
+    <h1>{{ collection_type.name }}</h1>
+
+    <ul>
+        {% for collection in collections %}
+            <li><a href="{% url 'explore_collection' collection.id %}">{{ collection }}</a></li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

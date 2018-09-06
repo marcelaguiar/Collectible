@@ -3,8 +3,8 @@
 
 
 {% block body %}
-    <h1>{{ bottleCap }}</h1>
-    <p>Item #{{ bottleCap.id }}/{{ itemsInCollection }} in {{ collectionName }} belonging to {{  }}</p>
+    <h1>{{ collection_item }}</h1>
+    <p>Item #{{ collection_item.id }}/{{ itemsInCollection }} in {{ collectionName }} belonging to </p>
 
     <table class="item-info">
         {% for row in rows %}
@@ -14,4 +14,11 @@
             </tr>
         {% endfor %}
     </table>
+
+    <h4>Tags</h4>
+    <ul>
+        {% for tag in tags %}
+            <li>{{ tag }}</li>
+        {% endfor %}
+    </ul>
 {% endblock %}

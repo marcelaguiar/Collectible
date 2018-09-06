@@ -3,13 +3,11 @@
 
 
 {% block body %}
-    <h1>{{ collection.name }}</h1>
-
-    <p>To be built...</p>
+    <h1>{{ collection_name }}</h1>
 
     <ul>
-        {% for item in collection %}
-            <li>{{ item }}</li>
+        {% for item in collection_items %}
+            <li><a href="{% url 'item' item.id %}">{{ item }}</a></li>
         {% endfor %}
     </ul>
 

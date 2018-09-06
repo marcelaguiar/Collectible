@@ -14,10 +14,41 @@ def get_unknown_user():
 class CommonInfo(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='Created')
     created_by = models.ForeignKey(User, on_delete=models.PROTECT, default=get_unknown_user,
-                                   related_name='%(app_label)s_%(class)s_created')
+                                   related_name='%(app_label)s_%(class)s_created', verbose_name='Created By')
     modified = models.DateTimeField(auto_now=True, verbose_name='Modified')
     modified_by = models.ForeignKey(User, on_delete=models.PROTECT, default=get_unknown_user,
-                                    related_name='%(app_label)s_%(class)s_modified')
+                                    related_name='%(app_label)s_%(class)s_modified', verbose_name='Modified By')
+
+    class Meta:
+        abstract = True
+
+
+class CollectionItem(CommonInfo):
+    NONE_SELECTED = 0
+    DONATED = 1
+    PURCHASED = 2
+    TRADED = 3
+    FOUND = 4
+    CREATED = 5
+
+    METHOD_ACQUIRED_CHOICES = (
+        (NONE_SELECTED, ''),
+        (DONATED, 'Donated'),
+        (PURCHASED, 'Purchased'),
+        (TRADED, 'Traded'),
+        (FOUND, 'Found'),
+        (CREATED, 'Created')
+    )
+
+    date_acquired = models.DateField(default=date.today, verbose_name='Date Acquired')
+    method_acquired = models.IntegerField(choices=METHOD_ACQUIRED_CHOICES, default=NONE_SELECTED,
+                                          verbose_name='Method Acquired')
+    available_for_trade = models.BooleanField(default=False, verbose_name='Available For Trade')
+    image = models.ImageField(blank=True, verbose_name='Image')
+    number_in_collection = models.IntegerField(verbose_name='Number in collection')
+    tags = TaggableManager(verbose_name='Tags')
+    description = models.CharField(max_length=512, blank=True, verbose_name='Description')
+    collection = models.ForeignKey('Collection', on_delete=models.PROTECT, verbose_name='Collection ID')
 
     class Meta:
         abstract = True
@@ -25,7 +56,7 @@ class CommonInfo(models.Model):
 
 class CollectionType(CommonInfo):
     name = models.CharField(max_length=100)
-    render_page_name = models.CharField(max_length=100)
+    view_name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
@@ -41,12 +72,11 @@ class Collection(CommonInfo):
         return self.name
 
 
-class BottleCap(CommonInfo):
-    collection = models.ForeignKey('Collection', on_delete=models.PROTECT, verbose_name='Collection ID')
+class BottleCap(CollectionItem):
     company = models.CharField(max_length=100, blank=True, verbose_name='Company')
     brand = models.CharField(max_length=100, blank=True, verbose_name='Brand')
     product = models.CharField(max_length=100, blank=True, verbose_name='Product')
-    flavor = models.CharField(max_length=100, blank=True, verbose_name='Flavor')
+    variety = models.CharField(max_length=100, blank=True, verbose_name='Variety')
     color = models.IntegerField(default=None, blank=True, null=True, verbose_name='Color')
 
     NONE_SELECTED = 0
@@ -69,27 +99,6 @@ class BottleCap(CommonInfo):
                                         verbose_name='Beverage Type')
     text = models.CharField(max_length=200, blank=True, verbose_name='Text')
     underside = models.CharField(max_length=50, blank=True, verbose_name='Underside')
-    date_acquired = models.DateField(default=date.today, verbose_name='Date Acquired')
-
-    DONATED = 1
-    PURCHASED = 2
-    TRADED = 3
-    FOUND = 4
-
-    METHOD_ACQUIRED_CHOICES = (
-        (NONE_SELECTED, ''),
-        (DONATED, 'Donated'),
-        (PURCHASED, 'Purchased'),
-        (TRADED, 'Traded'),
-        (FOUND, 'Found')
-    )
-
-    method_acquired = models.IntegerField(choices=METHOD_ACQUIRED_CHOICES, default=NONE_SELECTED,
-                                          verbose_name='Method Acquired')
-    spares_available = models.BooleanField(default=False, verbose_name='Spares Available')
-    tags = TaggableManager(verbose_name='Tags')
-    image = models.ImageField(blank=True, verbose_name='Image')
-    number_in_collection = models.IntegerField(verbose_name='Number in collection')
 
     def __str__(self):
-        return self.brand + ' ' + self.product + ' ' + self.flavor
+        return self.brand + ' ' + self.product + ' ' + self.variety

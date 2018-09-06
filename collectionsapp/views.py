@@ -64,37 +64,43 @@ def create_collection_type(request):
     return redirect('collection_types')
 
 
-def bottle_cap_item(request, item_id):
-
+def item(request, item_id):
     fields = []
-    bottle_cap = BottleCap.objects.get(id=item_id)
-    collection = bottle_cap.collection
+    tags = BottleCap.objects.get(id=item_id).tags.all()
+    collection_item = BottleCap.objects.get(id=item_id)
+    collection = collection_item.collection
 
     excluded_fields = [
-        'created',
-        'modified',
-        'id',
-        'image',
-        'collection_id'
+        'Created',
+        'Modified',
+        'ID',
+        'Image',
+        'Collection ID',
+        'Tags',
+        'tagged items'
     ]
 
     for field in BottleCap._meta.get_fields():
-        if field.name in excluded_fields:
+
+        if field.verbose_name in excluded_fields:
             continue
+
         field_verbose_name = BottleCap._meta.get_field(field.name).verbose_name
-        field_value = getattr(bottle_cap, field.name)
+        field_value = getattr(collection_item, field.name)
+        print(str(field_verbose_name) + '\t' + str(field_value))
 
         fields.append({'attr': field_verbose_name, 'value': field_value})
 
     context = {
-        'bottleCap': bottle_cap,
+        'collection_item': collection_item,
         'rows': fields,
         'itemsInCollection': BottleCap.objects.filter(collection=collection).count(),
         'username': 'test',
-        'collectionName': Collection.objects.get(id=collection.pk).name
+        'collectionName': Collection.objects.get(id=collection.pk).name,
+        'tags': tags
     }
 
-    return render(request, 'collectionsapp/bottle_cap_item.html', context)
+    return render(request, 'collectionsapp/item.html', context)
 
 
 def my_collections(request):
@@ -151,6 +157,7 @@ def explore_collection(request, collection_id):
     BOTTLE_CAPS = 'Bottle Caps'
 
     collection = Collection.objects.get(id=collection_id)
+    item_view_name = CollectionType.objects.get(id=collection.collection_type_id).view_name
 
     if collection.collection_type_id == CollectionType.objects.get(name=BOTTLE_CAPS).pk:
         collection_items = BottleCap.objects.filter(collection_id=collection_id)
@@ -158,13 +165,20 @@ def explore_collection(request, collection_id):
         collection_items = BottleCap.objects.filter(collection_id=collection_id)
 
     context = {
-        'collection': collection_items
+        'view_name': item_view_name,
+        'collection_name': collection.name,
+        'collection_items': collection_items
     }
     return render(request, 'collectionsapp/explore_collection.html', context)
 
 
-def explore_collection_type(request, item_id):
+def explore_collection_type(request, collection_type_id):
+
+    collections = Collection.objects.filter(collection_type_id=collection_type_id)
+
     context = {
+        'collection_type': CollectionType.objects.get(id=collection_type_id),
+        'collections': collections
     }
     return render(request, 'collectionsapp/explore_collection_type.html', context)
 

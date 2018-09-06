@@ -7,7 +7,7 @@
 
 <ul>
     {% for collection_type in all_collection_types %}
-        <li><a href="{% url 'home' %}">{{ collection_type.name }}</a></li>
+        <li><a href="{% url 'explore_collection_type' collection_type.pk %}">{{ collection_type.name }}</a></li>
     {% endfor %}
 </ul>
 {% endblock %}
