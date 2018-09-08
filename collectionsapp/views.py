@@ -185,14 +185,14 @@ def explore_collection_type(request, collection_type_id):
 
 def select_collection(request):
     # TODO: Check that the user is logged in
-    collections = Collection.objects.filter(owner=request.user).order_by('name')
     collections_list = []
-    collection_dict = {}
 
-    for collection in collections:
-        collection_dict['id'] = collection.id
-        collection_dict['name'] = collection.name
-        collections_list.append(collection_dict.copy())
+    for collection in Collection.objects.filter(owner=request.user).order_by('name'):
+        collection_dict = {
+            'id': collection.id,
+            'name': collection.name
+        }
+        collections_list.append(collection_dict)
 
     context = {
         'collections': collections_list
