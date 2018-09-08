@@ -183,18 +183,28 @@ def explore_collection_type(request, collection_type_id):
     return render(request, 'collectionsapp/explore_collection_type.html', context)
 
 
-def add_new_collection_item(request):
+def select_collection(request):
+    # TODO: Check that the user is logged in
     collections = Collection.objects.filter(owner=request.user).order_by('name')
     collections_list = []
     collection_dict = {}
 
     for collection in collections:
-        collection_dict['id'] = collection.pk
-        collection_dict['url'] = collection.pk  # instead of this use corresponding form type
+        collection_dict['id'] = collection.id
         collection_dict['name'] = collection.name
-        collections_list.append(collection_dict)
+        collections_list.append(collection_dict.copy())
 
     context = {
         'collections': collections_list
     }
-    return render(request, 'collectionsapp/add_new_collection_item.html', context)
+
+    return render(request, 'collectionsapp/select_collection.html', context)
+
+
+def input_item_details(request, collection_id):
+    # TODO: Check that the user is logged in
+    collection_type = Collection.objects.get(id=collection_id).collection_type
+
+    context = {
+    }
+    return render(request, 'collectionsapp/input_item_details.html', context)
