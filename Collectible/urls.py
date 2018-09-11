@@ -25,6 +25,7 @@ urlpatterns = [
     path('collection_types/', views.collection_types, name='collection_types'),
     path('create_collection/', views.create_collection, name='create_collection'),
     path('create_collection_type/', views.create_collection_type, name='create_collection_type'),
+    path('create_item', views.create_item, name='create_item'),
     path('explore_collection/<int:collection_id>/', views.explore_collection, name='explore_collection'),
     path('explore_collection_type/<int:collection_type_id>/', views.explore_collection_type, name='explore_collection_type'),
     path('input_item_details/<int:collection_id>/', views.input_item_details, name='input_item_details'),

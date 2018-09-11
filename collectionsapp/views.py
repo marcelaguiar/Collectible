@@ -1,4 +1,4 @@
-from collectionsapp.forms import CollectionTypeForm, CollectionForm
+from collectionsapp.forms import CollectionTypeForm, CollectionForm, BottleCapForm
 from collectionsapp.models import BottleCap, CollectionType, Collection
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -52,6 +52,7 @@ def site_management(request):
 def create_collection_type(request):
     form = CollectionTypeForm(request.POST)
 
+    # TODO: Check that new collection type is unique
     if form.is_valid():
         name = request.POST['name']
         render_page_name = request.POST['render_page_name']
@@ -205,6 +206,21 @@ def input_item_details(request, collection_id):
     # TODO: Check that the user is logged in
     collection_type = Collection.objects.get(id=collection_id).collection_type
 
+    collection_form = get_item_input_form(collection_type)
+
     context = {
+        'collectionForm': collection_form
     }
     return render(request, 'collectionsapp/input_item_details.html', context)
+
+
+def get_item_input_form(collection_type):
+    switcher = {
+        'Bottle Caps': BottleCapForm,
+    }
+    return switcher.get(collection_type.name, "Invalid collection")
+
+
+def create_item(request):
+    context = {}
+    return render(request, '', context)

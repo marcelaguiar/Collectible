@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <h4>Input Item Details</h4>
+
+    <form action="{% url 'create_item' %}" method="POST" role="form">
+        {% csrf_token %}
+        <div class="input-form">
+            {{ collectionForm }}
+            <button type="submit" class="btn btn-primary precedes-control">Create</button>
+        </div>
+    </form>
+
+{% endblock %}
