@@ -120,15 +120,32 @@ def my_collections(request):
 
 def start_collection(request):
     collection_form = CollectionForm
-    users_collections = Collection.objects.filter(owner=request.user)
     context = {
-        'usersCollections': users_collections,
         'collectionForm': collection_form
     }
     return render(request, 'collectionsapp/start_collection.html', context)
 
 
 @require_POST
+def select_fieldset(request):
+    form = CollectionForm(request.POST)
+
+    if not form.is_valid():
+        pass  # TODO: GO back to previous page
+
+    collection_name = request.POST['collection_name']
+    collection_type_id = request.POST['collection_type']
+
+    request.session['collection_name'] = collection_name
+    request.session['collection_type_id'] = collection_type_id
+
+    context = {
+        'collectionType': CollectionType.objects.get(id=collection_type_id),
+        'collectionName': collection_name
+    }
+    return render(request, 'collectionsapp/select_fieldset.html', context)
+
+
 def create_collection(request):
     form = CollectionForm(request.POST)
 
@@ -224,3 +241,20 @@ def get_item_input_form(collection_type):
 def create_item(request):
     context = {}
     return render(request, '', context)
+
+
+def select_existing_fieldset(request):
+    context = {
+    }
+    return render(request, 'collectionsapp/select_existing_fieldset.html', context)
+
+
+def design_fieldset(request):
+    collection_type = CollectionType.objects.get(id=request.session.get('collection_type_id'))
+    collection_name = request.session.get('collection_name')
+
+    context = {
+        'collectionType': collection_type,
+        'collectionName': collection_name
+    }
+    return render(request, 'collectionsapp/design_fieldset.html', context)

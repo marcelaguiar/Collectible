@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block body %}
+    <h4>{{ collectionName }}</h4>
+    <h6> ({{ collectionType.name }})</h6>
+
+    <div>
+        <a href="{% url 'select_existing_fieldset' %}">
+            <button class="btn btn-primary precedes-control">Select an existing fieldset</button>
+        </a>
+    </div>
+    <div>or</div>
+    <div>
+        <a href="{% url 'design_fieldset' %}">
+            <button class="btn btn-primary precedes-control">Design a new fieldset</button>
+        </a>
+    </div>
+{% endblock %}
