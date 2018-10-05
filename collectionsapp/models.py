@@ -102,3 +102,9 @@ class BottleCap(CollectionItem):
 
     def __str__(self):
         return self.brand + ' ' + self.product + ' ' + self.variety
+
+
+class EAVTable(CollectionItem):
+    field1Name = models.CharField(max_length=100)
+    field1Type = models.CharField(max_length=100)
+    field1Value = models.CharField(max_length=200)
