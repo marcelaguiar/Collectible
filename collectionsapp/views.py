@@ -1,5 +1,5 @@
 from collectionsapp.forms import CollectionTypeForm, CollectionForm, BottleCapForm
-from collectionsapp.models import BottleCap, CollectionType, Collection
+from collectionsapp.models import BottleCap, CollectionType, Collection, CollectionItem
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
@@ -175,7 +175,6 @@ def explore_collection(request, collection_id):
     BOTTLE_CAPS = 'Bottle Caps'
 
     collection = Collection.objects.get(id=collection_id)
-    item_view_name = CollectionType.objects.get(id=collection.collection_type_id).view_name
 
     if collection.collection_type_id == CollectionType.objects.get(name=BOTTLE_CAPS).pk:
         collection_items = BottleCap.objects.filter(collection_id=collection_id)
@@ -183,7 +182,6 @@ def explore_collection(request, collection_id):
         collection_items = BottleCap.objects.filter(collection_id=collection_id)
 
     context = {
-        'view_name': item_view_name,
         'collection_name': collection.name,
         'collection_items': collection_items
     }
@@ -252,9 +250,32 @@ def select_existing_fieldset(request):
 def design_fieldset(request):
     collection_type = CollectionType.objects.get(id=request.session.get('collection_type_id'))
     collection_name = request.session.get('collection_name')
+    base_fields = []
+
+    excluded_fields = [
+        'Created',
+        'Created By',
+        'Modified',
+        'Modified By',
+        ''
+    ]
+
+    i = 1
+    for field in CollectionItem._meta.get_fields():
+        if field.verbose_name in excluded_fields:
+            continue
+
+        base_field_dict = {
+            'index': i,
+            'verbose_name': field.verbose_name
+        }
+
+        base_fields.append(base_field_dict)
+        i = i + 1
 
     context = {
         'collectionType': collection_type,
-        'collectionName': collection_name
+        'collectionName': collection_name,
+        'baseFields': base_fields
     }
     return render(request, 'collectionsapp/design_fieldset.html', context)

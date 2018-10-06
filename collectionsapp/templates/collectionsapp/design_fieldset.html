@@ -4,6 +4,63 @@
 
 {% block body %}
     <h3>{{ collectionType }} Fieldset Design</h3>
-    <h6>Base fields included in all {{ collectionType.name }} collections:</h6>
-    <h6>Add additional fields:</h6>
+    <div class="vertically-split-container">
+
+        <div class="fixed-width">
+            <h5>Add additional fields:</h5>
+            <table>
+            <tr>
+                <td><input type="text" class="form-control" id="fieldsetNameInput"></td>
+                <td><button type="button" class="btn btn-outline-primary" onclick="addFieldToFieldset()">Add To Fieldset</button></td>
+            </tr>
+            </table>
+
+        </div>
+
+        <div class="flex-width">
+            <h5>Fieldset</h5>
+            <table id="fieldset">
+                {% for field in baseFields %}
+                    <tr>
+                        <td>{{ field.index }}.&nbsp;&nbsp;</td>
+                        <td>{{ field.verbose_name }}</td>
+                        <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="removeField({{ field.index }})">remove</button></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+
+    <script>
+    function addFieldToFieldset() {
+        var fieldsetName = document.getElementById("fieldsetNameInput").value;
+        var table = document.getElementById("fieldset");
+        var row = table.insertRow(0);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+
+        cell1.innerHTML = "0";
+        cell2.innerHTML = fieldsetName;
+        cell3.innerHTML = "<button type=\"button\" class=\"btn btn-outline-danger btn-sm\" >remove</button>";
+    }
+
+    function removeField(tableRow) {
+        document.getElementById("fieldset").deleteRow(tableRow - 1);
+
+        renumberTable();
+    }
+
+    function renumberTable() {
+        var table = document.getElementById("fieldset")
+
+        for (var i = 0, row; row = table.rows[i]; i++) {
+            var newVal = (i + 1).toString() + ".&nbsp;&nbsp;";
+            row.cells[0].innerHTML = newVal;
+            var button = row.cells[2].getElementsByTagName("button")
+            button.onclick = function() {removeField(i - 1)};
+        }
+    }
+    </script>
+
 {% endblock %}

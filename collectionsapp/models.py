@@ -1,6 +1,7 @@
 from datetime import date
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Count
 from taggit.managers import TaggableManager
 
 
@@ -9,6 +10,11 @@ UNKNOWN_USER_ID = 11
 
 def get_unknown_user():
     return User.objects.get(id=UNKNOWN_USER_ID).pk
+
+'''
+def get_most_popular_collection_fieldset():
+    #Collection.objects.annotate(fieldset_count=Count('fieldset')).order_by('-fieldset_count')[:1].get().pk
+    return 1'''
 
 
 class CommonInfo(models.Model):
@@ -45,7 +51,6 @@ class CollectionItem(CommonInfo):
                                           verbose_name='Method Acquired')
     available_for_trade = models.BooleanField(default=False, verbose_name='Available For Trade')
     image = models.ImageField(blank=True, verbose_name='Image')
-    number_in_collection = models.IntegerField(verbose_name='Number in collection')
     tags = TaggableManager(verbose_name='Tags')
     description = models.CharField(max_length=512, blank=True, verbose_name='Description')
     collection = models.ForeignKey('Collection', on_delete=models.PROTECT, verbose_name='Collection ID')
@@ -56,7 +61,6 @@ class CollectionItem(CommonInfo):
 
 class CollectionType(CommonInfo):
     name = models.CharField(max_length=100)
-    view_name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
@@ -67,6 +71,7 @@ class Collection(CommonInfo):
     collection_type = models.ForeignKey('CollectionType', on_delete=models.PROTECT)
     owner = models.ForeignKey(User, on_delete=models.PROTECT, default=get_unknown_user,
                               related_name='%(app_label)s_%(class)s_owned')
+    #fieldset = models.ForeignKey('CollectionFieldset', on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name
@@ -104,7 +109,14 @@ class BottleCap(CollectionItem):
         return self.brand + ' ' + self.product + ' ' + self.variety
 
 
-class EAVTable(CollectionItem):
-    field1Name = models.CharField(max_length=100)
-    field1Type = models.CharField(max_length=100)
-    field1Value = models.CharField(max_length=200)
+class CollectionFieldset(CommonInfo):
+    field1 = models.CharField(max_length=200, blank=True, verbose_name='Field1')
+    field2 = models.CharField(max_length=200, blank=True, verbose_name='Field2')
+    field3 = models.CharField(max_length=200, blank=True, verbose_name='Field3')
+    field4 = models.CharField(max_length=200, blank=True, verbose_name='Field4')
+    field5 = models.CharField(max_length=200, blank=True, verbose_name='Field5')
+    field6 = models.CharField(max_length=200, blank=True, verbose_name='Field6')
+    field7 = models.CharField(max_length=200, blank=True, verbose_name='Field7')
+    field8 = models.CharField(max_length=200, blank=True, verbose_name='Field8')
+    field9 = models.CharField(max_length=200, blank=True, verbose_name='Field9')
+    field10 = models.CharField(max_length=200, blank=True, verbose_name='Field10')
