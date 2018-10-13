@@ -4,9 +4,23 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.db import Error
+from django.db.models import fields
+from django.db.models.fields import files
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
+from taggit.managers import TaggableManager
+
+
+class FriendlyDataTypes:
+    INT = 'number'
+    BOOL = 't/f (checkbox)'
+    FLOAT = 'decimal'
+    CHAR = 'text'
+    DATE = 'date'
+    DATETIME = 'date + time'
+    IMAGE = 'image'
+    TAG = 'tagging feature'
 
 
 def home(request):
@@ -257,7 +271,8 @@ def design_fieldset(request):
         'Created By',
         'Modified',
         'Modified By',
-        ''
+        'Collection ID',
+        'eav values'
     ]
 
     i = 1
@@ -267,7 +282,8 @@ def design_fieldset(request):
 
         base_field_dict = {
             'index': i,
-            'verbose_name': field.verbose_name
+            'verbose_name': field.verbose_name,
+            'type': get_friendly_type(field)
         }
 
         base_fields.append(base_field_dict)
@@ -279,3 +295,19 @@ def design_fieldset(request):
         'baseFields': base_fields
     }
     return render(request, 'collectionsapp/design_fieldset.html', context)
+
+
+def get_friendly_type(field):
+    print(type(field))
+    switch_dict = {
+        fields.BooleanField: FriendlyDataTypes.BOOL,
+        fields.IntegerField: FriendlyDataTypes.INT,
+        fields.FloatField: FriendlyDataTypes.FLOAT,
+        fields.CharField: FriendlyDataTypes.CHAR,
+        fields.DateField: FriendlyDataTypes.DATE,
+        fields.DateTimeField: FriendlyDataTypes.DATETIME,
+        files.ImageField: FriendlyDataTypes.IMAGE,
+        TaggableManager: FriendlyDataTypes.TAG
+    }
+
+    return switch_dict.get(type(field), '???')

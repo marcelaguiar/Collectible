@@ -6,31 +6,31 @@
     <script src="{% static "collectionsapp/javascript/design_fieldset.js" %}" ></script>
 
     <h3>{{ collectionType }} Fieldset Design</h3>
-    <div class="vertically-split-container">
 
-        <div class="fixed-width">
-            <h5>Add additional fields:</h5>
-            <table>
+    <div>
+        <table id="fieldset">
             <tr>
+                <td></td>
                 <td><input type="text" class="form-control" id="fieldsetNameInput"></td>
+                <td>
+                    <select class="form-control"  id="fieldsetTypeInput">
+                        <option>text</option>
+                        <option>numeric</option>
+                        <option>date</option>
+                        <option>checkbox</option>
+                    </select>
+                </td>
                 <td><button type="button" class="btn btn-outline-primary" onclick="addFieldToFieldset()">Add To Fieldset</button></td>
             </tr>
-            </table>
-
-        </div>
-
-        <div class="flex-width">
-            <h5>Fieldset</h5>
-            <table id="fieldset">
-                {% for field in baseFields %}
-                    <tr>
-                        <td>{{ field.index }}.&nbsp;&nbsp;</td>
-                        <td>{{ field.verbose_name }}</td>
-                        <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="removeField(this)">remove</button></td>
-                    </tr>
-                {% endfor %}
-            </table>
-        </div>
+            {% for field in baseFields %}
+                <tr>
+                    <td>{{ field.index }}.&nbsp;&nbsp;</td>
+                    <td>{{ field.verbose_name }}</td>
+                    <td style="color: darkgray">{{ field.type }}</td>
+                    <td><button type="button" class="btn btn-outline-danger btn-sm" onclick="removeField(this)">remove</button></td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
 
 {% endblock %}
