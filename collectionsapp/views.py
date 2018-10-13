@@ -298,7 +298,6 @@ def design_fieldset(request):
 
 
 def get_friendly_type(field):
-    print(type(field))
     switch_dict = {
         fields.BooleanField: FriendlyDataTypes.BOOL,
         fields.IntegerField: FriendlyDataTypes.INT,
