@@ -1,10 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
 {% block body %}
     <h1>{{ collection_name }}</h1>
 
+    <!-- Check if logged in user is owner of this collection  -->
+    {% if is_owner %}
+        <a href="{% url 'input_item_details' collection_id%}">
+            <button type="button" class="btn btn-outline-success">Add item to collection</button>
+        </a>&nbsp;
+    {% endif %}
+
+    <!-- Display all items in collection -->
     <ul>
         {% for item in collection_items %}
             <li><a href="{% url 'item' item.id %}">{{ item }}</a></li>
@@ -12,3 +19,6 @@
     </ul>
 
 {% endblock %}
+
+
+

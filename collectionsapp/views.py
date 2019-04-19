@@ -197,7 +197,9 @@ def explore_collection(request, collection_id):
 
     context = {
         'collection_name': collection.name,
-        'collection_items': collection_items
+        'collection_items': collection_items,
+        'collection_id': collection_id,
+        'is_owner': collection.created_by_id == request.user.id
     }
     return render(request, 'collectionsapp/explore_collection.html', context)
 
