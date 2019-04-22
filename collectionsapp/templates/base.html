@@ -16,6 +16,7 @@
 
         <link rel="stylesheet" type="text/css" href="{% static 'collectionsapp/css/base.css' %}" />
         <link rel="stylesheet" type="text/css" href="{% static 'collectionsapp/css/login.css' %}" />
+        <link rel="shortcut icon" type="image/png" href="{% static 'collectionsapp/img/favicon.ico' %}" />
 
         <title>Collectible</title>
     </head>
@@ -47,16 +48,18 @@
                     {% endif %}
                     <div class="dropdown">
                         <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-user"></i>&nbsp;My Profile
+                            <!--<i class="fas fa-user"></i>-->
+                            <!--<img src="{% static 'collectionsapp/img/default.png' %}">-->
+                            <img src="{% static 'collectionsapp/img/user.svg' %}">
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'profile' user.id %}">My Profile</a>
                             <a class="dropdown-item" href="{% url 'my_collections' %}">My Collections</a>
                             <a class="dropdown-item" href="#">Settings</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{% url 'logout' %}">Sign out</a>
                         </div>
                     </div>
-                    <a class="navbar-brand" href="{% url 'home' %}"></a>
                     {% else %}
                     <a href="{% url 'login' %}">
                         <button type="button" class="btn btn-outline-primary" >Log In</button>

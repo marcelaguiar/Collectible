@@ -1,5 +1,5 @@
 from collectionsapp.forms import CollectionTypeForm, CollectionForm, BottleCapForm
-from collectionsapp.models import BottleCap, CollectionType, Collection, CollectionItem
+from collectionsapp.models import BottleCap, CollectionType, Collection, CollectionItem, User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
@@ -28,8 +28,10 @@ def home(request):
 
 
 def collection_types(request):
-    all_collection_types = {'all_collection_types': CollectionType.objects.all()}
-    return render(request, 'collectionsapp/collection_types.html', all_collection_types)
+    context = {
+        'all_collection_types': CollectionType.objects.all().order_by('name')
+    }
+    return render(request, 'collectionsapp/collection_types.html', context)
 
 
 def signup(request):
@@ -79,24 +81,25 @@ def create_collection_type(request):
     return redirect('collection_types')
 
 
-def item(request, item_id):
-    fields = []
-    tags = BottleCap.objects.get(id=item_id).tags.all()
+def bottle_cap(request, item_id):
+    columns = []
     collection_item = BottleCap.objects.get(id=item_id)
+    tags = collection_item.tags.all()
+
     collection = collection_item.collection
 
     excluded_fields = [
         'Created',
         'Modified',
         'ID',
-        'Image',
         'Collection ID',
         'Tags',
         'tagged items'
     ]
 
     for field in BottleCap._meta.get_fields():
-
+        print(field)
+        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
         if field.verbose_name in excluded_fields:
             continue
 
@@ -104,18 +107,21 @@ def item(request, item_id):
         field_value = getattr(collection_item, field.name)
         print(str(field_verbose_name) + '\t' + str(field_value))
 
-        fields.append({'attr': field_verbose_name, 'value': field_value})
+        columns.append({'attr': field_verbose_name, 'value': field_value})
 
     context = {
         'collection_item': collection_item,
-        'rows': fields,
+        'rows': columns,
         'itemsInCollection': BottleCap.objects.filter(collection=collection).count(),
-        'username': 'test',
+        'collectionOwner': collection.created_by,
         'collectionName': Collection.objects.get(id=collection.pk).name,
+        'collectionTypeName': collection.collection_type.name,
         'tags': tags
     }
 
-    return render(request, 'collectionsapp/item.html', context)
+
+
+    return render(request, 'collectionsapp/bottle_cap.html', context)
 
 
 def my_collections(request):
@@ -186,19 +192,22 @@ def create_collection(request):
 
 
 def explore_collection(request, collection_id):
-    BOTTLE_CAPS = 'Bottle Caps'
+    bottle_caps = 'Bottle Caps'
 
     collection = Collection.objects.get(id=collection_id)
 
-    if collection.collection_type_id == CollectionType.objects.get(name=BOTTLE_CAPS).pk:
+    if collection.collection_type_id == CollectionType.objects.get(name=bottle_caps).pk:
         collection_items = BottleCap.objects.filter(collection_id=collection_id)
+        display_form = 'bottle_cap'
     else:
         collection_items = BottleCap.objects.filter(collection_id=collection_id)
+        display_form = 'item'
 
     context = {
         'collection_name': collection.name,
         'collection_items': collection_items,
         'collection_id': collection_id,
+        'display_form': display_form,
         'is_owner': collection.created_by_id == request.user.id
     }
     return render(request, 'collectionsapp/explore_collection.html', context)
@@ -254,7 +263,7 @@ def get_item_input_form(collection_type):
 
 def create_item(request):
     context = {}
-    return render(request, '', context)
+    return render(request, 'collectionsapp/home.html', context)
 
 
 def select_existing_fieldset(request):
@@ -312,3 +321,12 @@ def get_friendly_type(field):
     }
 
     return switch_dict.get(type(field), '???')
+
+
+def profile(request, user_id):
+    target_user = User.objects.get(id=user_id)
+
+    context = {
+        'user': target_user
+    }
+    return render(request, 'collectionsapp/profile.html', context)

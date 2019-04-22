@@ -7,7 +7,12 @@
 
     <ul>
         {% for collection in collections %}
-            <li><a href="{% url 'explore_collection' collection.id %}">{{ collection }}</a></li>
+        <li>
+            <span>
+                <a href="{% url 'explore_collection' collection.id %}">{{ collection }}</a>
+                , owned by <a href="{% url 'profile' collection.owner.id %}">{{ collection.owner.username }}</a>
+            </span>
+        </li>
         {% endfor %}
     </ul>
 

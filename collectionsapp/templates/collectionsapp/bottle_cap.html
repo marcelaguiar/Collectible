@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block body %}
+    <h1>{{ collection_item }}</h1>
+    <p>
+        <span>Item #{{ collection_item.id }}/{{ itemsInCollection }} in
+            <a href="{% url 'profile' collectionOwner.id %}">
+                {{ collectionOwner.username }}
+            </a>'s {{ collectionTypeName }} collection.
+        </span>
+    </p>
+
+    <div class="item-display-form-container">
+        <div class="details-column">
+
+            <table class="item-info">
+                {% for row in rows %}
+                    <tr>
+                        <td class="field-name">{{ row.attr }}</td>
+                        <td class="field-value">{{ row.value }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+
+            <h4>Tags</h4>
+            <ul>
+                {% for tag in tags %}
+                    <li>{{ tag }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="image-column">
+            <img src="{{ collection_item.image.url }}" alt="{{ collection_item }}">
+        </div>
+    </div>
+{% endblock %}

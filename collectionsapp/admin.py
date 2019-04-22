@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import BottleCap, CollectionType, Collection, CollectionItem, CollectionFieldset
+from .models import BottleCap, CollectionType, Collection, CollectionItem, CollectionFieldset, CollectionItemImage
 import eav
 
 
@@ -7,6 +7,7 @@ import eav
 admin.site.register(CollectionType)
 admin.site.register(BottleCap)
 admin.site.register(Collection)
+admin.site.register(CollectionItemImage)
 admin.site.register(CollectionFieldset)
 eav.register(CollectionItem)
 

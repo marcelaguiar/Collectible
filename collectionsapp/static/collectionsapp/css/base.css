@@ -7,6 +7,10 @@ body {
   margin-bottom: 60px; /* Margin bottom by footer height */
 }
 
+a:hover {
+    text-decoration-line: none;
+}
+
 .footer {
   position: absolute;
   bottom: 0;
@@ -46,4 +50,18 @@ li.no-bullets {
 
 .flex-width{
     flex-grow: 1;
+}
+
+.item-display-form-container {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+}
+
+.image-column {
+
+}
+
+.details-column {
+
 }

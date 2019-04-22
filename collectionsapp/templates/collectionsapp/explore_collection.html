@@ -14,7 +14,7 @@
     <!-- Display all items in collection -->
     <ul>
         {% for item in collection_items %}
-            <li><a href="{% url 'item' item.id %}">{{ item }}</a></li>
+            <li><a href="{% url 'bottle_cap' item.id  %}" >{{ item }}</a></li>
         {% endfor %}
     </ul>
 
