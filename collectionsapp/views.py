@@ -2,6 +2,7 @@ from collectionsapp.forms import CollectionTypeForm, CollectionForm, BottleCapFo
 from collectionsapp.models import BottleCap, CollectionType, Collection, CollectionItem, User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.db import Error
 from django.db.models import fields
@@ -119,8 +120,6 @@ def bottle_cap(request, item_id):
         'tags': tags
     }
 
-
-
     return render(request, 'collectionsapp/bottle_cap.html', context)
 
 
@@ -138,6 +137,7 @@ def my_collections(request):
     return render(request, 'collectionsapp/my_collections.html', context)
 
 
+@login_required
 def start_collection(request):
     collection_form = CollectionForm
     context = {
@@ -192,7 +192,7 @@ def create_collection(request):
 
 
 def explore_collection(request, collection_id):
-    bottle_caps = 'Bottle Caps'
+    bottle_caps = 'Bottle cap'
 
     collection = Collection.objects.get(id=collection_id)
 
@@ -224,6 +224,7 @@ def explore_collection_type(request, collection_type_id):
     return render(request, 'collectionsapp/explore_collection_type.html', context)
 
 
+@login_required
 def select_collection(request):
     # TODO: Check that the user is logged in
     collections_list = []
@@ -327,6 +328,6 @@ def profile(request, user_id):
     target_user = User.objects.get(id=user_id)
 
     context = {
-        'user': target_user
+        'target_user': target_user
     }
     return render(request, 'collectionsapp/profile.html', context)

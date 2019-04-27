@@ -58,17 +58,17 @@ class CollectionItem(CommonInfo):
 
 
 class CollectionType(CommonInfo):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, verbose_name="Name")
 
     def __str__(self):
         return self.name
 
 
 class Collection(CommonInfo):
-    name = models.CharField(max_length=100)
-    collection_type = models.ForeignKey('CollectionType', on_delete=models.PROTECT)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE,
-                              related_name='%(app_label)s_%(class)s_owned')
+    name = models.CharField(max_length=100, verbose_name="Collection")
+    collection_type = models.ForeignKey('CollectionType', on_delete=models.PROTECT, verbose_name="Collection Type")
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(app_label)s_%(class)s_owned',
+                              verbose_name="Owner")
     # fieldset = models.ForeignKey('CollectionFieldset', on_delete=models.PROTECT)
 
     def __str__(self):

@@ -13,6 +13,10 @@
 
     <!-- Display all items in collection -->
     <ul>
+        {% if collection_items.count == 0 %}
+            <p>(no items in collection)</p>
+        {% endif %}
+
         {% for item in collection_items %}
             <li><a href="{% url 'bottle_cap' item.id  %}" >{{ item }}</a></li>
         {% endfor %}
