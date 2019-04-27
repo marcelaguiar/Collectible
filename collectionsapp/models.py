@@ -69,7 +69,6 @@ class Collection(CommonInfo):
     collection_type = models.ForeignKey('CollectionType', on_delete=models.PROTECT, verbose_name="Collection Type")
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(app_label)s_%(class)s_owned',
                               verbose_name="Owner")
-    # fieldset = models.ForeignKey('CollectionFieldset', on_delete=models.PROTECT)
 
     def __str__(self):
         return self.name
@@ -111,16 +110,3 @@ class BottleCap(CollectionItem):
 
     def __str__(self):
         return self.brand + ' - ' + self.product + ' - ' + self.variety
-
-
-class CollectionFieldset(CommonInfo):
-    field1 = models.CharField(max_length=200, blank=True, verbose_name='Field1')
-    field2 = models.CharField(max_length=200, blank=True, verbose_name='Field2')
-    field3 = models.CharField(max_length=200, blank=True, verbose_name='Field3')
-    field4 = models.CharField(max_length=200, blank=True, verbose_name='Field4')
-    field5 = models.CharField(max_length=200, blank=True, verbose_name='Field5')
-    field6 = models.CharField(max_length=200, blank=True, verbose_name='Field6')
-    field7 = models.CharField(max_length=200, blank=True, verbose_name='Field7')
-    field8 = models.CharField(max_length=200, blank=True, verbose_name='Field8')
-    field9 = models.CharField(max_length=200, blank=True, verbose_name='Field9')
-    field10 = models.CharField(max_length=200, blank=True, verbose_name='Field10')

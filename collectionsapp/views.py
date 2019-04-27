@@ -283,8 +283,7 @@ def design_fieldset(request):
         'Created By',
         'Modified',
         'Modified By',
-        'Collection ID',
-        'eav values'
+        'Collection ID'
     ]
 
     i = 1
