@@ -85,7 +85,6 @@ def create_collection_type(request):
 def bottle_cap(request, item_id):
     columns = []
     collection_item = BottleCap.objects.get(id=item_id)
-    tags = collection_item.tags.all()
 
     collection = collection_item.collection
 
@@ -99,16 +98,17 @@ def bottle_cap(request, item_id):
     ]
 
     for field in BottleCap._meta.get_fields():
-        print(field)
-        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-        if field.verbose_name in excluded_fields:
+        try:
+            if field.verbose_name in excluded_fields:
+                continue
+
+            field_verbose_name = BottleCap._meta.get_field(field.name).verbose_name
+            field_value = getattr(collection_item, field.name)
+            print(str(field_verbose_name) + '\t' + str(field_value))
+            columns.append({'attr': field_verbose_name, 'value': field_value})
+        except AttributeError:
+            print("An exception occurred......")
             continue
-
-        field_verbose_name = BottleCap._meta.get_field(field.name).verbose_name
-        field_value = getattr(collection_item, field.name)
-        print(str(field_verbose_name) + '\t' + str(field_value))
-
-        columns.append({'attr': field_verbose_name, 'value': field_value})
 
     context = {
         'collection_item': collection_item,
@@ -117,7 +117,7 @@ def bottle_cap(request, item_id):
         'collectionOwner': collection.created_by,
         'collectionName': Collection.objects.get(id=collection.pk).name,
         'collectionTypeName': collection.collection_type.name,
-        'tags': tags
+        'tags': collection_item.tags.all()
     }
 
     return render(request, 'collectionsapp/bottle_cap.html', context)
