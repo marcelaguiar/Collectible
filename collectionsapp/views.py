@@ -1,5 +1,5 @@
 from collectionsapp.forms import CollectionTypeForm, CollectionForm, BottleCapForm
-from collectionsapp.models import BottleCap, CollectionType, Collection, CollectionItem, User
+from collectionsapp.models import BottleCap, CollectionType, Collection, CollectionItem, User, CollectionItemImage
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -97,6 +97,7 @@ def bottle_cap(request, item_id):
         'tagged items'
     ]
 
+    # TODO: fix the method of getting field values
     for field in BottleCap._meta.get_fields():
         try:
             if field.verbose_name in excluded_fields:
@@ -117,7 +118,8 @@ def bottle_cap(request, item_id):
         'collectionOwner': collection.created_by,
         'collectionName': Collection.objects.get(id=collection.pk).name,
         'collectionTypeName': collection.collection_type.name,
-        'tags': collection_item.tags.all()
+        'tags': collection_item.tags.all(),
+        'imageSet': CollectionItemImage.objects.filter(collection_item=collection_item).order_by('order_in_collection')
     }
 
     return render(request, 'collectionsapp/bottle_cap.html', context)

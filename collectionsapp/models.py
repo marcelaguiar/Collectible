@@ -2,18 +2,6 @@ from datetime import date
 from django.contrib.auth.models import User
 from django.db import models
 from taggit.managers import TaggableManager
-# import os
-
-
-'''
-def get_image_path(instance, filename):
-    filename_w_ext = os.path.basename(filename)
-    filename, file_extension = os.path.splitext(filename_w_ext)
-    new_file_name = str(instance.id) + file_extension
-
-    print(instance.id)
-
-    return os.path.join('images/collections/', str(instance.collection.id), new_file_name)'''
 
 
 class CommonInfo(models.Model):
@@ -75,9 +63,9 @@ class Collection(CommonInfo):
 
 
 class CollectionItemImage(CommonInfo):
-    image = models.ImageField(verbose_name='Image')
+    image = models.ImageField(verbose_name='Image', upload_to='images/')
     collection_item = models.ForeignKey('BottleCap', on_delete=models.PROTECT, verbose_name='Collection Item')
-    order_in_collection = models.IntegerField(verbose_name='Order', default=1)
+    order_in_collection = models.PositiveSmallIntegerField(verbose_name='Order', default=1)
 
 
 class BottleCap(CollectionItem):

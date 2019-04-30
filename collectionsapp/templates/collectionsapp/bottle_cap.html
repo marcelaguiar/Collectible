@@ -32,7 +32,9 @@
             </ul>
         </div>
         <div class="image-column">
-            <img src="{{ collection_item.image.url }}" alt="{{ collection_item }}">
+            {% for item in imageSet %}
+                <img style="height: 400px; width: 400px; object-fit: contain" src="{{ item.image.url }}" alt="{{ collection_item }}">
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
