@@ -56,6 +56,7 @@ li.no-bullets {
     display: flex;
     flex-flow: row wrap;
     align-items: flex-start;
+    /*justify-content: center;*/
 }
 
 .image-column {
@@ -63,5 +64,5 @@ li.no-bullets {
 }
 
 .details-column {
-
+    margin: 0 20px 0 50px;
 }
