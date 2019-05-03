@@ -3,7 +3,7 @@
 
 
 {% block body %}
-    <h3>{{ collection_item }}</h3>
+    <h3>{{ bottle_cap }}</h3>
 
     <div class="item-display-form-container">
 
@@ -30,11 +30,11 @@
                                 {% for item in imageSet %}
                                     {%  if forloop.first %}
                                         <div class="carousel-item active">
-                                            <img src="{{ item.image.url }}" class="d-block w-100" alt="{{ collection_item }}">
+                                            <img src="{{ item.image.url }}" class="d-block w-100" alt="{{ bottle_cap }}">
                                         </div>
                                     {% else %}
                                         <div class="carousel-item">
-                                            <img src="{{ item.image.url }}" class="d-block w-100" alt="{{ collection_item }}">
+                                            <img src="{{ item.image.url }}" class="d-block w-100" alt="{{ bottle_cap }}">
                                         </div>
                                     {% endif %}
                                 {% endfor %}
@@ -59,12 +59,54 @@
         <div class="details-column">
             <table class="table table-sm">
                 <tbody>
-                    {% for row in rows %}
                     <tr>
-                        <th scope="row">{{ row.attr }}</th>
-                        <td>{{ row.value }}</td>
+                        <th scope="row">Company</th>
+                        <td>{{ bottle_cap.company}}</td>
                     </tr>
-                {% endfor %}
+                    <tr>
+                        <th scope="row">Brand</th>
+                        <td>{{ bottle_cap.brand }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Product</th>
+                        <td>{{ bottle_cap.product}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Variety</th>
+                        <td>{{ bottle_cap.variety }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Beverage Type</th>
+                        <td>{{ bottle_cap.beverage_type}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Description</th>
+                        <td>{{ bottle_cap.description }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Date Acquired</th>
+                        <td>{{ bottle_cap.date_acquired}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Method Acquired</th>
+                        <td>{{ bottle_cap.method_acquired }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Available For Trade</th>
+                        <td>{{ bottle_cap.available_for_trade}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Color</th>
+                        <td>{{ bottle_cap.color }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Text</th>
+                        <td>{{ bottle_cap.text}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Underside</th>
+                        <td>{{ bottle_cap.underside }}</td>
+                    </tr>
                 </tbody>
             </table>
 

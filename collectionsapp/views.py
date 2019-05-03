@@ -84,9 +84,9 @@ def create_collection_type(request):
 
 def bottle_cap(request, item_id):
     columns = []
-    collection_item = BottleCap.objects.get(id=item_id)
+    bottle_cap = BottleCap.objects.get(id=item_id)
 
-    collection = collection_item.collection
+    collection = bottle_cap.collection
 
     excluded_fields = [
         'ID',
@@ -106,7 +106,7 @@ def bottle_cap(request, item_id):
                 continue
 
             field_verbose_name = BottleCap._meta.get_field(field.name).verbose_name
-            field_value = getattr(collection_item, field.name)
+            field_value = getattr(bottle_cap, field.name)
             print(str(field_verbose_name) + '\t' + str(field_value))
             columns.append({'attr': field_verbose_name, 'value': field_value})
         except AttributeError:
@@ -114,14 +114,14 @@ def bottle_cap(request, item_id):
             continue
 
     context = {
-        'collection_item': collection_item,
+        'bottle_cap': bottle_cap,
         'rows': columns,
         'itemsInCollection': BottleCap.objects.filter(collection=collection).count(),
         'collectionOwner': collection.created_by,
         'collectionName': Collection.objects.get(id=collection.pk).name,
         'collectionTypeName': collection.collection_type.name,
-        'tags': collection_item.tags.all(),
-        'imageSet': CollectionItemImage.objects.filter(collection_item=collection_item).order_by('order_in_collection')
+        'tags': bottle_cap.tags.all(),
+        'imageSet': CollectionItemImage.objects.filter(collection_item=bottle_cap).order_by('order_in_collection')
     }
 
     return render(request, 'collectionsapp/bottle_cap.html', context)
