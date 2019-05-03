@@ -25,7 +25,10 @@ class FriendlyDataTypes:
 
 
 def home(request):
-    return render(request, 'collectionsapp/home.html')
+    context = {
+        'column_count': range(43)
+    }
+    return render(request, 'collectionsapp/home.html', context)
 
 
 def collection_types(request):

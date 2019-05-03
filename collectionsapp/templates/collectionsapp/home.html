@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'collectionsapp/css/image_grid.css' %}">
+{% endblock %}
 
 {% block body %}
-<h1>Home</h1>
-
-<p>under construction</p>
-<p>please excuse our dust</p>
+    <div class="image-grid">
+        {% for item in column_count %}
+            <div class="grid-item">
+                <img src="/media/images/Boochcraft.jpg">
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

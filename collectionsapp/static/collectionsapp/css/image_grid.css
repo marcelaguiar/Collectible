@@ -1,0 +1,9 @@
+.image-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+.grid-item {
+    max-width: 100px;
+}
