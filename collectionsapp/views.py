@@ -89,9 +89,11 @@ def bottle_cap(request, item_id):
     collection = collection_item.collection
 
     excluded_fields = [
-        'Created',
-        'Modified',
         'ID',
+        'Modified',
+        'Modified By',
+        'Created',
+        'Created By',
         'Collection ID',
         'Tags',
         'tagged items'

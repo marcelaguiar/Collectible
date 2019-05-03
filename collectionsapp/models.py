@@ -73,28 +73,17 @@ class BottleCap(CollectionItem):
     brand = models.CharField(max_length=100, blank=True, verbose_name='Brand')
     product = models.CharField(max_length=100, blank=True, verbose_name='Product')
     variety = models.CharField(max_length=100, blank=True, verbose_name='Variety')
+    beverage_type = models.ForeignKey('BeverageType', on_delete=models.PROTECT, verbose_name="Beverage Type")
     color = models.IntegerField(default=None, blank=True, null=True, verbose_name='Color')
-
-    NONE_SELECTED = 0
-    SODA = 1
-    BEER = 2
-    WATER = 3
-    MILK = 4
-    KOMBUCHA = 5
-
-    BEVERAGE_TYPE_CHOICES = (
-        (NONE_SELECTED, ''),
-        (SODA, 'Soda'),
-        (BEER, 'Beer'),
-        (WATER, 'Water'),
-        (MILK, 'Milk'),
-        (KOMBUCHA, 'Kombucha')
-    )
-
-    beverage_type = models.IntegerField(choices=BEVERAGE_TYPE_CHOICES, default=NONE_SELECTED,
-                                        verbose_name='Beverage Type')
     text = models.CharField(max_length=200, blank=True, verbose_name='Text')
     underside = models.CharField(max_length=50, blank=True, verbose_name='Underside')
 
     def __str__(self):
         return self.brand + ' - ' + self.product + ' - ' + self.variety
+
+
+class BeverageType(CommonInfo):
+    name = models.CharField(max_length=100, blank=False, verbose_name='Name')
+
+    def __str__(self):
+        return self.name

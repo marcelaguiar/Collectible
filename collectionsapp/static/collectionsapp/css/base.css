@@ -60,9 +60,19 @@ li.no-bullets {
 }
 
 .image-column {
-
+    margin: 0 20px 0 0;
 }
 
 .details-column {
-    margin: 0 20px 0 50px;
+    margin: 0 20px 0 0;
+}
+
+.tag-container {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+}
+
+.tag {
+    margin: 0 5px 0 0;
 }
