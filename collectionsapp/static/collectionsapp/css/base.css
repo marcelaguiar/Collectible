@@ -89,3 +89,7 @@ li.no-bullets {
     position: relative;
     left: 183px;
 }
+
+.image-upload-button {
+  margin: 0 auto;
+}
