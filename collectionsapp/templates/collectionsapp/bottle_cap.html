@@ -15,7 +15,11 @@
                     <div class="card-body">
                         <div class="centered">
                             {% if imageSet.count == 0 %}
-                                <button type="button" class="btn btn-outline-primary btn-sm">Upload Image</button>
+                                {% if user == collectionOwner %}
+                                    <button type="button" class="btn btn-outline-primary btn-sm">Upload Image</button>
+                                {% else %}
+                                    <p>[no image]</p>
+                                {% endif %}
                             {% else %}
                                 <div id="carousel"  class="carousel slide" data-ride="carousel">
                                     {% if imageSet.count > 1 %}
