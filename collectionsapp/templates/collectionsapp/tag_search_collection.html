@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <p>Search <span class="badge badge-secondary">{{ search_criteria }}</span> within</p>
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <a class="btn btn-secondary active">collection</a>
+        <a class="btn btn-secondary" href="{% url 'tag_search_collection_type' collection_type_id search_criteria %}">collection type</a>
+        <a class="btn btn-secondary" href="#">all collection types</a>
+    </div>
+
+    <ul>
+        {% for item in search_results %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+
+

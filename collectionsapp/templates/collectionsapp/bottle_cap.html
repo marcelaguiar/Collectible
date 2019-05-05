@@ -118,13 +118,19 @@
                             <th scope="row">Underside</th>
                             <td>{{ bottle_cap.underside }}</td>
                         </tr>
+                        <tr>
+                            <th scope="row">Collection</th>
+                            <td><a href="{% url 'explore_collection' bottle_cap.collection.id%}">Link</a></td>
+                        </tr>
                     </tbody>
                 </table>
 
                 <!-- Tags -->
                 <div class="tag-container">
                     {% for tag in tags %}
-                        <div class="tag"><a href="#" class="badge badge-secondary">{{ tag }}</a></div>
+                        <div class="tag">
+                            <a href="{% url 'tag_search_collection' bottle_cap.collection.id  tag.slug %}" class="badge badge-secondary">{{ tag.slug }}</a>
+                        </div>
                     {% endfor %}
                 </div>
             </div>
