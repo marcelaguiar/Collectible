@@ -339,26 +339,49 @@ def profile(request, user_id):
     return render(request, 'collectionsapp/profile.html', context)
 
 
-def tag_search_collection(request, collection_id, search_criteria):
+def tag_search_collection(request, collection_id, slug):
+
+    collection_type_id = Collection.objects.get(id=collection_id).collection_type_id
 
     context = {
-        'search_criteria': search_criteria,
-        'collection_type_id': Collection.objects.get(id=collection_id).collection_type_id,
-        'collection_results': BottleCap.objects.filter(
-            tags__name__in=[search_criteria],
+        'search_criteria': slug,
+        'collection_id': collection_id,
+        'collection_type_id': collection_type_id,
+        'search_results': BottleCap.objects.filter(
+            tags__slug__exact=slug,
             collection_id=collection_id)
     }
 
     return render(request, 'collectionsapp/tag_search_collection.html', context)
 
 
-def tag_search_collection_type(request, collection_type_id, search_criteria):
+def tag_search_collection_type(request, collection_id, slug):
+
+    collection_type_id = Collection.objects.get(id=collection_id).collection_type_id
 
     context = {
-        'search_criteria': search_criteria,
-        'collection_type_results': BottleCap.objects.filter(
-            tags__name__in=[search_criteria],
+        'search_criteria': slug,
+        'collection_id': collection_id,
+        'collection_type_id': collection_type_id,
+        'search_results': BottleCap.objects.filter(
+            tags__slug__exact=slug,
             collection__collection_type_id=collection_type_id)
     }
 
     return render(request, 'collectionsapp/tag_search_collection_type.html', context)
+
+
+def tag_search_all_collection_types(request, collection_id, slug):
+
+    collection_type_id = Collection.objects.get(id=collection_id).collection_type_id
+
+    context = {
+        'search_criteria': slug,
+        'collection_id': collection_id,
+        'collection_type_id': collection_type_id,
+        'search_results': BottleCap.objects.filter(
+            tags__slug__exact=slug,
+            collection__collection_type_id=collection_type_id)
+    }
+
+    return render(request, 'collectionsapp/tag_search_all_collection_types.html', context)

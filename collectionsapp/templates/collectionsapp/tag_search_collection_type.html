@@ -4,14 +4,14 @@
 {% block body %}
     <p>Search <span class="badge badge-secondary">{{ search_criteria }}</span> within</p>
     <div class="btn-group" role="group" aria-label="Basic example">
-        <a class="btn btn-secondary" href="#">collection</a>
+        <a class="btn btn-secondary" href="{% url 'tag_search_collection' collection_id search_criteria %}">collection</a>
         <a class="btn btn-secondary active" href="#">collection type</a>
-        <a class="btn btn-secondary" href="#">all collection types</a>
+        <a class="btn btn-secondary" href="{% url 'tag_search_all_collection_types' collection_id search_criteria %}">all collection types</a>
     </div>
 
     <ul>
         {% for item in search_results %}
-            <li>{{ item }}</li>
+            <li><a href="{% url 'bottle_cap' item.id %}">{{ item }}</a></li>
         {% endfor %}
     </ul>
 {% endblock %}
