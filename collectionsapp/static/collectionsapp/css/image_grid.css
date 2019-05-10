@@ -5,6 +5,12 @@
 }
 
 .grid-item {
-    max-width: 100px;
-    max-height: 100px;
+    max-width: 150px;
+    max-height: 150px;
+    margin: 2px;
+}
+
+.grid-item img {
+    width: 100%;
+    height: 100%;
 }

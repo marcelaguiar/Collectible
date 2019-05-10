@@ -26,7 +26,7 @@ class FriendlyDataTypes:
 
 def home(request):
     context = {
-        'column_count': range(43)
+        'items': CollectionItemImage.objects.filter(order_in_collection=1)
     }
     return render(request, 'collectionsapp/home.html', context)
 

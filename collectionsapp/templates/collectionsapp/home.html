@@ -2,14 +2,14 @@
 {% load static %}
 
 
-<link rel="stylesheet" href="{% static 'collectionsapp/css/image_grid.css' %}">
-
-
 {% block body %}
+    <link rel="stylesheet" href="{% static 'collectionsapp/css/image_grid.css' %}">
     <div class="image-grid">
-        {% for item in column_count %}
+        {% for item in items %}
             <div class="grid-item">
-                <img src="/media/images/Boochcraft.jpg">
+                <a href="{% url 'bottle_cap' item.collection_item.id %}">
+                    <img src="{{ item.image.url }}" alt="{{ item.collection_item }}">
+                </a>
             </div>
         {% endfor %}
     </div>
