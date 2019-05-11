@@ -17,25 +17,8 @@ class CommonInfo(models.Model):
 
 
 class CollectionItem(CommonInfo):
-    NONE_SELECTED = 0
-    DONATED = 1
-    PURCHASED = 2
-    TRADED = 3
-    FOUND = 4
-    CREATED = 5
-
-    METHOD_ACQUIRED_CHOICES = (
-        (NONE_SELECTED, ''),
-        (DONATED, 'Donated'),
-        (PURCHASED, 'Purchased'),
-        (TRADED, 'Traded'),
-        (FOUND, 'Found'),
-        (CREATED, 'Created')
-    )
-
     date_acquired = models.DateField(default=date.today, verbose_name='Date Acquired')
-    method_acquired = models.IntegerField(choices=METHOD_ACQUIRED_CHOICES, default=NONE_SELECTED,
-                                          verbose_name='Method Acquired')
+    method_acquired = models.ForeignKey('MethodAcquired', on_delete=models.PROTECT, verbose_name="Method Acquired")
     available_for_trade = models.BooleanField(default=False, verbose_name='Available For Trade')
     tags = TaggableManager(verbose_name='Tags')
     description = models.CharField(max_length=512, blank=True, verbose_name='Description')
@@ -83,6 +66,13 @@ class BottleCap(CollectionItem):
 
 
 class BeverageType(CommonInfo):
+    name = models.CharField(max_length=100, blank=False, verbose_name='Name')
+
+    def __str__(self):
+        return self.name
+
+
+class MethodAcquired(CommonInfo):
     name = models.CharField(max_length=100, blank=False, verbose_name='Name')
 
     def __str__(self):
