@@ -75,10 +75,9 @@ def create_collection_type(request):
     # TODO: Check that new collection type is unique
     if form.is_valid():
         name = request.POST['name']
-        render_page_name = request.POST['render_page_name']
         created_by = request.user
         modified_by = request.user
-        new_collection_type = CollectionType(name=name, render_page_name=render_page_name, created_by=created_by,
+        new_collection_type = CollectionType(name=name, created_by=created_by,
                                              modified_by=modified_by)
         new_collection_type.save()
 
@@ -87,9 +86,9 @@ def create_collection_type(request):
 
 def bottle_cap(request, item_id):
     columns = []
-    bottle_cap = BottleCap.objects.get(id=item_id)
+    bottle_cap_item = BottleCap.objects.get(id=item_id)
 
-    collection = bottle_cap.collection
+    collection = bottle_cap_item.collection
 
     excluded_fields = [
         'ID',
@@ -109,7 +108,7 @@ def bottle_cap(request, item_id):
                 continue
 
             field_verbose_name = BottleCap._meta.get_field(field.name).verbose_name
-            field_value = getattr(bottle_cap, field.name)
+            field_value = getattr(bottle_cap_item, field.name)
             print(str(field_verbose_name) + '\t' + str(field_value))
             columns.append({'attr': field_verbose_name, 'value': field_value})
         except AttributeError:
@@ -117,14 +116,14 @@ def bottle_cap(request, item_id):
             continue
 
     context = {
-        'bottle_cap': bottle_cap,
+        'bottle_cap': bottle_cap_item,
         'rows': columns,
         'itemsInCollection': BottleCap.objects.filter(collection=collection).count(),
         'collectionOwner': collection.created_by,
         'collectionName': Collection.objects.get(id=collection.pk).name,
         'collectionTypeName': collection.collection_type.name,
-        'tags': bottle_cap.tags.all(),
-        'imageSet': CollectionItemImage.objects.filter(collection_item=bottle_cap).order_by('order_in_collection')
+        'tags': bottle_cap_item.tags.all(),
+        'imageSet': CollectionItemImage.objects.filter(collection_item=bottle_cap_item).order_by('order_in_collection')
     }
 
     return render(request, 'collectionsapp/bottle_cap.html', context)
@@ -146,9 +145,8 @@ def my_collections(request):
 
 @login_required
 def start_collection(request):
-    collection_form = CollectionForm
     context = {
-        'collectionForm': collection_form
+        'collectionForm': CollectionForm
     }
     return render(request, 'collectionsapp/start_collection.html', context)
 
@@ -177,25 +175,21 @@ def create_collection(request):
     form = CollectionForm(request.POST)
 
     if form.is_valid():
-        name = request.POST['name']
-        collection_type_id = request.POST['collection_type']
-
-        # If user decides to not enter a name, we generate a name for them
-        if not name:
-            name = CollectionType.objects.get(id=collection_type_id).name + ' collection'
-
+        name = request.POST.get('name')
+        collection_type_id = request.POST.get('type')
         owner = request.user
         created_by = request.user
         modified_by = request.user
-        new_collection = Collection(name=name, collection_type_id=collection_type_id, owner=owner,
+
+        new_collection = Collection(name=name, type_id=collection_type_id, owner=owner,
                                     created_by=created_by, modified_by=modified_by)
         try:
             new_collection.save()
             messages.add_message(request, messages.SUCCESS, name + ' collection created')
+            return redirect('explore_collection', collection_id=new_collection.pk)
         except Error:
             messages.add_message(request, messages.ERROR, name + ' collection failed to create')
-
-    return redirect('my_collections')
+            return redirect('my_collections')
 
 
 def explore_collection(request, collection_id):
@@ -203,7 +197,7 @@ def explore_collection(request, collection_id):
 
     collection = Collection.objects.get(id=collection_id)
 
-    if collection.collection_type_id == CollectionType.objects.get(name=bottle_caps).pk:
+    if collection.type_id == CollectionType.objects.get(name=bottle_caps).pk:
         collection_items = BottleCap.objects.filter(collection_id=collection_id)
         display_form = 'bottle_cap'
     else:
@@ -222,12 +216,14 @@ def explore_collection(request, collection_id):
 
 def explore_collection_type(request, collection_type_id):
 
-    collections = Collection.objects.filter(collection_type_id=collection_type_id)
+    collection_type = CollectionType.objects.get(id=collection_type_id)
+    collections = Collection.objects.filter(type__id=collection_type_id)
 
     context = {
-        'collection_type': CollectionType.objects.get(id=collection_type_id),
+        'collection_type': collection_type,
         'collections': collections
     }
+
     return render(request, 'collectionsapp/explore_collection_type.html', context)
 
 

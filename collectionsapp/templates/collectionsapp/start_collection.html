@@ -6,11 +6,11 @@
 <div class="management-utility">
     <h4>Start New Collection</h4>
 
-    <form action="{% url 'select_fieldset' %}" method="POST" role="form">
+    <form action="{% url 'create_collection' %}" method="POST" role="form">
         {% csrf_token %}
         <div class="input-form">
-            {{ collectionForm.collection_name }}
-            {{ collectionForm.collection_type }}
+            {{ collectionForm.name }}
+            {{ collectionForm.type }}
             <button type="submit" class="btn btn-primary precedes-control">Create</button>
         </div>
     </form>

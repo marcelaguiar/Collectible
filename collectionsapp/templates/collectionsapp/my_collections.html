@@ -15,7 +15,10 @@
         </ul>
     {% endif %}
 
-    <a href="{% url 'start_collection' %}">Start new collection</a>
+    <a href="{% url 'start_collection' %}">
+        <button type="button" class="btn btn-outline-success">Start new collection</button>
+    </a>
+
 
 
 {% endblock %}

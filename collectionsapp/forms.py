@@ -4,13 +4,24 @@ from taggit.managers import TaggableManager
 
 
 class CollectionForm(forms.Form):
-    collection_name = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs={
+    name = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={
         'class': 'form-control',
         'placeholder': 'Name',
     }))
 
-    collection_type = forms.ModelChoiceField(queryset=models.CollectionType.objects.all(),
-                                             widget=forms.Select(attrs={'class': 'form-control'}), required=True)
+    type = forms.ModelChoiceField(queryset=models.CollectionType.objects.all(),
+                                  widget=forms.Select(attrs={'class': 'form-control'}), required=True)
+
+    # def clean(self):
+    #
+    #     cleaned_data = super().clean()
+    #     collection_name = cleaned_data.get("name")
+    #     collection_type = cleaned_data.get("type")
+    #
+    #     if collection_name and collection_type:
+    #         # Only do something if both fields are valid so far.
+    #         if Collection.objects.filter(name=collection_name, type=collection_type).count() > 0:
+    #             raise forms.ValidationError("You already own a collection with that name!")
 
 
 class CollectionTypeForm(forms.Form):

@@ -36,13 +36,18 @@ class CollectionType(CommonInfo):
 
 
 class Collection(CommonInfo):
-    name = models.CharField(max_length=100, verbose_name="Collection")
-    collection_type = models.ForeignKey('CollectionType', on_delete=models.PROTECT, verbose_name="Collection Type")
+    name = models.CharField(max_length=100, verbose_name="Name")
+    type = models.ForeignKey('CollectionType', on_delete=models.PROTECT, verbose_name="Collection Type")
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(app_label)s_%(class)s_owned',
                               verbose_name="Owner")
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['name', 'owner'], name='owner cannot repeat collection names')
+        ]
 
 
 class CollectionItemImage(CommonInfo):
