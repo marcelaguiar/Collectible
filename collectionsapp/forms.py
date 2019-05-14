@@ -12,17 +12,6 @@ class CollectionForm(forms.Form):
     type = forms.ModelChoiceField(queryset=models.CollectionType.objects.all(),
                                   widget=forms.Select(attrs={'class': 'form-control'}), required=True)
 
-    # def clean(self):
-    #
-    #     cleaned_data = super().clean()
-    #     collection_name = cleaned_data.get("name")
-    #     collection_type = cleaned_data.get("type")
-    #
-    #     if collection_name and collection_type:
-    #         # Only do something if both fields are valid so far.
-    #         if Collection.objects.filter(name=collection_name, type=collection_type).count() > 0:
-    #             raise forms.ValidationError("You already own a collection with that name!")
-
 
 class CollectionTypeForm(forms.Form):
     name = forms.CharField(max_length=100, widget=forms.TextInput(attrs={
@@ -52,8 +41,8 @@ class BottleCapForm(forms.Form):
         'class': 'form-control',
         'placeholder': 'Variety',
     }))
-
-    beverage_type = forms.ChoiceField()
+    beverage_type = forms.ModelChoiceField(queryset=models.BeverageType.objects.all(),
+                                           widget=forms.Select(attrs={'class': 'form-control'}), required=False)
     text = forms.CharField(max_length=200, widget=forms.TextInput(attrs={
         'class': 'form-control',
         'placeholder': 'Text',
@@ -63,7 +52,8 @@ class BottleCapForm(forms.Form):
         'placeholder': 'Underside',
     }))
     date_acquired = forms.DateField()
-    method_acquired = forms.IntegerField()
+    method_acquired = forms.ModelChoiceField(queryset=models.MethodAcquired.objects.all(),
+                                             widget=forms.Select(attrs={'class': 'form-control'}), required=False)
     available_for_trade = forms.BooleanField()
     image = forms.ImageField()
     number_in_collection = forms.IntegerField()
@@ -72,7 +62,7 @@ class BottleCapForm(forms.Form):
         'class': 'form-control',
         'placeholder': 'Description',
     }))
-    collection = forms.ModelChoiceField(queryset=models.Collection.objects.all(),
+    collection = forms.ModelChoiceField(queryset=models.Collection.objects.filter(),
                                         widget=forms.Select(attrs={'class': 'form-control'}), required=True)
 
 

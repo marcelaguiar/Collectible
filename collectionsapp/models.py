@@ -62,7 +62,6 @@ class BottleCap(CollectionItem):
     product = models.CharField(max_length=100, blank=True, verbose_name='Product')
     variety = models.CharField(max_length=100, blank=True, verbose_name='Variety')
     beverage_type = models.ForeignKey('BeverageType', on_delete=models.PROTECT, verbose_name="Beverage Type")
-    color = models.IntegerField(default=None, blank=True, null=True, verbose_name='Color')
     text = models.CharField(max_length=200, blank=True, verbose_name='Text')
     underside = models.CharField(max_length=50, blank=True, verbose_name='Underside')
 
@@ -71,14 +70,14 @@ class BottleCap(CollectionItem):
 
 
 class BeverageType(CommonInfo):
-    name = models.CharField(max_length=100, blank=False, verbose_name='Name')
+    name = models.CharField(max_length=100, blank=False, verbose_name='Beverage type')
 
     def __str__(self):
         return self.name
 
 
 class MethodAcquired(CommonInfo):
-    name = models.CharField(max_length=100, blank=False, verbose_name='Name')
+    name = models.CharField(max_length=100, blank=False, verbose_name='Method acquired')
 
     def __str__(self):
         return self.name

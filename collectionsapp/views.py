@@ -121,7 +121,7 @@ def bottle_cap(request, item_id):
         'itemsInCollection': BottleCap.objects.filter(collection=collection).count(),
         'collectionOwner': collection.created_by,
         'collectionName': Collection.objects.get(id=collection.pk).name,
-        'collectionTypeName': collection.collection_type.name,
+        'collectionTypeName': collection.type.name,
         'tags': bottle_cap_item.tags.all(),
         'imageSet': CollectionItemImage.objects.filter(collection_item=bottle_cap_item).order_by('order_in_collection')
     }
@@ -246,22 +246,23 @@ def select_collection(request):
     return render(request, 'collectionsapp/select_collection.html', context)
 
 
+@login_required
 def input_item_details(request, collection_id):
-    # TODO: Check that the user is logged in
-    collection_type = Collection.objects.get(id=collection_id).collection_type
-
-    collection_form = get_item_input_form(collection_type)
+    collection_form = get_item_input_form(collection_id)
 
     context = {
-        'collectionForm': collection_form
+        'collectionForm': collection_form,
     }
     return render(request, 'collectionsapp/input_item_details.html', context)
 
 
-def get_item_input_form(collection_type):
+def get_item_input_form(collection_id):
+    collection_type = Collection.objects.get(id=collection_id).type
+
     switcher = {
-        'Bottle Caps': BottleCapForm,
+        'Bottle cap': BottleCapForm(initial={'collection': collection_id}),
     }
+
     return switcher.get(collection_type.name, "Invalid collection")
 
 
@@ -337,7 +338,7 @@ def profile(request, user_id):
 
 def tag_search_collection(request, collection_id, slug):
 
-    collection_type_id = Collection.objects.get(id=collection_id).collection_type_id
+    collection_type_id = Collection.objects.get(id=collection_id).type.id
 
     context = {
         'search_criteria': slug,
@@ -353,7 +354,7 @@ def tag_search_collection(request, collection_id, slug):
 
 def tag_search_collection_type(request, collection_id, slug):
 
-    collection_type_id = Collection.objects.get(id=collection_id).collection_type_id
+    collection_type_id = Collection.objects.get(id=collection_id).type.id
 
     context = {
         'search_criteria': slug,
@@ -361,7 +362,7 @@ def tag_search_collection_type(request, collection_id, slug):
         'collection_type_id': collection_type_id,
         'search_results': BottleCap.objects.filter(
             tags__slug__exact=slug,
-            collection__collection_type_id=collection_type_id)
+            collection__type_id=collection_type_id)
     }
 
     return render(request, 'collectionsapp/tag_search_collection_type.html', context)
@@ -369,7 +370,7 @@ def tag_search_collection_type(request, collection_id, slug):
 
 def tag_search_all_collection_types(request, collection_id, slug):
 
-    collection_type_id = Collection.objects.get(id=collection_id).collection_type_id
+    collection_type_id = Collection.objects.get(id=collection_id).type.id
 
     context = {
         'search_criteria': slug,
@@ -377,7 +378,7 @@ def tag_search_all_collection_types(request, collection_id, slug):
         'collection_type_id': collection_type_id,
         'search_results': BottleCap.objects.filter(
             tags__slug__exact=slug,
-            collection__collection_type_id=collection_type_id)
+            collection__type_id=collection_type_id)
     }
 
     return render(request, 'collectionsapp/tag_search_all_collection_types.html', context)

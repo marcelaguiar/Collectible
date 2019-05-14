@@ -101,3 +101,8 @@ li.no-bullets {
     height: 100%;
     width: 100%;
 }
+
+.centered-form {
+    display: flex;
+    justify-content: center;
+}
