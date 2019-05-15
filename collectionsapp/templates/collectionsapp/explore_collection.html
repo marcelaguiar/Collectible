@@ -6,7 +6,7 @@
 
     <!-- Check if logged in user is owner of this collection  -->
     {% if is_owner %}
-        <a href="{% url 'input_item_details' collection_id%}">
+        <a href="{% url 'add_to_collection' collection_id%}">
             <button type="button" class="btn btn-outline-success">Add item to collection</button>
         </a>&nbsp;
     {% endif %}

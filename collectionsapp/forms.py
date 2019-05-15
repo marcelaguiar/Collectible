@@ -1,6 +1,5 @@
 from collectionsapp import models
 from django import forms
-from taggit.managers import TaggableManager
 
 
 class CollectionForm(forms.Form):
@@ -25,40 +24,41 @@ class CollectionTypeForm(forms.Form):
 
 
 class BottleCapForm(forms.Form):
-    company = forms.CharField(max_length=100, widget=forms.TextInput(attrs={
+    company = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs={
         'class': 'form-control',
         'placeholder': 'Company',
     }))
-    brand = forms.CharField(max_length=100, widget=forms.TextInput(attrs={
+    brand = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs={
         'class': 'form-control',
         'placeholder': 'Brand',
     }))
-    product = forms.CharField(max_length=100, widget=forms.TextInput(attrs={
+    product = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs={
         'class': 'form-control',
         'placeholder': 'Product',
     }))
-    variety = forms.CharField(max_length=100, widget=forms.TextInput(attrs={
+    variety = forms.CharField(max_length=100, required=False, widget=forms.TextInput(attrs={
         'class': 'form-control',
         'placeholder': 'Variety',
     }))
     beverage_type = forms.ModelChoiceField(queryset=models.BeverageType.objects.all(),
                                            widget=forms.Select(attrs={'class': 'form-control'}), required=False)
-    text = forms.CharField(max_length=200, widget=forms.TextInput(attrs={
+    text = forms.CharField(max_length=200, required=False, widget=forms.TextInput(attrs={
         'class': 'form-control',
         'placeholder': 'Text',
     }))
-    underside = forms.CharField(max_length=50, widget=forms.TextInput(attrs={
+    underside = forms.CharField(max_length=50, required=False, widget=forms.TextInput(attrs={
         'class': 'form-control',
         'placeholder': 'Underside',
     }))
-    date_acquired = forms.DateField()
+    date_acquired = forms.DateField(required=False)
     method_acquired = forms.ModelChoiceField(queryset=models.MethodAcquired.objects.all(),
                                              widget=forms.Select(attrs={'class': 'form-control'}), required=False)
-    available_for_trade = forms.BooleanField()
-    image = forms.ImageField()
-    number_in_collection = forms.IntegerField()
-    tags = TaggableManager()
-    description = forms.CharField(max_length=512, widget=forms.TextInput(attrs={
+    available_for_trade = forms.BooleanField(required=False)
+    tags = forms.CharField(max_length=512, required=False, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': 'ex: star, 1776, liberty',
+    }))
+    description = forms.CharField(max_length=512, required=False, widget=forms.TextInput(attrs={
         'class': 'form-control',
         'placeholder': 'Description',
     }))

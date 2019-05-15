@@ -11,6 +11,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 from taggit.managers import TaggableManager
+import datetime
 
 
 class FriendlyDataTypes:
@@ -247,13 +248,42 @@ def select_collection(request):
 
 
 @login_required
-def input_item_details(request, collection_id):
-    collection_form = get_item_input_form(collection_id)
+def add_to_collection(request, collection_id):
+    if request.method == "POST":
+        form = BottleCapForm(request.POST)
 
-    context = {
-        'collectionForm': collection_form,
-    }
-    return render(request, 'collectionsapp/input_item_details.html', context)
+        if form.is_valid():
+            submit_time = datetime.datetime.now()
+            new_bottle_cap = BottleCap(
+                created=submit_time,
+                modified=submit_time,
+                date_acquired=form.cleaned_data['date_acquired'],
+                #available_for_trade=form.cleaned_data['available_for_trade'],
+                description=form.cleaned_data['description'],
+                company=form.cleaned_data['company'],
+                brand=form.cleaned_data['brand'],
+                product=form.cleaned_data['product'],
+                variety=form.cleaned_data['variety'],
+                text=form.cleaned_data['text'],
+                underside=form.cleaned_data['underside'],
+                beverage_type=form.cleaned_data['beverage_type'],
+                collection=form.cleaned_data['collection'],
+                created_by=request.user,
+                method_acquired=form.cleaned_data['method_acquired'],
+                modified_by=request.user
+            )
+
+            new_bottle_cap.save()
+
+            return bottle_cap(request, new_bottle_cap.pk)
+    else:
+        collection_form = get_item_input_form(collection_id)
+
+        context = {
+            'collectionForm': collection_form,
+            'collection_id': collection_id
+        }
+        return render(request, 'collectionsapp/add_to_collection.html', context)
 
 
 def get_item_input_form(collection_id):
@@ -264,11 +294,6 @@ def get_item_input_form(collection_id):
     }
 
     return switcher.get(collection_type.name, "Invalid collection")
-
-
-def create_item(request):
-    context = {}
-    return render(request, 'collectionsapp/home.html', context)
 
 
 def select_existing_fieldset(request):

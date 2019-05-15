@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block body %}
-    <form action="{% url 'create_item' %}" method="POST" role="form">
+    <form action="{% url 'add_to_collection' collection_id %}" method="POST" role="form">
         {% csrf_token %}
         <div class="input-form centered-form">
             <div style="width:800px">
@@ -24,10 +24,6 @@
                         <td>{{ collectionForm.variety }}</td>
                     </tr>
                     <tr>
-                        <td>{{ collectionForm.beverage_type.label_tag }}</td>
-                        <td>{{ collectionForm.beverage_type }}</td>
-                    </tr>
-                    <tr>
                         <td>{{ collectionForm.text.label_tag }}</td>
                         <td>{{ collectionForm.text }}</td>
                     </tr>
@@ -36,36 +32,34 @@
                         <td>{{ collectionForm.underside }}</td>
                     </tr>
                     <tr>
-                        <td>{{ collectionForm.date_acquired.label_tag }}</td>
-                        <td>
-                            <div class="input-group">
-                                <input type="text" class="form-control">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary" type="button">
-                                        <ion-icon name="calendar"></ion-icon>
-                                    </button>
-                                </div>
-                            </div>
-                        </td>
+                        <td>{{ collectionForm.description.label_tag }}</td>
+                        <td>{{ collectionForm.description }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ collectionForm.beverage_type.label_tag }}</td>
+                        <td>{{ collectionForm.beverage_type }}</td>
                     </tr>
                     <tr>
                         <td>{{ collectionForm.method_acquired.label_tag }}</td>
                         <td>{{ collectionForm.method_acquired }}</td>
                     </tr>
                     <tr>
-                        <td>{{ collectionForm.description.label_tag }}</td>
-                        <td>{{ collectionForm.description }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ collectionForm.collection.label_tag }}</td>
-                        <td>{{ collectionForm.collection }}</td>
+                        <td>{{ collectionForm.date_acquired.label_tag }}</td>
+                        <td>{{ collectionForm.date_acquired }}</td>
                     </tr>
                     <tr>
                         <td>{{ collectionForm.available_for_trade.label_tag }}</td>
                         <td>{{ collectionForm.available_for_trade }}</td>
                     </tr>
+                    <tr>
+                        <td>{{ collectionForm.tags.label_tag }}</td>
+                        <td>{{ collectionForm.tags }}</td>
+                    </tr>
                 </table>
-                <button type="submit" class="btn btn-primary precedes-control" style="width: 300px; float: right;">Save</button>
+
+                {{ collectionForm.collection.as_hidden }}
+
+                <button type="submit" class="btn btn-primary precedes-control" style="width: 300px; float: right;">Add to Collection</button>
             </div>
         </div>
 
