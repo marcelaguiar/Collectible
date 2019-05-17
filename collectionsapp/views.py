@@ -1,4 +1,4 @@
-from collectionsapp.forms import CollectionTypeForm, CollectionForm, BottleCapForm
+from collectionsapp.forms import CollectionTypeForm, CollectionForm, BottleCapForm, CollectionItemImageForm
 from collectionsapp.models import BottleCap, CollectionType, Collection, CollectionItem, User, CollectionItemImage
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db import Error
 from django.db.models import fields
 from django.db.models.fields import files
+from django.forms import modelformset_factory
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -407,3 +408,49 @@ def tag_search_all_collection_types(request, collection_id, slug):
     }
 
     return render(request, 'collectionsapp/tag_search_all_collection_types.html', context)
+
+
+@login_required
+def upload_image(request, collection_item_id):
+    CollectionItemImageFormset = modelformset_factory(
+        model=CollectionItemImage,
+        fields=('image', 'order_in_collection'),
+        extra=1,
+        max_num=5
+    )
+
+    if request.method == "POST":
+        formset = CollectionItemImageFormset(
+            request.POST,
+            request.FILES,
+            queryset=CollectionItemImage.objects.filter(collection_item_id=collection_item_id)
+        )
+
+        if formset.is_valid():
+            submit_time = datetime.datetime.now()
+
+            for f in formset:
+                new_image = CollectionItemImage(
+                    created=submit_time,
+                    modified=submit_time,
+                    order_in_collection=f.cleaned_data['order_in_collection'],
+                    image=f.cleaned_data['image'],
+                    collection_item=BottleCap.objects.get(id=collection_item_id),
+                    created_by=request.user,
+                    modified_by=request.user
+                )
+
+                new_image.save()
+
+            return bottle_cap(request, collection_item_id)
+        else:
+            print(formset.errors)
+    else:
+        collection = BottleCap.objects.get(pk=collection_item_id).collection
+
+        context = {
+            'collection': collection,
+            'imageUploadFormSet': CollectionItemImageFormset(queryset=CollectionItemImage.objects.none())
+        }
+
+        return render(request, 'collectionsapp/upload_image.html', context)

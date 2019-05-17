@@ -106,3 +106,7 @@ li.no-bullets {
     display: flex;
     justify-content: center;
 }
+
+.image-selector-container {
+    margin-bottom: 5px;
+}

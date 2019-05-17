@@ -16,7 +16,9 @@
                         <div class="centered">
                             {% if imageSet.count == 0 %}
                                 {% if user == collectionOwner %}
-                                    <button type="button" class="btn btn-outline-primary btn-sm">Upload Image</button>
+                                    <a href="{% url 'upload_image' bottle_cap.id %}">
+                                        <button type="button" class="btn btn-outline-primary btn-sm">Upload Image</button>
+                                    </a>
                                 {% else %}
                                     <p>[no image]</p>
                                 {% endif %}

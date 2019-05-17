@@ -66,11 +66,9 @@ class BottleCapForm(forms.Form):
                                         widget=forms.Select(attrs={'class': 'form-control'}), required=True)
 
 
-#  TODO: Is this class even used?
-class TempForm(forms.ModelForm):
-    class Meta:
-        model = models.CollectionType
-        fields = ['name']
-        widgets = {
-            'name': forms.TextInput()
-        }
+class CollectionItemImageForm(forms.ModelForm):
+    image = forms.ImageField(widget=forms.FileInput())
+    order_in_collection = forms.IntegerField(min_value=1, initial=1, widget=forms.NumberInput(attrs={
+        'class': 'form-control'
+    }))
+

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block body %}
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ imageUploadFormSet.as_p }}
+{% comment %}        {% for form in imageUploadFormSet %}
+            <div class="row">
+                <div class="col-xs-6" style="margin-right: 5px;">{{ form.order_in_collection }}</div>
+                <div class="col-xs-6">{{ form.image }}</div>
+            </div>
+        {% endfor %}{% endcomment %}
+        <!--<button type="button" class="btn btn-outline-primary btn-sm">Add another image</button>-->
+    <button type="submit" class="btn btn-primary precedes-control" style="width: 100px;">Save</button>
+    </form>
+
+{% endblock %}
