@@ -7,7 +7,7 @@
 
     <ul>
         {% for collection in collections %}
-            <a href="{% url 'input_item_details' collection.id %}"><li class="no-bullets">{{ collection.name }}</li></a>
+            <a href="{% url 'add_to_collection' collection.id %}"><li class="no-bullets">{{ collection.name }}</li></a>
         {% endfor %}
     </ul>
 

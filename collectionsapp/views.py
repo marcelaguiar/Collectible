@@ -87,39 +87,13 @@ def create_collection_type(request):
 
 
 def bottle_cap(request, item_id):
-    columns = []
+
     bottle_cap_item = BottleCap.objects.get(id=item_id)
 
     collection = bottle_cap_item.collection
 
-    excluded_fields = [
-        'ID',
-        'Modified',
-        'Modified By',
-        'Created',
-        'Created By',
-        'Collection ID',
-        'Tags',
-        'tagged items'
-    ]
-
-    # TODO: fix the method of getting field values
-    for field in BottleCap._meta.get_fields():
-        try:
-            if field.verbose_name in excluded_fields:
-                continue
-
-            field_verbose_name = BottleCap._meta.get_field(field.name).verbose_name
-            field_value = getattr(bottle_cap_item, field.name)
-            print(str(field_verbose_name) + '\t' + str(field_value))
-            columns.append({'attr': field_verbose_name, 'value': field_value})
-        except AttributeError:
-            print("An exception occurred......")
-            continue
-
     context = {
         'bottle_cap': bottle_cap_item,
-        'rows': columns,
         'itemsInCollection': BottleCap.objects.filter(collection=collection).count(),
         'collectionOwner': collection.created_by,
         'collectionName': Collection.objects.get(id=collection.pk).name,
@@ -254,47 +228,23 @@ def add_to_collection(request, collection_id):
         form = BottleCapForm(request.POST)
 
         if form.is_valid():
-            submit_time = datetime.datetime.now()
-            new_bottle_cap = BottleCap(
-                created=submit_time,
-                modified=submit_time,
-                date_acquired=form.cleaned_data['date_acquired'],
-                #available_for_trade=form.cleaned_data['available_for_trade'],
-                description=form.cleaned_data['description'],
-                company=form.cleaned_data['company'],
-                brand=form.cleaned_data['brand'],
-                product=form.cleaned_data['product'],
-                variety=form.cleaned_data['variety'],
-                text=form.cleaned_data['text'],
-                underside=form.cleaned_data['underside'],
-                beverage_type=form.cleaned_data['beverage_type'],
-                collection=form.cleaned_data['collection'],
-                created_by=request.user,
-                method_acquired=form.cleaned_data['method_acquired'],
-                modified_by=request.user
-            )
+            new_bottle_cap = form.save(commit=False)
+            new_bottle_cap.created_by = request.user
+            new_bottle_cap.modified_by = request.user
 
             new_bottle_cap.save()
 
+            form.save_m2m()
+
             return bottle_cap(request, new_bottle_cap.pk)
     else:
-        collection_form = get_item_input_form(collection_id)
+        collection_item_form = BottleCapForm(initial={'collection': collection_id})
 
         context = {
-            'collectionForm': collection_form,
+            'collectionForm': collection_item_form,
             'collection_id': collection_id
         }
         return render(request, 'collectionsapp/add_to_collection.html', context)
-
-
-def get_item_input_form(collection_id):
-    collection_type = Collection.objects.get(id=collection_id).type
-
-    switcher = {
-        'Bottle cap': BottleCapForm(initial={'collection': collection_id}),
-    }
-
-    return switcher.get(collection_type.name, "Invalid collection")
 
 
 def select_existing_fieldset(request):

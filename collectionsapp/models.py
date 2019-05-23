@@ -2,6 +2,7 @@ from datetime import date
 from django.contrib.auth.models import User
 from django.db import models
 from taggit.managers import TaggableManager
+from django.utils import timezone
 
 
 class CommonInfo(models.Model):
@@ -12,6 +13,12 @@ class CommonInfo(models.Model):
     modified_by = models.ForeignKey(User, on_delete=models.CASCADE,
                                     related_name='%(app_label)s_%(class)s_modified', verbose_name='Modified By')
 
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.created = timezone.now()
+        self.modified = timezone.now()
+        return super(CommonInfo, self).save(*args, **kwargs)
+
     class Meta:
         abstract = True
 
@@ -20,9 +27,9 @@ class CollectionItem(CommonInfo):
     date_acquired = models.DateField(default=date.today, verbose_name='Date Acquired')
     method_acquired = models.ForeignKey('MethodAcquired', on_delete=models.PROTECT, verbose_name="Method Acquired")
     available_for_trade = models.BooleanField(default=False, verbose_name='Available For Trade')
-    tags = TaggableManager(verbose_name='Tags')
+    tags = TaggableManager(verbose_name='Tags', blank=True)
     description = models.CharField(max_length=512, blank=True, verbose_name='Description')
-    collection = models.ForeignKey('Collection', on_delete=models.PROTECT, verbose_name='Collection ID')
+    collection = models.ForeignKey('Collection', on_delete=models.PROTECT, verbose_name='Collection')
 
     class Meta:
         abstract = True
