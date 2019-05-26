@@ -5,13 +5,18 @@ from django import forms
 class CollectionForm(forms.ModelForm):
     class Meta:
         model = Collection
-        fields = ['name', 'type', 'owner']
-    # name = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={
-    #     'class': 'form-control',
-    #     'placeholder': 'Name',
-    # }))
-    # type = forms.ModelChoiceField(queryset=models.CollectionType.objects.all(),
-    #                               widget=forms.Select(attrs={'class': 'form-control'}), required=True)
+        fields = ['name', 'type']
+
+    def __init__(self, *args, **kwargs):
+        super(CollectionForm, self).__init__(*args, **kwargs)
+
+        # Add bootstrap styling to fields
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+        # Add placeholder text to fields
+        self.fields['name'].widget.attrs.update({'placeholder': 'Name'})
+        self.fields['type'].widget.attrs.update({'placeholder': 'Type'})
 
 
 class CollectionTypeForm(forms.ModelForm):

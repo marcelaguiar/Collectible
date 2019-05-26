@@ -99,7 +99,8 @@ def bottle_cap(request, item_id):
         'collectionName': Collection.objects.get(id=collection.pk).name,
         'collectionTypeName': collection.type.name,
         'tags': bottle_cap_item.tags.all(),
-        'imageSet': CollectionItemImage.objects.filter(collection_item=bottle_cap_item).order_by('order_in_collection')
+        'imageSet': CollectionItemImage.objects.filter(collection_item=bottle_cap_item).order_by('order_in_collection'),
+        'collection_item_id': item_id
     }
 
     return render(request, 'collectionsapp/bottle_cap.html', context)
@@ -404,3 +405,11 @@ def upload_image(request, collection_item_id):
         }
 
         return render(request, 'collectionsapp/upload_image.html', context)
+
+
+def edit_collection_item(request, collection_item_id):
+    context = {
+        'collection_item_id': collection_item_id
+    }
+
+    return render(request, 'collectionsapp/edit_collection_item.html', context)

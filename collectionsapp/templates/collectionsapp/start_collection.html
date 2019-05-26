@@ -8,11 +8,15 @@
 
     <form action="{% url 'create_collection' %}" method="POST" role="form">
         {% csrf_token %}
-        <div class="input-form">
-            {{ collectionForm.name }}
-            {{ collectionForm.type }}
-            <button type="submit" class="btn btn-primary precedes-control">Create</button>
+        <div class="container">
+            <div class="row spaced-control">
+                {{ collectionForm.name }}
+            </div>
+            <div class="row spaced-control">
+                {{ collectionForm.type }}
+            </div>
         </div>
+        <button type="submit" class="btn btn-primary precedes-control">Create</button>
     </form>
 </div>
 {% endblock %}
