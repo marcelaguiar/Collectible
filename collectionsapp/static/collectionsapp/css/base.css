@@ -80,10 +80,6 @@ li.no-bullets {
     align-items: flex-start;
 }
 
-.tag {
-    margin: 0 5px 0 0;
-}
-
 .image-upload-button {
   margin: 0 auto;
 }
@@ -113,4 +109,8 @@ li.no-bullets {
 
 .spaced-control {
     margin-bottom: 5px;
+}
+
+.tag {
+    margin-left: 5px;
 }
