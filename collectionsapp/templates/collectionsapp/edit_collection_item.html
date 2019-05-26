@@ -2,6 +2,70 @@
 {% load static %}
 
 {% block body %}
-Editing item: {{ collection_item_id }}
+    <form action="{% url 'edit_collection_item' collection_item_id %}" method="POST" role="form">
+        {% csrf_token %}
+        <div class="input-form centered-form">
+            <div style="width:800px">
+                <table style="width: 100%">
+                    <tr>
+                        <td>{{ collectionForm.company.label_tag }}</td>
+                        <td>{{ collectionForm.company }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ collectionForm.brand.label_tag }}</td>
+                        <td>{{ collectionForm.brand }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ collectionForm.product.label_tag }}</td>
+                        <td>{{ collectionForm.product }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ collectionForm.variety.label_tag }}</td>
+                        <td>{{ collectionForm.variety }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ collectionForm.text.label_tag }}</td>
+                        <td>{{ collectionForm.text }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ collectionForm.underside.label_tag }}</td>
+                        <td>{{ collectionForm.underside }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ collectionForm.description.label_tag }}</td>
+                        <td>{{ collectionForm.description }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ collectionForm.beverage_type.label_tag }}</td>
+                        <td>{{ collectionForm.beverage_type }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ collectionForm.method_acquired.label_tag }}</td>
+                        <td>{{ collectionForm.method_acquired }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ collectionForm.date_acquired.label_tag }}</td>
+                        <td>{{ collectionForm.date_acquired }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ collectionForm.available_for_trade.label_tag }}</td>
+                        <td>{{ collectionForm.available_for_trade }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ collectionForm.tags.label_tag }}</td>
+                        <td>{{ collectionForm.tags }}</td>
+                    </tr>
+                </table>
+
+                {{ collectionForm.collection.as_hidden }}
+
+                <button type="submit" class="btn btn-primary precedes-control" style="width: 300px; float: right;">Save changes</button>
+                <a href="{% url 'delete_collection_item' %}">
+                    <button type="submit" class="btn btn-outline-danger" style="float: left;">Delete</button>
+                </a>
+            </div>
+        </div>
+
+    </form>
 
 {% endblock %}

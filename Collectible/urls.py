@@ -31,6 +31,7 @@ urlpatterns = [
     path('create_collection_type/', views.create_collection_type, name='create_collection_type'),
     path('design_fieldset', views.design_fieldset, name='design_fieldset'),
     path('edit_collection_item/<int:collection_item_id>/', views.edit_collection_item, name='edit_collection_item'),
+    path('error/', views.error, name='error'),
     path('explore_collection/<int:collection_id>/', views.explore_collection, name='explore_collection'),
     path('explore_collection_type/<int:collection_type_id>/', views.explore_collection_type,
          name='explore_collection_type'),
@@ -52,7 +53,7 @@ urlpatterns = [
     path('tag_search_all_collection_types/<int:collection_id>/<slug:slug>/',
          views.tag_search_all_collection_types,
          name='tag_search_all_collection_types'),
-    path('upload_image/<int:collection_item_id>', views.upload_image, name='upload_image'),
+    path('upload_image/<int:collection_item_id>', views.upload_image, name='upload_image')
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
