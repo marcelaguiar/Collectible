@@ -1,18 +1,3 @@
-"""Collectible URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/2.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URL conf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
@@ -41,20 +26,20 @@ urlpatterns = [
     path('my_collections/', views.my_collections, name='my_collections'),
     path('profile/<int:user_id>/', views.profile, name='profile'),
     path('select_collection/', views.select_collection, name='select_collection'),
-    path('select_fieldset', views.select_fieldset, name='select_fieldset'),
     path('select_existing_fieldset', views.select_existing_fieldset, name='select_existing_fieldset'),
+    path('select_fieldset', views.select_fieldset, name='select_fieldset'),
     path('signup/', views.signup, name='signup'),
     path('site_management/', views.site_management, name='site_management'),
     path('start_collection/', views.start_collection, name='start_collection'),
+    path('tag_search_all_collection_types/<int:collection_id>/<slug:slug>/',
+         views.tag_search_all_collection_types,
+         name='tag_search_all_collection_types'),
     path('tag_search_collection/<int:collection_id>/<slug:slug>/',
          views.tag_search_collection,
          name='tag_search_collection'),
     path('tag_search_collection_type/<int:collection_id>/<slug:slug>/',
          views.tag_search_collection_type,
          name='tag_search_collection_type'),
-    path('tag_search_all_collection_types/<int:collection_id>/<slug:slug>/',
-         views.tag_search_all_collection_types,
-         name='tag_search_all_collection_types'),
     path('upload_image/<int:collection_item_id>', views.upload_image, name='upload_image')
 ]
 
