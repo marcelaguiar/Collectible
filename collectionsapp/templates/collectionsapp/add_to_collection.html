@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block body %}
+
     <form action="{% url 'add_to_collection' collection_id %}" method="POST" role="form">
         {% csrf_token %}
         <div class="input-form centered-form">
@@ -46,6 +47,10 @@
                     <tr>
                         <td>{{ collectionForm.date_acquired.label_tag }}</td>
                         <td>{{ collectionForm.date_acquired }}</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>{{ collectionForm.date_acquired.errors }}</td>
                     </tr>
                     <tr>
                         <td>{{ collectionForm.available_for_trade.label_tag }}</td>

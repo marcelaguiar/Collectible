@@ -1,5 +1,6 @@
 from collectionsapp.models import Collection, CollectionType, BottleCap, CollectionItemImage
 from django import forms
+from datetime import date
 
 
 class CollectionForm(forms.ModelForm):
@@ -63,6 +64,14 @@ class BottleCapForm(forms.ModelForm):
         self.fields['text'].widget.attrs.update({'placeholder': 'Text'})
         self.fields['underside'].widget.attrs.update({'placeholder': 'Underside'})
         self.fields['description'].widget.attrs.update({'placeholder': 'Description'})
+
+    def clean_date_acquired(self):
+        cleaned_data = super(BottleCapForm, self).clean()
+        date_acquired = cleaned_data.get("date_acquired")
+
+        if date_acquired > date.today():
+            raise forms.ValidationError("Date time cannot be in future")
+        return date_acquired
 
 
 class CollectionItemImageForm(forms.ModelForm):

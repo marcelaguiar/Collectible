@@ -44,6 +44,12 @@ def add_to_collection(request, collection_id):
             form.save_m2m()
 
             return bottle_cap(request, new_bottle_cap.pk)
+        else:
+            context = {
+                'collectionForm': form,
+                'collection_id': collection_id
+            }
+            return render(request, 'collectionsapp/add_to_collection.html', context)
     else:
         collection_item_form = BottleCapForm(initial={'collection': collection_id})
 
