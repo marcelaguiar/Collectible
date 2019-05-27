@@ -431,3 +431,11 @@ def error(request, description):
         'description': description
     }
     return render(request, 'collectionsapp/error.html', context)
+
+
+def delete_collection_item(request, collection_item_id):
+    instance = BottleCap.objects.get(id=collection_item_id)
+    collection_id = instance.collection_id
+    instance.delete()
+
+    return explore_collection(request, collection_id)

@@ -73,7 +73,8 @@ class BottleCap(CollectionItem):
     underside = models.CharField(max_length=50, blank=True, verbose_name='Underside')
 
     def __str__(self):
-        return self.brand + ' - ' + self.product + ' - ' + self.variety
+        strings = [self.brand, self.product, self.variety]
+        return ' - '.join(filter(None, strings))
 
 
 class BeverageType(CommonInfo):

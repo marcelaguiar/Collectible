@@ -60,12 +60,14 @@
                 {{ collectionForm.collection.as_hidden }}
 
                 <button type="submit" class="btn btn-primary precedes-control" style="width: 300px; float: right;">Save changes</button>
-                <a href="{% url 'delete_collection_item' %}">
-                    <button type="submit" class="btn btn-outline-danger" style="float: left;">Delete</button>
-                </a>
+
             </div>
         </div>
 
     </form>
+
+    <a href="{% url 'delete_collection_item' collection_item_id %}">
+        <button class="btn btn-outline-danger" style="float: left;">Delete</button>
+    </a>
 
 {% endblock %}

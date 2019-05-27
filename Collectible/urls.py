@@ -29,6 +29,8 @@ urlpatterns = [
     path('collection_types/', views.collection_types, name='collection_types'),
     path('create_collection/', views.create_collection, name='create_collection'),
     path('create_collection_type/', views.create_collection_type, name='create_collection_type'),
+    path('delete_collection_item/<int:collection_item_id>', views.delete_collection_item,
+         name='delete_collection_item'),
     path('design_fieldset', views.design_fieldset, name='design_fieldset'),
     path('edit_collection_item/<int:collection_item_id>/', views.edit_collection_item, name='edit_collection_item'),
     path('error/', views.error, name='error'),
