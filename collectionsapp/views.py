@@ -28,6 +28,9 @@ class FriendlyDataTypes:
 
 @login_required
 def add_to_collection(request, collection_id):
+    if Collection.objects.get(id=collection_id).owner != request.user:
+        return error(request, "You cannot add to other people's collections.")
+
     if request.method == "POST":
         form = BottleCapForm(request.POST)
 
