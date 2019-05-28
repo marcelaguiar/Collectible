@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.db import Error
-from django.db.models import fields
+from django.db.models import fields, Q
 from django.db.models.fields import files
 from django.forms import modelformset_factory
 from django.shortcuts import render, redirect, get_object_or_404
@@ -448,3 +448,19 @@ def delete_collection_item(request, collection_item_id):
     instance.delete()
 
     return explore_collection(request, collection_id)
+
+
+def search(request):
+
+    criteria = request.GET.get('q')
+
+    query = Q(company__icontains=criteria) |\
+        Q(brand__icontains=criteria) |\
+        Q(product__icontains=criteria) |\
+        Q(variety__icontains=criteria) |\
+        Q(text__icontains=criteria)
+
+    context = {
+        'search_results': BottleCap.objects.filter(query)
+    }
+    return render(request, 'collectionsapp/search.html', context)

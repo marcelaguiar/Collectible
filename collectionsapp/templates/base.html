@@ -37,20 +37,22 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'start_collection' %}">Start Collection</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'select_collection' %}">Add Item</a>
+                        </li>
                     </ul>
 
-                    <div class="input-group navbar-item-spaced" style="width: 400px;">
-                        <input type="text" class="form-control" placeholder="Search collections">
-                        <a class="input-group-append" href="#">
-                            <div class="input-group-text">
-                                <ion-icon name="search"></ion-icon>
-                                Search
-                            </div>
-                        </a>
-                    </div>
-                    <a href="{% url 'select_collection' %}" class="navbar-item-spaced">
-                        <button type="button" class="btn btn-outline-success">Add Item</button>
-                    </a>
+                    <form method="get" action="{% url 'search' %}">
+                        <div class="input-group navbar-item-spaced" style="width: 300px;">
+                            <input class="form-control" type="search" placeholder="Search collections" name="q">
+                            <a class="input-group-append" href="#">
+                                <button type="submit" class="btn btn-secondary">
+                                    <ion-icon name="search"></ion-icon>
+                                </button>
+                            </a>
+                        </div>
+                    </form>
+
                     {% if user.is_authenticated %}
                     <div class="dropdown">
                         <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown">

@@ -3,3 +3,4 @@ Collectible/settings.py
 .idea/
 .JPG
 .media/
+collectionsapp/static/bootstrap*

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <ul>
+        {% for result in search_results %}
+            <li><a href="{% url 'bottle_cap' result.pk %}">{{ result }}</a></li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
