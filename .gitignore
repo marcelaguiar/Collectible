@@ -2,5 +2,6 @@ Collectible/__pycache__/
 Collectible/settings.py
 .idea/
 .JPG
-.media/
+media/
 collectionsapp/static/bootstrap*
+node_modules/
