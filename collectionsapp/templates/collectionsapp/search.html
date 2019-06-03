@@ -9,4 +9,10 @@
         {% endfor %}
     </ul>
 
+    <div id="gridContainer"></div>
+
+    {% block adhocjs %}
+        <script src="{% static "collectionsapp/javascript/search_page.js" %}"></script>
+    {% endblock %}
+
 {% endblock %}

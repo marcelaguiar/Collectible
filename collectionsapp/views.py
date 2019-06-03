@@ -8,6 +8,7 @@ from django.db import Error
 from django.db.models import fields, Q
 from django.db.models.fields import files
 from django.forms import modelformset_factory
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -461,6 +462,24 @@ def search(request):
         Q(text__icontains=criteria)
 
     context = {
+        'criteria': criteria,
         'search_results': BottleCap.objects.filter(query)
     }
     return render(request, 'collectionsapp/search.html', context)
+
+
+def search_json(request):
+    data = []
+
+    for cap in BottleCap.objects.all():
+        item = {
+            "Link": "Link",
+            "Company": cap.company,
+            "Brand": cap.brand,
+            "Product": cap.product,
+            "Variety": cap.variety
+        }
+
+        data.append(item)
+
+    return JsonResponse(data, safe=False)
