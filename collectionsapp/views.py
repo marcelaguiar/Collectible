@@ -445,6 +445,10 @@ def error(request, description):
 
 def delete_collection_item(request, collection_item_id):
     instance = BottleCap.objects.get(id=collection_item_id)
+    related_images = CollectionItemImage.objects.filter(collection_item_id=instance.pk)
+
+    related_images.delete()
+
     collection_id = instance.collection_id
     instance.delete()
 

@@ -21,7 +21,7 @@ function SetUpSearchResults() {
         headerFilter: {
             visible: true
         },
-         columns: [{
+        columns: [{
             type: "buttons",
             buttons: [{
                 text: "Link",
@@ -34,6 +34,6 @@ function SetUpSearchResults() {
         allowColumnResizing: true,
         columnResizingMode: "nextColumn",
         columnMinWidth: 50,
-        columnAutoWidth: true,
+        columnAutoWidth: true
     });
 }
