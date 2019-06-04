@@ -455,15 +455,8 @@ def search(request):
 
     criteria = request.GET.get('q')
 
-    query = Q(company__icontains=criteria) |\
-        Q(brand__icontains=criteria) |\
-        Q(product__icontains=criteria) |\
-        Q(variety__icontains=criteria) |\
-        Q(text__icontains=criteria)
-
     context = {
-        'criteria': criteria,
-        'search_results': BottleCap.objects.filter(query)
+        'criteria': "" if criteria is None else criteria
     }
     return render(request, 'collectionsapp/search.html', context)
 

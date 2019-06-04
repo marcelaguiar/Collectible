@@ -8,9 +8,13 @@ function SetUpSearchResults() {
             highlightCaseSensitive: false,
             highlightSearchText: true,
             searchVisibleColumnsOnly: true,
-            text: criteria,
+            text: $("#search-criteria").val(),
             visible: true,
             width: 500
+        },
+        filterRow: {
+            visible: true,
+            applyFilter: "auto"
         }
     });
 }
