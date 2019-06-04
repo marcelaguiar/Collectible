@@ -456,7 +456,7 @@ def search(request):
     criteria = request.GET.get('q')
 
     context = {
-        'criteria': "" if criteria is None else criteria
+        'criteria': criteria if criteria is not None else ""
     }
     return render(request, 'collectionsapp/search.html', context)
 
@@ -466,11 +466,12 @@ def search_json(request):
 
     for cap in BottleCap.objects.all():
         item = {
-            "Link": "Link",
+            "Id": cap.pk,
             "Company": cap.company,
             "Brand": cap.brand,
             "Product": cap.product,
-            "Variety": cap.variety
+            "Variety": cap.variety,
+            "Date acquired": cap.date_acquired
         }
 
         data.append(item)
