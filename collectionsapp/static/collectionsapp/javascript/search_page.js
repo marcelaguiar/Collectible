@@ -21,16 +21,23 @@ function SetUpSearchResults() {
         headerFilter: {
             visible: true
         },
-        columns: [{
-            type: "buttons",
-            buttons: [{
-                text: "Link",
-                onClick: function (e) {
-                    var itemId = e.row.values[1];
-                    window.location = '/bottle_cap/' + (itemId).toString();
-                }
-            }]
-        }, "Id", "Company", "Brand", "Product", "Variety", "Date acquired"],
+        columns: [
+            {
+                cellTemplate: function(element, info) {
+                    element.append("<a href='/bottle_cap/" + info.data.Id +"'>Link</a>").css("text-align", "center");
+                    },
+                allowFiltering: false,
+                allowSorting: false,
+                width: 20
+            },
+            {
+                dataField: "Id",
+                width: 30
+            }, "Company", "Brand", "Product", "Variety",
+            {
+                dataField: "Date acquired",
+                dataType: "date"
+            }],
         allowColumnResizing: true,
         columnResizingMode: "nextColumn",
         columnMinWidth: 50,
