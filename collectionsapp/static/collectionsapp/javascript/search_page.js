@@ -32,7 +32,7 @@ function SetUpSearchResults() {
             },
             {
                 dataField: "Id",
-                width: 30
+                visible: false
             }, "Company", "Brand", "Product", "Variety",
             {
                 dataField: "Date acquired",
