@@ -1,8 +1,17 @@
 var searchCriteria = ($("#search-criteria").length ? $("#search-criteria").val() : "");
 
+var beverageTypeLookupDataSource = {
+    store: new DevExpress.data.CustomStore({
+        key: "id",
+        loadMode: "raw",
+        load: function() {
+            return $.getJSON("../get_all_beverage_types");
+        }
+    }),
+    sort: "name"
+};
+
 SetUpSearchResults(searchCriteria);
-
-
 
 function SetUpSearchResults(criteria) {
     $("#gridContainer").dxDataGrid({
@@ -58,7 +67,7 @@ function SetUpSearchResults(criteria) {
                 dataField: 'beverage_type',
                 caption: 'Beverage type',
                 lookup: {
-                    dataSource: '../get_all_beverage_types/',
+                    dataSource: beverageTypeLookupDataSource,
                     valueExpr: 'id',
                     displayExpr: 'name'
                 }
