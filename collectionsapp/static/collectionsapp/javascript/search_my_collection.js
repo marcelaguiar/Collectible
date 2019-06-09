@@ -1,6 +1,8 @@
-SetUpSearchResults();
+var searchCriteria = ($("#search-criteria").length ? $("#search-criteria").val() : "");
 
-function SetUpSearchResults() {
+SetUpSearchResults(searchCriteria);
+
+function SetUpSearchResults(criteria) {
     $("#gridContainer").dxDataGrid({
         dataSource: "json/",
         showBorders: true,
@@ -10,7 +12,7 @@ function SetUpSearchResults() {
             highlightCaseSensitive: false,
             highlightSearchText: true,
             searchVisibleColumnsOnly: true,
-            text: $("#search-criteria").val(),
+            text: criteria,
             visible: true,
             width: 400
         },

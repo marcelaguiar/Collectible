@@ -1,5 +1,5 @@
 from collectionsapp.forms import CollectionTypeForm, CollectionForm, BottleCapForm
-from collectionsapp.models import BottleCap, CollectionType, Collection, CollectionItem, User, CollectionItemImage
+from collectionsapp.models import BeverageType, BottleCap, CollectionType, Collection, CollectionItem, User, CollectionItemImage
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -212,7 +212,8 @@ def explore_collection(request, collection_id):
         'collection_name': collection.name,
         'collection_items': collection_items,
         'collection_id': collection_id,
-        'is_owner': collection.created_by_id == request.user.id
+        'is_owner': collection.created_by_id == request.user.id,
+        'images': CollectionItemImage.objects.filter(order_in_collection=1, collection_item__collection=collection)
     }
     return render(request, 'collectionsapp/explore_collection.html', context)
 
@@ -465,19 +466,14 @@ def search(request):
     return render(request, 'collectionsapp/search.html', context)
 
 
-def search_json(request):
-    data = []
+def get_all_bottle_caps(request):
+    data = BottleCap.objects.all().values('id', 'company', 'brand', 'product', 'variety', 'beverage_type',
+                                          'date_acquired')
 
-    for cap in BottleCap.objects.all():
-        item = {
-            "Id": cap.pk,
-            "Company": cap.company,
-            "Brand": cap.brand,
-            "Product": cap.product,
-            "Variety": cap.variety,
-            "Date acquired": cap.date_acquired
-        }
+    return JsonResponse(list(data), safe=False)
 
-        data.append(item)
 
-    return JsonResponse(data, safe=False)
+def get_all_beverage_types(request):
+    data = BeverageType.objects.all().values('id', 'name')
+
+    return JsonResponse(list(data), safe=False)

@@ -118,3 +118,7 @@ li.no-bullets {
 .navbar-item-spaced {
     margin-right: 5px;
 }
+
+.navbar-title-text {
+    font-family: 'Pacifico', cursive;
+}

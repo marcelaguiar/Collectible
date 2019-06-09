@@ -22,6 +22,23 @@
         {% endfor %}
     </ul>
 
+    <link rel="stylesheet" href="{% static 'collectionsapp/css/image_grid.css' %}">
+    <div class="image-grid">
+        {% for item in images %}
+            <div class="grid-item">
+                <a href="{% url 'bottle_cap' item.collection_item.id %}">
+                    <img src="{{ item.image.url }}" alt="{{ item.collection_item }}">
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div id="gridContainer"></div>
+
+    {% block adhocjs %}
+        <script src="{% static "collectionsapp/javascript/search.js" %}"></script>
+    {% endblock %}
+
 {% endblock %}
 
 

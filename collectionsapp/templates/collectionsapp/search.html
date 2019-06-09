@@ -3,17 +3,7 @@
 
 {% block body %}
 
-    <ul>
-        {% for result in search_results %}
-            <li><a href="{% url 'bottle_cap' result.pk %}">{{ result }}</a></li>
-        {% endfor %}
-    </ul>
-
     <div id="gridContainer"></div>
-
-    {% block adhocjs %}
-        <script src="{% static "collectionsapp/javascript/search_page.js" %}"></script>
-    {% endblock %}
 
     <input type="hidden" id="search-criteria" value="{{ criteria }}">
 
