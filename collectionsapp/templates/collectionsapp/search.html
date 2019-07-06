@@ -8,3 +8,7 @@
     <input type="hidden" id="search-criteria" value="{{ criteria }}">
 
 {% endblock %}
+
+{% block dedicated_scripts %}
+    <script src="{% static "collectionsapp/javascript/search.js" %}"></script>
+{% endblock %}

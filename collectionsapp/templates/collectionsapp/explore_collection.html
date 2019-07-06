@@ -11,33 +11,27 @@
         </a>&nbsp;
     {% endif %}
 
-    <!-- Display all items in collection -->
-    <ul>
-        {% if collection_items.count == 0 %}
-            <p>(no items in collection)</p>
-        {% endif %}
-
-        {% for item in collection_items %}
-            <li><a href="{% url 'bottle_cap' item.id  %}" >{{ item }}</a></li>
-        {% endfor %}
-    </ul>
-
-    <link rel="stylesheet" href="{% static 'collectionsapp/css/image_grid.css' %}">
-    <div class="image-grid">
-        {% for item in images %}
-            <div class="grid-item">
-                <a href="{% url 'bottle_cap' item.collection_item.id %}">
-                    <img src="{{ item.image.url }}" alt="{{ item.collection_item }}">
-                </a>
-            </div>
-        {% endfor %}
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <a class="btn btn-outline-secondary" href="{% url 'explore_collection' collection_id 'image' %}" role="button">Image</a>
+        <a class="btn btn-outline-secondary" href="{% url 'explore_collection' collection_id 'imageanddetails' %}" role="button">Image & Details</a>
+        <a class="btn btn-outline-secondary" href="{% url 'explore_collection' collection_id 'details' %}" role="button">Details</a>
     </div>
 
-    <div id="gridContainer"></div>
-
-    {% block adhocjs %}
-        <script src="{% static "collectionsapp/javascript/search.js" %}"></script>
-    {% endblock %}
+    {% if view == 'image' %}
+        <link rel="stylesheet" href="{% static 'collectionsapp/css/image_grid.css' %}">
+        <div class="image-grid">
+            {% for item in images %}
+                <div class="grid-item">
+                    <a href="{% url 'bottle_cap' item.collection_item.id %}">
+                        <img src="{{ item.image.url }}" alt="{{ item.collection_item }}">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% elif view == 'imageanddetails' or view == 'details'%}
+        <div id="gridContainer"></div>
+    {% else %}
+    {% endif %}
 
 {% endblock %}
 

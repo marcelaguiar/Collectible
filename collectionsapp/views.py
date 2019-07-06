@@ -204,16 +204,24 @@ def create_collection(request):
             return redirect('my_collections')
 
 
-def explore_collection(request, collection_id):
+def explore_collection(request, collection_id, view):
+
     collection = Collection.objects.get(id=collection_id)
-    collection_items = BottleCap.objects.filter(collection_id=collection_id).order_by('-created')
+    images = None
+
+    if view == 'image':
+        images = CollectionItemImage.objects.filter(order_in_collection=1, collection_item__collection=collection)
+    # elif view == 'imageanddetails':
+    #     #
+    # elif view == 'details':
+    #     #
 
     context = {
         'collection_name': collection.name,
-        'collection_items': collection_items,
         'collection_id': collection_id,
         'is_owner': collection.created_by_id == request.user.id,
-        'images': CollectionItemImage.objects.filter(order_in_collection=1, collection_item__collection=collection)
+        'images': images,
+        'view': view
     }
     return render(request, 'collectionsapp/explore_collection.html', context)
 
@@ -457,6 +465,10 @@ def delete_collection_item(request, collection_item_id):
 
 
 def search(request):
+    data = CollectionItemImage.objects.select_related('collection_item').filter(order_in_collection=1)
+
+    for item in data:
+        print(item)
 
     criteria = request.GET.get('q')
 
@@ -466,9 +478,31 @@ def search(request):
     return render(request, 'collectionsapp/search.html', context)
 
 
+def debug_search(request):
+    data = CollectionItemImage.objects.select_related('collection_item').filter(order_in_collection=1)
+
+    for item in data:
+        print(item)
+
+    criteria = request.GET.get('q')
+
+    context = {
+        'criteria': criteria if criteria is not None else ""
+    }
+    return render(request, 'collectionsapp/debug_search.html', context)
+
+
 def get_all_bottle_caps(request):
     data = BottleCap.objects.all().values('id', 'company', 'brand', 'product', 'variety', 'beverage_type',
                                           'date_acquired')
+
+    return JsonResponse(list(data), safe=False)
+
+
+def get_all_bottle_caps_with_primary_image(request):
+    data = CollectionItemImage.objects.select_related(order_in_collection=1).values()
+
+    data = data.values('id', 'company', 'brand', 'product', 'variety', 'beverage_type', 'date_acquired')
 
     return JsonResponse(list(data), safe=False)
 

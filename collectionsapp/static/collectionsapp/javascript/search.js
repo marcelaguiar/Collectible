@@ -1,33 +1,43 @@
-var searchCriteria = ($("#search-criteria").length ? $("#search-criteria").val() : "");
+var url = window.location.href;
 
-var beverageTypeLookupDataSource = {
-    store: new DevExpress.data.CustomStore({
-        key: "id",
-        loadMode: "raw",
-        load: function() {
-            return $.getJSON("../get_all_beverage_types");
-        }
-    }),
-    sort: "name"
-};
+if(new RegExp('explore_collection\/[0-9]+\/details$').test(url) || new RegExp('search\/').test(url)) {
+    SetUpDataGrid();//SetUpDataGrid('details');
+}
+else if(new RegExp('explore_collection\/[0-9]+\/imageanddetails$').test(url)) {
+    SetUpDataGrid();//SetUpDataGrid('imageanddetails');
+}
 
-SetUpSearchResults(searchCriteria);
+function SetUpDataGrid() {
+    var criteria = document.getElementById("search-criteria").value;
 
-function SetUpSearchResults(criteria) {
+    var beverageTypeLookupDataSource = {
+        store: new DevExpress.data.CustomStore({
+            key: "id",
+            loadMode: "raw",
+            load: function() {
+                return $.getJSON("/get_all_beverage_types");
+            }
+        }),
+        sort: "name"
+    };
+
     $("#gridContainer").dxDataGrid({
-        dataSource: "../get_all_bottle_caps/",
-        showBorders: true,
-        showRowLines: true,
-        rowAlternationEnabled: true,
+        dataSource: "/get_all_bottle_caps/",
         searchPanel: {
             highlightCaseSensitive: false,
             highlightSearchText: true,
             searchVisibleColumnsOnly: true,
             text: criteria,
-            visible: true,
-            width: 400
+            visible: true
         },
-        filterRow: {
+        showBorders: true,
+        showRowLines: true,
+        rowAlternationEnabled: true,
+        allowColumnResizing: true,
+        columnResizingMode: "nextColumn",
+        columnMinWidth: 50,
+        columnAutoWidth: true,
+         filterRow: {
             visible: true,
             applyFilter: "auto"
         },
@@ -41,10 +51,12 @@ function SetUpSearchResults(criteria) {
                 },
                 allowFiltering: false,
                 allowSorting: false,
+                allowSearch: false,
                 width: 20
             },
             {
                 dataField: "id",
+                dataType: "Number",
                 visible: false
             },
             {
@@ -70,16 +82,13 @@ function SetUpSearchResults(criteria) {
                     dataSource: beverageTypeLookupDataSource,
                     valueExpr: 'id',
                     displayExpr: 'name'
-                }
+                },
+                dataType: "String"
             },
             {
                 dataField: "date_acquired",
-                dataType: "date"
+                dataType: "Date"
             }
-        ],
-        allowColumnResizing: true,
-        columnResizingMode: "nextColumn",
-        columnMinWidth: 50,
-        columnAutoWidth: true
+        ]
     });
 }
