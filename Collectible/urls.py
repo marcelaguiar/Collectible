@@ -28,7 +28,6 @@ urlpatterns = [
     path('my_collections/', views.my_collections, name='my_collections'),
     path('profile/<int:user_id>/', views.profile, name='profile'),
     path('search/', views.search, name='search'),
-    path('debug_search/', views.debug_search, name='debug_search'),
     path('select_collection/', views.select_collection, name='select_collection'),
     path('select_existing_fieldset', views.select_existing_fieldset, name='select_existing_fieldset'),
     path('select_fieldset', views.select_fieldset, name='select_fieldset'),

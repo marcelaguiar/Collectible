@@ -1,21 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Register</title>
-</head>
-<body>
-    <h1>Registration page</h1>
-    <form method="post" action="{% url 'signup' %}">
-        {% csrf_token %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <div align="center">
+        <!-- Header -->
+        <h3>Registration</h3>
 
         {% if form.errors %}
-        <p>There are errors in the form!</p>
+            <p>There are errors in the form!</p>
         {% endif %}
 
-        {{ form }}
+        <div style="width: 300px;">
+            <form method="post" action="{% url 'signup' %}">
+                {% csrf_token %}
 
-        <input type="submit" value="signup">
-    </form>
-</body>
-</html>
+                {{ form.username }}
+
+                {{ form.password1 }}
+
+                {{ form.password2 }}
+
+                <input type="submit" value="signup">
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,14 +1,15 @@
 from collectionsapp.forms import CollectionTypeForm, CollectionForm, BottleCapForm
-from collectionsapp.models import BeverageType, BottleCap, CollectionType, Collection, CollectionItem, User, CollectionItemImage
+from collectionsapp.models import BeverageType, BottleCap, CollectionType, Collection, CollectionItem, User,\
+    CollectionItemImage
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.db import Error
-from django.db.models import fields, Q
+from django.db.models import fields
 from django.db.models.fields import files
 from django.forms import modelformset_factory
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -373,7 +374,7 @@ def tag_search_all_collection_types(request, collection_id, slug):
 
 @login_required
 def upload_image(request, collection_item_id):
-    CollectionItemImageFormset = modelformset_factory(
+    collection_item_image_formset = modelformset_factory(
         model=CollectionItemImage,
         fields=('image', 'order_in_collection'),
         extra=1,
@@ -381,7 +382,7 @@ def upload_image(request, collection_item_id):
     )
 
     if request.method == "POST":
-        formset = CollectionItemImageFormset(
+        formset = collection_item_image_formset(
             request.POST,
             request.FILES,
             queryset=CollectionItemImage.objects.filter(collection_item_id=collection_item_id)
@@ -411,7 +412,7 @@ def upload_image(request, collection_item_id):
 
         context = {
             'collection': collection,
-            'imageUploadFormSet': CollectionItemImageFormset(queryset=CollectionItemImage.objects.none())
+            'imageUploadFormSet': collection_item_image_formset(queryset=CollectionItemImage.objects.none())
         }
 
         return render(request, 'collectionsapp/upload_image.html', context)
@@ -461,7 +462,7 @@ def delete_collection_item(request, collection_item_id):
     collection_id = instance.collection_id
     instance.delete()
 
-    return explore_collection(request, collection_id)
+    return explore_collection(request, collection_id, "image")
 
 
 def search(request):
@@ -476,20 +477,6 @@ def search(request):
         'criteria': criteria if criteria is not None else ""
     }
     return render(request, 'collectionsapp/search.html', context)
-
-
-def debug_search(request):
-    data = CollectionItemImage.objects.select_related('collection_item').filter(order_in_collection=1)
-
-    for item in data:
-        print(item)
-
-    criteria = request.GET.get('q')
-
-    context = {
-        'criteria': criteria if criteria is not None else ""
-    }
-    return render(request, 'collectionsapp/debug_search.html', context)
 
 
 def get_all_bottle_caps(request):

@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% if view == 'image' %}
+    {% block dedicated_styling %}
+        <link rel="stylesheet" href="{% static 'collectionsapp/css/image_grid.css' %}">
+    {% endblock %}
+{% endif %}
+
 {% block body %}
     <h1>{{ collection_name }}</h1>
 
@@ -18,7 +24,6 @@
     </div>
 
     {% if view == 'image' %}
-        <link rel="stylesheet" href="{% static 'collectionsapp/css/image_grid.css' %}">
         <div class="image-grid">
             {% for item in images %}
                 <div class="grid-item">

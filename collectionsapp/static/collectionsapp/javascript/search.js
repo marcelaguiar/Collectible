@@ -76,12 +76,12 @@ function SetUpDataGrid() {
                 dataType: "String"
             },
             {
-                dataField: 'beverage_type',
-                caption: 'Beverage type',
+                dataField: "beverage_type",
+                caption: "Beverage type",
                 lookup: {
                     dataSource: beverageTypeLookupDataSource,
-                    valueExpr: 'id',
-                    displayExpr: 'name'
+                    valueExpr: "id",
+                    displayExpr: "name"
                 },
                 dataType: "String"
             },
