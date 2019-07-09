@@ -17,10 +17,26 @@
         </a>&nbsp;
     {% endif %}
 
-    <div class="btn-group" role="group" aria-label="Basic example">
-        <a class="btn btn-outline-secondary" href="{% url 'explore_collection' collection_id 'image' %}" role="button">Image</a>
-        <a class="btn btn-outline-secondary" href="{% url 'explore_collection' collection_id 'imageanddetails' %}" role="button">Image & Details</a>
-        <a class="btn btn-outline-secondary" href="{% url 'explore_collection' collection_id 'details' %}" role="button">Details</a>
+    <div class="btn-group" role="group">
+        {% if view == "image" %}
+            <div class="btn btn-outline-secondary active">Image</div>
+            <a class="btn btn-outline-secondary"
+               href="{% url 'explore_collection' collection_id 'imageanddetails' %}" role="button">Image & Details</a>
+            <a class="btn btn-outline-secondary"
+               href="{% url 'explore_collection' collection_id 'details' %}" role="button">Details</a>
+        {% elif view == "details" %}
+            <a class="btn btn-outline-secondary"
+               href="{% url 'explore_collection' collection_id 'image' %}" role="button">Image</a>
+            <a class="btn btn-outline-secondary"
+               href="{% url 'explore_collection' collection_id 'imageanddetails' %}" role="button">Image & Details</a>
+            <div class="btn btn-outline-secondary active">Details</div>
+        {% else %}
+            <a class="btn btn-outline-secondary"
+               href="{% url 'explore_collection' collection_id 'image' %}" role="button">Image</a>
+            <div class="btn btn-outline-secondary active">Image & Details</div>
+            <a class="btn btn-outline-secondary"
+               href="{% url 'explore_collection' collection_id 'details' %}" role="button">Details</a>
+        {% endif %}
     </div>
 
     {% if view == 'image' %}
@@ -37,7 +53,6 @@
         <div id="gridContainer"></div>
     {% else %}
     {% endif %}
-
 {% endblock %}
 
 {% if view == 'imageanddetails' or view == 'details'%}
