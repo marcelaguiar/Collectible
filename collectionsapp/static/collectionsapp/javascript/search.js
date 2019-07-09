@@ -1,14 +1,13 @@
-var url = window.location.href;
-
-if(new RegExp('explore_collection\/[0-9]+\/details$').test(url) || new RegExp('search\/').test(url)) {
-    SetUpDataGrid();//SetUpDataGrid('details');
-}
-else if(new RegExp('explore_collection\/[0-9]+\/imageanddetails$').test(url)) {
-    SetUpDataGrid();//SetUpDataGrid('imageanddetails');
+if(!!document.getElementById("gridContainer")) {
+    SetUpDataGrid();
 }
 
 function SetUpDataGrid() {
-    var criteria = document.getElementById("search-criteria").value;
+    var criteria = "";
+
+    if(!!document.getElementById("search-criteria")) {
+        criteria = document.getElementById("search-criteria").value;
+    }
 
     var beverageTypeLookupDataSource = {
         store: new DevExpress.data.CustomStore({
@@ -28,7 +27,8 @@ function SetUpDataGrid() {
             highlightSearchText: true,
             searchVisibleColumnsOnly: true,
             text: criteria,
-            visible: true
+            visible: true,
+            width: 300
         },
         showBorders: true,
         showRowLines: true,
@@ -56,24 +56,24 @@ function SetUpDataGrid() {
             },
             {
                 dataField: "id",
-                dataType: "Number",
+                dataType: "number",
                 visible: false
             },
             {
                 dataField: "company",
-                dataType: "String"
+                dataType: "string"
             },
             {
                 dataField: "brand",
-                dataType: "String"
+                dataType: "string"
             },
             {
                 dataField: "product",
-                dataType: "String"
+                dataType: "string"
             },
             {
                 dataField: "variety",
-                dataType: "String"
+                dataType: "string"
             },
             {
                 dataField: "beverage_type",
@@ -83,11 +83,11 @@ function SetUpDataGrid() {
                     valueExpr: "id",
                     displayExpr: "name"
                 },
-                dataType: "String"
+                dataType: "string"
             },
             {
                 dataField: "date_acquired",
-                dataType: "Date"
+                dataType: "date"
             }
         ]
     });

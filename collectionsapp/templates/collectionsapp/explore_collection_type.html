@@ -9,7 +9,7 @@
         {% for collection in collections %}
         <li>
             <span>
-                <a href="{% url 'explore_collection' collection.id 'imageanddetails'%}">{{ collection }}</a>
+                <a href="{% url 'explore_collection' collection.id 'image'%}">{{ collection }}</a>
                 , owned by <a href="{% url 'profile' collection.owner.id %}">{{ collection.owner.username }}</a>
             </span>
         </li>
