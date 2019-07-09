@@ -53,11 +53,13 @@
         <div id="gridContainer"></div>
     {% else %}
     {% endif %}
+
+    <input type="hidden" id="collection-id" value="{{ collection_id }}">
 {% endblock %}
 
 {% if view == 'imageanddetails' or view == 'details'%}
     {% block dedicated_scripts %}
-        <script src="{% static "collectionsapp/javascript/search.js" %}"></script>
+        <script src="{% static "collectionsapp/javascript/search_collection.js" %}"></script>
     {% endblock %}
 {% endif %}
 

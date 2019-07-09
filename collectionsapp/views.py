@@ -486,6 +486,13 @@ def get_all_bottle_caps(request):
     return JsonResponse(list(data), safe=False)
 
 
+def get_all_bottle_caps_by_collection(request, collection_id):
+    data = BottleCap.objects.filter(collection_id=collection_id)\
+        .values('id', 'company', 'brand', 'product', 'variety', 'beverage_type', 'date_acquired')
+
+    return JsonResponse(list(data), safe=False)
+
+
 def get_all_bottle_caps_with_primary_image(request):
     data = CollectionItemImage.objects.select_related(order_in_collection=1).values()
 

@@ -24,6 +24,8 @@ urlpatterns = [
          name='explore_collection_type'),
     path('get_all_beverage_types/', views.get_all_beverage_types),
     path('get_all_bottle_caps/', views.get_all_bottle_caps),
+    path('get_all_bottle_caps_by_collection/<int:collection_id>/', views.get_all_bottle_caps_by_collection,
+         name='get_all_bottle_caps_by_collection'),
     path('logout/', views.logout_view, name='logout'),
     path('my_collections/', views.my_collections, name='my_collections'),
     path('profile/<int:user_id>/', views.profile, name='profile'),
