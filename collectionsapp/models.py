@@ -63,6 +63,12 @@ class CollectionItemImage(CommonInfo):
     order_in_collection = models.PositiveSmallIntegerField(verbose_name='Order', default=1)
 
 
+class CollectionItemImageThumbnail(CommonInfo):
+    image = models.ImageField(verbose_name='Image', upload_to='thumbnails/')
+    collection_item = models.ForeignKey('BottleCap', on_delete=models.PROTECT, verbose_name='Collection Item')
+    order_in_collection = models.PositiveSmallIntegerField(verbose_name='Order', default=1)
+
+
 class BottleCap(CollectionItem):
     company = models.CharField(max_length=100, blank=True, verbose_name='Company')
     brand = models.CharField(max_length=100, blank=True, verbose_name='Brand')

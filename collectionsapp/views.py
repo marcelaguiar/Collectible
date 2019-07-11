@@ -1,10 +1,11 @@
 from collectionsapp.forms import CollectionTypeForm, CollectionForm, BottleCapForm
 from collectionsapp.models import BeverageType, BottleCap, CollectionType, Collection, CollectionItem, User,\
-    CollectionItemImage
+    CollectionItemImage, CollectionItemImageThumbnail
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.core.files import File
 from django.db import Error
 from django.db.models import fields
 from django.db.models.fields import files
@@ -13,6 +14,8 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.decorators.http import require_POST
+from io import BytesIO
+from PIL import Image
 from taggit.managers import TaggableManager
 import datetime
 
@@ -391,18 +394,68 @@ def upload_image(request, collection_item_id):
         if formset.is_valid():
             submit_time = datetime.datetime.now()
 
+            collection_item = BottleCap.objects.get(id=collection_item_id)
+
             for f in formset:
                 new_image = CollectionItemImage(
                     created=submit_time,
                     modified=submit_time,
                     order_in_collection=f.cleaned_data['order_in_collection'],
                     image=f.cleaned_data['image'],
-                    collection_item=BottleCap.objects.get(id=collection_item_id),
+                    collection_item=collection_item,
                     created_by=request.user,
                     modified_by=request.user
                 )
 
+                # Save full-quality image
                 new_image.save()
+
+                im = Image.open(new_image.image.path)
+
+                width, height = im.size
+                new_width = 150
+                new_height = 150
+
+                left = 0
+                top = 0
+                right = width
+                bottom = height
+
+                # fit larger images
+                if height > new_height and width > new_width:
+                    resize_ratio = min(width, height) / new_width
+
+                    if width > height:
+                        im.thumbnail([width * resize_ratio, new_height], Image.ANTIALIAS)
+                    else:
+                        im.thumbnail([new_width, height * resize_ratio], Image.ANTIALIAS)
+
+                # crop
+                if width <= new_width and height > new_height:
+                    top = (height - new_height) / 2
+                    bottom = (height + new_height) / 2
+
+                if height <= new_height and width > new_width:
+                    left = (width - new_width) / 2
+                    right = (width + new_width) / 2
+
+                im = im.crop((left, top, right, bottom))
+                blob = BytesIO()
+                im.save(blob, 'JPEG', quality=95)
+
+                print("Completed blob save")
+                thumbnail = CollectionItemImageThumbnail(
+                    created=submit_time,
+                    modified=submit_time,
+                    order_in_collection=f.cleaned_data['order_in_collection'],
+                    image=File(blob),
+                    collection_item=collection_item,
+                    created_by=request.user,
+                    modified_by=request.user
+                )
+                print("Created thumbnail django boejct")
+                thumbnail.save()
+                print("Made it past save!")
 
             return bottle_cap(request, collection_item_id)
         else:
