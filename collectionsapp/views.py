@@ -413,8 +413,6 @@ def upload_image(request, collection_item_id):
                 im = Image.open(new_image.image.path)
 
                 width, height = im.size
-                print(width)
-                print(height)
                 new_width = 150
                 new_height = 150
 
@@ -430,21 +428,14 @@ def upload_image(request, collection_item_id):
                     if width > height:
                         im.thumbnail([width * resize_ratio, new_height], Image.ANTIALIAS)
                     else:
-                        print("Taller than wide")
                         im.thumbnail([new_width, height * resize_ratio], Image.ANTIALIAS)
 
                 # crop
-                print("width: ", width)
-                print("height: ", height)
-                print("new_width: ", new_width)
-                print("new_height: ", new_height)
                 if width > new_width:
-                    print("cropping width")
                     top = 0
                     bottom = new_height
 
                 if height > new_height and width > new_width:
-                    print("cropping height")
                     left = 0
                     right = new_width
 
@@ -465,7 +456,6 @@ def upload_image(request, collection_item_id):
                 )
 
                 thumbnail.save()
-                print("Made it past first save!")
 
                 thumbnail.image.save(
                     new_image.image.name,
@@ -478,8 +468,6 @@ def upload_image(request, collection_item_id):
                         None
                     )
                 )
-
-                print("Made it past second save!")
 
             return bottle_cap(request, collection_item_id)
         else:
@@ -545,11 +533,6 @@ def delete_collection_item(request, collection_item_id):
 
 
 def search(request):
-    data = CollectionItemImage.objects.select_related('collection_item').filter(order_in_collection=1)
-
-    for item in data:
-        print(item)
-
     criteria = request.GET.get('q')
 
     context = {
