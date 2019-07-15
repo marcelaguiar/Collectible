@@ -5,7 +5,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.core.files import File
+from django.core.files.base import ContentFile
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import Error
 from django.db.models import fields
 from django.db.models.fields import files
@@ -67,7 +68,7 @@ def add_to_collection(request, collection_id):
 
 def home(request):
     context = {
-        'items': CollectionItemImage.objects.filter(order_in_collection=1)
+        'items': CollectionItemImageThumbnail.objects.filter(order_in_collection=1)
     }
     return render(request, 'collectionsapp/home.html', context)
 
@@ -214,11 +215,10 @@ def explore_collection(request, collection_id, view):
     images = None
 
     if view == 'image':
-        images = CollectionItemImage.objects.filter(order_in_collection=1, collection_item__collection=collection)
-    # elif view == 'imageanddetails':
-    #     #
-    # elif view == 'details':
-    #     #
+        images = CollectionItemImageThumbnail.objects.filter(
+            order_in_collection=1,
+            collection_item__collection=collection
+        )
 
     context = {
         'collection_name': collection.name,
@@ -413,6 +413,8 @@ def upload_image(request, collection_item_id):
                 im = Image.open(new_image.image.path)
 
                 width, height = im.size
+                print(width)
+                print(height)
                 new_width = 150
                 new_height = 150
 
@@ -422,40 +424,62 @@ def upload_image(request, collection_item_id):
                 bottom = height
 
                 # fit larger images
-                if height > new_height and width > new_width:
+                if height > new_height or width > new_width:
                     resize_ratio = min(width, height) / new_width
 
                     if width > height:
                         im.thumbnail([width * resize_ratio, new_height], Image.ANTIALIAS)
                     else:
+                        print("Taller than wide")
                         im.thumbnail([new_width, height * resize_ratio], Image.ANTIALIAS)
 
                 # crop
-                if width <= new_width and height > new_height:
-                    top = (height - new_height) / 2
-                    bottom = (height + new_height) / 2
+                print("width: ", width)
+                print("height: ", height)
+                print("new_width: ", new_width)
+                print("new_height: ", new_height)
+                if width > new_width:
+                    print("cropping width")
+                    top = 0
+                    bottom = new_height
 
-                if height <= new_height and width > new_width:
-                    left = (width - new_width) / 2
-                    right = (width + new_width) / 2
+                if height > new_height and width > new_width:
+                    print("cropping height")
+                    left = 0
+                    right = new_width
 
                 im = im.crop((left, top, right, bottom))
-                blob = BytesIO()
-                im.save(blob, 'JPEG', quality=95)
 
-                print("Completed blob save")
+                buffer = BytesIO()
+                im.save(fp=buffer, format='JPEG', quality=95)
+                pillow_image = ContentFile(buffer.getvalue())
+
                 thumbnail = CollectionItemImageThumbnail(
                     created=submit_time,
                     modified=submit_time,
                     order_in_collection=f.cleaned_data['order_in_collection'],
-                    image=File(blob),
+                    image=pillow_image,
                     collection_item=collection_item,
                     created_by=request.user,
                     modified_by=request.user
                 )
-                print("Created thumbnail django boejct")
+
                 thumbnail.save()
-                print("Made it past save!")
+                print("Made it past first save!")
+
+                thumbnail.image.save(
+                    new_image.image.name,
+                    InMemoryUploadedFile(
+                        pillow_image,
+                        None,               # field_name
+                        'my_image.jpg',     # file name
+                        'image/jpeg',       # content_type
+                        pillow_image.tell,  # size
+                        None
+                    )
+                )
+
+                print("Made it past second save!")
 
             return bottle_cap(request, collection_item_id)
         else:
@@ -509,8 +533,10 @@ def error(request, description):
 def delete_collection_item(request, collection_item_id):
     instance = BottleCap.objects.get(id=collection_item_id)
     related_images = CollectionItemImage.objects.filter(collection_item_id=instance.pk)
+    related_thumbnails = CollectionItemImageThumbnail.objects.filter(collection_item_id=instance.pk)
 
     related_images.delete()
+    related_thumbnails.delete()
 
     collection_id = instance.collection_id
     instance.delete()

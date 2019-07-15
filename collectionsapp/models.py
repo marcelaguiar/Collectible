@@ -64,7 +64,7 @@ class CollectionItemImage(CommonInfo):
 
 
 class CollectionItemImageThumbnail(CommonInfo):
-    image = models.ImageField(verbose_name='Image', upload_to='thumbnails/')
+    image = models.ImageField(verbose_name='ImageThumbnail', upload_to='thumbnails/')
     collection_item = models.ForeignKey('BottleCap', on_delete=models.PROTECT, verbose_name='Collection Item')
     order_in_collection = models.PositiveSmallIntegerField(verbose_name='Order', default=1)
 
