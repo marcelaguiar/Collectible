@@ -413,31 +413,47 @@ def upload_image(request, collection_item_id):
                 im = Image.open(new_image.image.path)
 
                 width, height = im.size
-                new_width = 150
-                new_height = 150
+
+                square_edge_length = 150
+                target_width = square_edge_length
+                target_height = square_edge_length
 
                 left = 0
                 top = 0
-                right = width
-                bottom = height
+                right = target_width
+                bottom = target_height
 
-                # fit larger images
-                if height > new_height or width > new_width:
-                    resize_ratio = min(width, height) / new_width
+                # get new dimensions to fit
+                if width > height:
+                    resize_ratio = target_height / height
+                    new_width = int(width * resize_ratio)
+                    new_height = target_height
+                elif height > width:
+                    resize_ratio = target_width / width
+                    new_width = target_width
+                    new_height = int(height * resize_ratio)
+                else:
+                    new_width = target_width
+                    new_height = target_height
 
-                    if width > height:
-                        im.thumbnail([width * resize_ratio, new_height], Image.ANTIALIAS)
-                    else:
-                        im.thumbnail([new_width, height * resize_ratio], Image.ANTIALIAS)
+                # grow or shrink to new dimensions
+                if width >= target_width and height >= target_height:
+                    im.thumbnail([new_width, new_height], Image.ANTIALIAS)
+                else:
+                    im = im.resize((new_width, new_height))
+                    print("resize happened: w: " + str(im.width) + " h: " + str(im.height))
+                print("new_width: " + str(new_width))
+                print("new_height: " + str(new_height))
 
                 # crop
-                if width > new_width:
-                    top = 0
-                    bottom = new_height
+                if new_width > target_width:
+                    left = (new_width - target_width)/2
+                    right = left + target_width
+                elif new_height > target_height:
+                    top = (new_height - target_height)/2
+                    bottom = top + target_height
 
-                if height > new_height and width > new_width:
-                    left = 0
-                    right = new_width
+                print(left, top, right, bottom)
 
                 im = im.crop((left, top, right, bottom))
 
