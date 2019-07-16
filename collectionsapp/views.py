@@ -441,19 +441,14 @@ def upload_image(request, collection_item_id):
                     im.thumbnail([new_width, new_height], Image.ANTIALIAS)
                 else:
                     im = im.resize((new_width, new_height))
-                    print("resize happened: w: " + str(im.width) + " h: " + str(im.height))
-                print("new_width: " + str(new_width))
-                print("new_height: " + str(new_height))
 
                 # crop
                 if new_width > target_width:
-                    left = (new_width - target_width)/2
+                    left = int((new_width - target_width)/2)
                     right = left + target_width
                 elif new_height > target_height:
-                    top = (new_height - target_height)/2
+                    top = int((new_height - target_height)/2)
                     bottom = top + target_height
-
-                print(left, top, right, bottom)
 
                 im = im.crop((left, top, right, bottom))
 
