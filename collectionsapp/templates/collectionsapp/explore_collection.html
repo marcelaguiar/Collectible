@@ -40,15 +40,19 @@
     </div>
 
     {% if view == 'image' %}
-        <div class="image-grid">
-            {% for item in images %}
-                <div class="grid-item">
-                    <a href="{% url 'bottle_cap' item.collection_item.id %}">
-                        <img src="{{ item.image.url }}" alt="{{ item.collection_item }}">
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
+        {% if images.count <= 0 %}
+            <p>No items in collection</p>
+        {% else %}
+            <div class="image-grid">
+                {% for item in images %}
+                    <div class="grid-item">
+                        <a href="{% url 'bottle_cap' item.collection_item.id %}">
+                            <img src="{{ item.image.url }}" alt="{{ item.collection_item }}">
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     {% elif view == 'imageanddetails' or view == 'details'%}
         <div id="gridContainer"></div>
     {% else %}
