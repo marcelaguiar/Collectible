@@ -89,6 +89,7 @@ li.no-bullets {
     justify-content: center;
     align-items: center;
     min-height: 403px;
+    max-height: 800px;
     width: 100%;
 }
 

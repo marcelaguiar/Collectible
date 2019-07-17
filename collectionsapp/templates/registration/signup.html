@@ -7,20 +7,42 @@
         <h3>Registration</h3>
 
         {% if form.errors %}
-            <p>There are errors in the form!</p>
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger">
+                        <strong>{{ error|escape }}</strong>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
         {% endif %}
 
-        <div style="width: 300px;">
+        <div>
             <form method="post" action="{% url 'signup' %}">
                 {% csrf_token %}
 
-                {{ form.username }}
+                <table class="spaced-control">
+                    <tr>
+                        <td>{{ form.username.label_tag }}</td>
+                        <td>{{ form.username }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.password1.label_tag }}</td>
+                        <td>{{ form.password1 }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.password2.label_tag }}</td>
+                        <td>{{ form.password2 }}</td>
+                    </tr>
 
-                {{ form.password1 }}
+                </table>
 
-                {{ form.password2 }}
+                <div><input class="btn btn-primary" type="submit" value="Sign up"></div>
 
-                <input type="submit" value="signup">
             </form>
         </div>
     </div>
