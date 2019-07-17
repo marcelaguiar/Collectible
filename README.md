@@ -1,2 +1,2 @@
 # Collectible
-![home page](https://raw.githubusercontent.com/marcelaguiar/Collectible/master/readme-images/home-page.png)
+![home page](https://github.com/marcelaguiar/Collectible/blob/master/readme-images/home-page.PNG)
