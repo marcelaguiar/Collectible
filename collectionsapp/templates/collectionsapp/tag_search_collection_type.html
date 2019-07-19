@@ -3,7 +3,7 @@
 
 {% block body %}
     <p>Search <span class="badge badge-secondary">{{ search_criteria }}</span> within</p>
-    <div class="btn-group" role="group" aria-label="Basic example">
+    <div class="btn-group tag-search-button-group" role="group">
         <a class="btn btn-secondary" href="{% url 'tag_search_collection' collection_id search_criteria %}">
             {{ collection_owner_username }}'s collection</a>
         <a class="btn btn-secondary active" href="#">All {{ collection_type_name }} collections</a>
@@ -11,11 +11,16 @@
             All collection types</a>
     </div>
 
-    <ul>
+    <link rel="stylesheet" href="{% static 'collectionsapp/css/image_grid.css' %}">
+    <div class="image-grid">
         {% for item in search_results %}
-            <li><a href="{% url 'bottle_cap' item.id %}">{{ item }}</a></li>
+            <div class="grid-item">
+                <a href="{% url 'bottle_cap' item.collection_item.id %}">
+                    <img src="{{ item.image.url }}" alt="{{ item.collection_item }}">
+                </a>
+            </div>
         {% endfor %}
-    </ul>
+    </div>
 {% endblock %}
 
 
