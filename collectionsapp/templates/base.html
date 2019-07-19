@@ -38,6 +38,9 @@
                     <a class="navbar-brand navbar-title-text" href="{% url 'home' %}">Collectible</a>
                     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                         <li class="nav-item">
+                            <a class="nav-link" href="{% url 'explore_collection_type' 1%}">Collections</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{% url 'collection_types' %}">Collection Types</a>
                         </li>
                         <li class="nav-item">
@@ -53,7 +56,7 @@
                             <input class="form-control" type="search" placeholder="Search collections" name="q">
                             <a class="input-group-append" href="#">
                                 <button type="submit" class="btn btn-secondary">
-                                    <ion-icon name="search"></ion-icon>
+                                    <i class="dx-icon-search"></i>
                                 </button>
                             </a>
                         </div>
@@ -62,7 +65,7 @@
                     {% if user.is_authenticated %}
                     <div class="dropdown">
                         <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown">
-                            <img src="{% static 'collectionsapp/svg/user.svg' %}">
+                            <i class="dx-icon-user"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                             <a class="dropdown-item" href="#">{{ user.get_username }}</a>

@@ -329,12 +329,16 @@ def profile(request, user_id):
 
 def tag_search_collection(request, collection_id, slug):
 
-    collection_type_id = Collection.objects.get(id=collection_id).type.id
+    collection = Collection.objects.get(id=collection_id)
+    collection_type = collection.type
+    collection_owner_username = collection.owner
 
     context = {
         'search_criteria': slug,
         'collection_id': collection_id,
-        'collection_type_id': collection_type_id,
+        'collection_type_id': collection_type.id,
+        'collection_type_name': collection_type.name,
+        'collection_owner_username': collection_owner_username,
         'search_results': BottleCap.objects.filter(
             tags__slug__exact=slug,
             collection_id=collection_id)
@@ -344,32 +348,38 @@ def tag_search_collection(request, collection_id, slug):
 
 
 def tag_search_collection_type(request, collection_id, slug):
-
-    collection_type_id = Collection.objects.get(id=collection_id).type.id
+    collection = Collection.objects.get(id=collection_id)
+    collection_type = collection.type
+    collection_owner_username = collection.owner
 
     context = {
         'search_criteria': slug,
         'collection_id': collection_id,
-        'collection_type_id': collection_type_id,
+        'collection_type_id': collection_type.id,
+        'collection_type_name': collection_type.name,
+        'collection_owner_username': collection_owner_username,
         'search_results': BottleCap.objects.filter(
             tags__slug__exact=slug,
-            collection__type_id=collection_type_id)
+            collection__type_id=collection_type.id)
     }
 
     return render(request, 'collectionsapp/tag_search_collection_type.html', context)
 
 
 def tag_search_all_collection_types(request, collection_id, slug):
-
-    collection_type_id = Collection.objects.get(id=collection_id).type.id
+    collection = Collection.objects.get(id=collection_id)
+    collection_type = collection.type
+    collection_owner_username = collection.owner
 
     context = {
         'search_criteria': slug,
         'collection_id': collection_id,
-        'collection_type_id': collection_type_id,
+        'collection_type_id': collection_type.id,
+        'collection_type_name': collection_type.name,
+        'collection_owner_username': collection_owner_username,
         'search_results': BottleCap.objects.filter(
             tags__slug__exact=slug,
-            collection__type_id=collection_type_id)
+            collection__type_id=collection_type.id)
     }
 
     return render(request, 'collectionsapp/tag_search_all_collection_types.html', context)
