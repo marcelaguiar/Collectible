@@ -203,7 +203,7 @@ def create_collection(request):
         try:
             new_collection.save()
             messages.add_message(request, messages.SUCCESS, name + ' collection created')
-            return redirect('explore_collection', collection_id=new_collection.pk)
+            return redirect('explore_collection', collection_id=new_collection.pk, view='image')
         except Error:
             messages.add_message(request, messages.ERROR, name + ' collection failed to create')
             return redirect('my_collections')
