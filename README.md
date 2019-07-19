@@ -1,5 +1,5 @@
 # Collectible
-A site for my bottle cap collection (and any body else's)! Search, filter, sort, and tag collection items.
+A site for my bottle cap collection (and anybody else's)! Search, filter, sort, and tag collection items.
 
 # Home page
 ![home page](https://github.com/marcelaguiar/Collectible/blob/master/readme-images/home-page.PNG)
