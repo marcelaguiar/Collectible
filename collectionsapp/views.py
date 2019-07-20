@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage as storage
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import Error
 from django.db.models import fields
@@ -415,8 +416,7 @@ def upload_image(request, collection_item_id):
 
                 # Save full-quality image
                 new_image.save()
-
-                im = Image.open(new_image.image.path)
+                im = Image.open(storage.open(new_image.image.name, 'r'))
 
                 width, height = im.size
 
@@ -475,7 +475,7 @@ def upload_image(request, collection_item_id):
                 thumbnail.save()
 
                 thumbnail.image.save(
-                    new_image.image.name,
+                    new_image.image.name.split("images/", 1)[1],
                     InMemoryUploadedFile(
                         pillow_image,
                         None,               # field_name
