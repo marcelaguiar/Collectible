@@ -1,1 +1,1 @@
-web: gunicorn CollectibleGitRepository.wsgi
+web: gunicorn Collectible.wsgi
