@@ -3,7 +3,7 @@ Collectible/__pycache__/
 .JPG
 media/
 collectionsapp/static/bootstrap*
-node_modules/
+staticfiles/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
