@@ -28,8 +28,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = (os.environ.get('DEBUG_VALUE') == 'True')
 
 ALLOWED_HOSTS = [
-    '*',
-    'collectibleapp.herokuapp.com'
+    'localhost',
+    'collectibleapp.herokuapp.com',
+    'collectibleapp.com'
 ]
 
 
