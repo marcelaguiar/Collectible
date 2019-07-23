@@ -2,7 +2,6 @@ Collectible/__pycache__/
 .idea/
 .JPG
 media/
-collectionsapp/static/bootstrap*
 staticfiles/
 
 # Byte-compiled / optimized / DLL files
