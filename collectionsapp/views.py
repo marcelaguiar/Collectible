@@ -537,14 +537,20 @@ def error(request, description):
 
 def delete_collection_item(request, collection_item_id):
     instance = BottleCap.objects.get(id=collection_item_id)
-    related_images = CollectionItemImage.objects.filter(collection_item_id=instance.pk)
-    related_thumbnails = CollectionItemImageThumbnail.objects.filter(collection_item_id=instance.pk)
-
-    related_images.delete()
-    related_thumbnails.delete()
-
     collection_id = instance.collection_id
-    instance.delete()
+
+    print(request.user)
+    print(instance.collection.owner)
+
+    if instance.collection.owner == request.user:
+        related_images = CollectionItemImage.objects.filter(collection_item_id=instance.pk)
+        related_thumbnails = CollectionItemImageThumbnail.objects.filter(collection_item_id=instance.pk)
+
+        related_images.delete()
+        related_thumbnails.delete()
+
+
+        instance.delete()
 
     return explore_collection(request, collection_id, "image")
 
