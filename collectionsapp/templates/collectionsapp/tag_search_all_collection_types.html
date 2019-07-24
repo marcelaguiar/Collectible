@@ -3,7 +3,7 @@
 
 {% block body %}
     <p>Search <span class="badge badge-secondary">{{ search_criteria }}</span> within</p>
-    <div class="btn-group tag-search-button-group" role="group" aria-label="Basic example">
+    <div class="btn-group" role="group" >
         <a class="btn btn-secondary" href="{% url 'tag_search_collection' collection_id search_criteria %}">
             {{ collection_owner_username }}'s collection</a>
         <a class="btn btn-secondary" href="{% url 'tag_search_collection_type' collection_id search_criteria %}">

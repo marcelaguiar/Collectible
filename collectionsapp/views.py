@@ -420,7 +420,7 @@ def upload_image(request, collection_item_id):
 
                 width, height = im.size
 
-                square_edge_length = 150
+                square_edge_length = 200
                 target_width = square_edge_length
                 target_height = square_edge_length
 
