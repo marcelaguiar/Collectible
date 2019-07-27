@@ -1,6 +1,8 @@
 from collectionsapp.models import Collection, CollectionType, BottleCap, CollectionItemImage
-from django import forms
 from datetime import date
+from django import forms
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 
 class CollectionForm(forms.ModelForm):
@@ -84,3 +86,11 @@ class CollectionItemImageForm(forms.ModelForm):
         self.fields['image'].widget.attrs.update({'class': 'form-control'})
         self.fields['collection_item'].widget.attrs.update({'class': 'form-control'})
         self.fields['order_in_collection'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Order'})
+
+
+class UserRegisterForm(UserCreationForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']

@@ -1,4 +1,4 @@
-from collectionsapp.forms import CollectionTypeForm, CollectionForm, BottleCapForm
+from collectionsapp.forms import CollectionTypeForm, CollectionForm, BottleCapForm, UserRegisterForm
 from collectionsapp.models import BeverageType, BottleCap, CollectionType, Collection, CollectionItem, User,\
     CollectionItemImage, CollectionItemImageThumbnail
 from django.contrib import messages
@@ -81,22 +81,25 @@ def collection_types(request):
     return render(request, 'collectionsapp/collection_types.html', context)
 
 
-def signup(request):
+def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserRegisterForm(request.POST)
 
         if form.is_valid():
             form.save()
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password1']
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+
+            messages.success(request, f'Account created for {username}!')
 
             user = authenticate(username=username, password=password)
             login(request, user)
+
             return redirect('home')
     else:
-        form = UserCreationForm()
+        form = UserRegisterForm()
     context = {'form': form}
-    return render(request, 'registration/signup.html', context)
+    return render(request, 'registration/register.html', context)
 
 
 def logout_view(request):

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'collectionsapp',
+    'crispy_forms',
     'taggit',
     'storages'
 ]
@@ -185,3 +186,5 @@ LOGGING = {
 }
 
 DEBUG_PROPAGATE_EXCEPTIONS = True
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
