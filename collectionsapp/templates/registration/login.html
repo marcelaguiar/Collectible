@@ -1,42 +1,24 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
 
-
-{% block dedicated_styling %}
-    <link rel="stylesheet" type="text/css" href="{% static 'collectionsapp/css/login.css' %}" />
-{% endblock %}
-
 {% block body %}
-    <div align="center">
-        <!-- Header -->
-        <h3>Login</h3>
-
-        {% if form.errors %}
-        <p>There's something wrong with what you entered!</p>
-        {% endif %}
-
-        {% if next %}
-        <p>Hey, you can't access that page.</p>
-        {% endif %}
-
-        <div style="width: 300px;">
-            <form class="form-login" method="post" action="{% url 'login' %}">
+    <div class="centered-panel">
+        <div class="content-section">
+            <form method="post">
                 {% csrf_token %}
-
-                <label for="id_username" class="sr-only">Username</label>
-                <label for="id_password" class="sr-only">Password</label>
-                <input type="text" name="username" autofocus maxlength="254" required id="id_username" class="form-control"/>
-                <input type="password" name="password" required id="id_password" class="form-control"/>
-
-                <div class="checkbox mb-3">
-                    <label>
-                        <input type="checkbox" value="remember-me"> Remember me
-                    </label>
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Log In</legend>
+                    {{ form|crispy }}
+                </fieldset>
+                <div class="form-group">
+                    <button class="btn btn-outline-info" type="submit">Log In</button>
                 </div>
-
-                <button class="btn btn-lg btn-primary btn-block" type="submit" value="login">Sign in</button>
-                <input type="hidden" name="next" value="{{ next }}">
             </form>
+            <div class="border-top pt-3">
+                <small class="text-muted"><a href="{% url 'password_reset' %}" >Forgot username/password?</a></small>
+            </div>
+            <small class="text-muted">New to Collectible?<a class="ml-2" href="{% url 'register' %}" >Create an account</a></small>
         </div>
     </div>
 {% endblock %}

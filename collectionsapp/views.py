@@ -4,7 +4,6 @@ from collectionsapp.models import BeverageType, BottleCap, CollectionType, Colle
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage as storage
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -90,7 +89,7 @@ def register(request):
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
 
-            messages.success(request, f'Account created for {username}!')
+            messages.success(request, f'Account created for {username} and signed in!')
 
             user = authenticate(username=username, password=password)
             login(request, user)
@@ -551,7 +550,6 @@ def delete_collection_item(request, collection_item_id):
 
         related_images.delete()
         related_thumbnails.delete()
-
 
         instance.delete()
 

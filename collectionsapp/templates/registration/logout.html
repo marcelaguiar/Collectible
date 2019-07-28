@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <div class="centered-panel">
+        <h2>You have been logged out.</h2>
+        <div class="content-section">
+            <div class="border-top pt-3">
+                <small class="text-muted"><a href="{% url 'login' %}" >Log in again</a></small>
+            </div>
+        </div>
+    </div>
+{% endblock %}
