@@ -68,7 +68,7 @@ def add_to_collection(request, collection_id):
 
 def home(request):
     context = {
-        'items': CollectionItemImageThumbnail.objects.filter(order_in_collection=1)
+        'items': CollectionItemImageThumbnail.objects.filter(order_in_collection=1).order_by('-created')
     }
     return render(request, 'collectionsapp/home.html', context)
 
