@@ -513,14 +513,12 @@ def edit_collection(request, collection_id):
         form = CollectionForm(request.POST, instance=collection)
 
         if form.is_valid():
-            print("1. is valid")
             form_data = form.save(commit=False)
             form_data.modified_by = request.user
 
             form_data.save()
 
             form.save_m2m()
-            print("2. is saved")
             return explore_collection(request, collection_id, 'image')
     else:
         form = CollectionForm(instance=collection)
