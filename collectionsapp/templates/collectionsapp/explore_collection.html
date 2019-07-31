@@ -8,7 +8,14 @@
 {% endif %}
 
 {% block body %}
-    <h1>{{ collection_name }}</h1>
+    <h1>{{ collection_name }}
+        {% if is_owner %}
+            <a class="btn btn-outline-secondary btn-sm" href="{% url 'edit_collection' collection_id %}" role="button">
+                Edit
+            </a>
+        {% endif %}
+    </h1>
+
 
     <!-- Check if logged in user is owner of this collection  -->
     {% if is_owner %}

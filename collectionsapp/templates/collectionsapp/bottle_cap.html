@@ -5,8 +5,7 @@
 {% block body %}
 <div>
     <div class="title-bar">
-
-                    {{ bottle_cap }}
+        {{ bottle_cap }}
         {% if user == collectionOwner %}
             <a href="{% url 'edit_collection_item' collection_item_id %}">
                 <button type="button" class="btn btn-outline-secondary btn-sm">edit</button>

@@ -133,3 +133,8 @@ li.no-bullets {
     border-radius: 10px;
     padding: 10px;
 }
+
+.save-button {
+    width: 300px;
+    float: right;
+}

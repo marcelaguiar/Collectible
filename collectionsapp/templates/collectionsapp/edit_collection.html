@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <form action="{% url 'edit_collection' collection_id %}" method="POST" role="form">
+        {% csrf_token %}
+
+        {{ collectionForm.name }}
+        {{ collectionForm.type.as_hidden }}
+
+        <button type="submit" class="btn btn-primary precedes-control save-button">Save changes</button>
+    </form>
+{% endblock %}

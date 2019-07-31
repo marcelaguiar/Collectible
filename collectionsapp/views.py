@@ -503,6 +503,37 @@ def upload_image(request, collection_item_id):
 
 
 @login_required
+def edit_collection(request, collection_id):
+    collection = get_object_or_404(Collection, pk=collection_id)
+
+    if collection.owner != request.user:
+        return error(request, "You cannot edit other people's items.")
+
+    if request.method == "POST":
+        form = CollectionForm(request.POST, instance=collection)
+
+        if form.is_valid():
+            print("1. is valid")
+            form_data = form.save(commit=False)
+            form_data.modified_by = request.user
+
+            form_data.save()
+
+            form.save_m2m()
+            print("2. is saved")
+            return explore_collection(request, collection_id, 'image')
+    else:
+        form = CollectionForm(instance=collection)
+
+    context = {
+        'collectionForm': form,
+        'collection_id': collection_id
+    }
+
+    return render(request, 'collectionsapp/edit_collection.html', context)
+
+
+@login_required
 def edit_collection_item(request, collection_item_id):
     collection_item = get_object_or_404(BottleCap, pk=collection_item_id)
 
