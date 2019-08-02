@@ -570,15 +570,17 @@ def delete_collection_item(request, collection_item_id):
     instance = BottleCap.objects.get(id=collection_item_id)
     collection_id = instance.collection_id
 
-    print(request.user)
-    print(instance.collection.owner)
-
     if instance.collection.owner == request.user:
         related_images = CollectionItemImage.objects.filter(collection_item_id=instance.pk)
         related_thumbnails = CollectionItemImageThumbnail.objects.filter(collection_item_id=instance.pk)
 
-        related_images.delete()
-        related_thumbnails.delete()
+        for item in related_images:
+            item.image.delete(save=False)
+            item.delete()
+
+        for item in related_thumbnails:
+            item.image.delete(save=False)
+            item.delete()
 
         instance.delete()
 
