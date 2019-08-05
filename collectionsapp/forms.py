@@ -44,6 +44,7 @@ class BottleCapForm(forms.ModelForm):
             'product',
             'variety',
             'text',
+            'region',
             'underside',
             'beverage_type',
             'collection',
@@ -64,6 +65,7 @@ class BottleCapForm(forms.ModelForm):
         self.fields['product'].widget.attrs.update({'placeholder': 'Product'})
         self.fields['variety'].widget.attrs.update({'placeholder': 'Variety'})
         self.fields['text'].widget.attrs.update({'placeholder': 'Text'})
+        self.fields['region'].widget.attrs.update({'placeholder': 'Region'})
         self.fields['underside'].widget.attrs.update({'placeholder': 'Underside'})
         self.fields['description'].widget.attrs.update({'placeholder': 'Description'})
 

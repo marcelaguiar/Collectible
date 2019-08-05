@@ -7,10 +7,10 @@ from django.utils import timezone
 
 class CommonInfo(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='Created')
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE,
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT,
                                    related_name='%(app_label)s_%(class)s_created', verbose_name='Created By')
     modified = models.DateTimeField(auto_now=True, verbose_name='Modified')
-    modified_by = models.ForeignKey(User, on_delete=models.CASCADE,
+    modified_by = models.ForeignKey(User, on_delete=models.PROTECT,
                                     related_name='%(app_label)s_%(class)s_modified', verbose_name='Modified By')
 
     def save(self, *args, **kwargs):
@@ -29,7 +29,7 @@ class CollectionItem(CommonInfo):
     available_for_trade = models.BooleanField(default=False, verbose_name='Available For Trade')
     tags = TaggableManager(verbose_name='Tags', blank=True)
     description = models.CharField(max_length=512, blank=True, verbose_name='Description')
-    collection = models.ForeignKey('Collection', on_delete=models.PROTECT, verbose_name='Collection')
+    collection = models.ForeignKey('Collection', on_delete=models.CASCADE, verbose_name='Collection')
 
     class Meta:
         abstract = True
@@ -59,13 +59,13 @@ class Collection(CommonInfo):
 
 class CollectionItemImage(CommonInfo):
     image = models.ImageField(verbose_name='Image', upload_to='images/')
-    collection_item = models.ForeignKey('BottleCap', on_delete=models.PROTECT, verbose_name='Collection Item')
+    collection_item = models.ForeignKey('BottleCap', on_delete=models.CASCADE, verbose_name='Collection Item')
     order_in_collection = models.PositiveSmallIntegerField(verbose_name='Order', default=1)
 
 
 class CollectionItemImageThumbnail(CommonInfo):
     image = models.ImageField(verbose_name='ImageThumbnail', upload_to='thumbnails/')
-    collection_item = models.ForeignKey('BottleCap', on_delete=models.PROTECT, verbose_name='Collection Item')
+    collection_item = models.ForeignKey('BottleCap', on_delete=models.CASCADE, verbose_name='Collection Item')
     order_in_collection = models.PositiveSmallIntegerField(verbose_name='Order', default=1)
 
 
@@ -76,6 +76,7 @@ class BottleCap(CollectionItem):
     variety = models.CharField(max_length=100, blank=True, verbose_name='Variety')
     beverage_type = models.ForeignKey('BeverageType', on_delete=models.PROTECT, verbose_name="Beverage Type")
     text = models.CharField(max_length=200, blank=True, verbose_name='Text')
+    region = models.CharField(max_length=100, blank=True, verbose_name='Region')
     underside = models.CharField(max_length=50, blank=True, verbose_name='Underside')
 
     def __str__(self):
