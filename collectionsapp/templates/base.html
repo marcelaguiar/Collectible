@@ -30,11 +30,12 @@
     <body class="site">
         <header>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01">
+                <a class="navbar-brand navbar-title-text" href="{% url 'home' %}">Collectible</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-                    <a class="navbar-brand navbar-title-text" href="{% url 'home' %}">Collectible</a>
+
+                <div class="collapse navbar-collapse" id="navbar">
                     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'explore_collection_type' 1%}">Collections</a>
@@ -74,12 +75,8 @@
                         </div>
                     </div>
                     {% else %}
-                    <a href="{% url 'login' %}">
-                        <button type="button" class="btn btn-outline-info" >Log in</button>
-                    </a>&nbsp;
-                    <a href="{% url 'register' %}">
-                        <button type="button" class="btn btn-info" >Register</button>
-                    </a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-info navbar-item-spaced">Log in</a>
+                        <a href="{% url 'register' %}" class="btn btn-info">Register</a>
                     {% endif %}
                 </div>
             </nav>

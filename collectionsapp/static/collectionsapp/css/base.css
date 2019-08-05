@@ -138,3 +138,8 @@ li.no-bullets {
     width: 300px;
     float: right;
 }
+
+#navbar.navbar-collapse.collapse.show > form {
+    margin-bottom: 8px;
+}
+
