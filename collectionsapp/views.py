@@ -639,7 +639,8 @@ def upload_all(request):
                 created_by=uploader,
                 modified_by=uploader,
                 date_acquired=current_timestamp.date(),
-                collection=target_collection
+                collection=target_collection,
+                description="unidentified"
             )
             bc.save()
             print('    cap saved.')
