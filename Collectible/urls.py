@@ -48,6 +48,7 @@ urlpatterns = [
     path('tag_search_all_collection_types/<int:collection_id>/<slug:slug>/', views.tag_search_all_collection_types, name='tag_search_all_collection_types'),
     path('tag_search_collection/<int:collection_id>/<slug:slug>/', views.tag_search_collection, name='tag_search_collection'),
     path('tag_search_collection_type/<int:collection_id>/<slug:slug>/', views.tag_search_collection_type, name='tag_search_collection_type'),
+    path('upload_all/', views.upload_all, name='upload_all'),
     path('upload_image/<int:collection_item_id>', views.upload_image, name='upload_image')
 ]
 

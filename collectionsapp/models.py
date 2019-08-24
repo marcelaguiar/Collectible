@@ -25,7 +25,8 @@ class CommonInfo(models.Model):
 
 class CollectionItem(CommonInfo):
     date_acquired = models.DateField(default=date.today, verbose_name='Date Acquired')
-    method_acquired = models.ForeignKey('MethodAcquired', on_delete=models.PROTECT, verbose_name="Method Acquired")
+    method_acquired = models.ForeignKey('MethodAcquired', blank=True, null=True, on_delete=models.PROTECT,
+                                        verbose_name="Method Acquired")
     available_for_trade = models.BooleanField(default=False, verbose_name='Available For Trade')
     tags = TaggableManager(verbose_name='Tags', blank=True)
     description = models.CharField(max_length=512, blank=True, verbose_name='Description')
@@ -74,7 +75,8 @@ class BottleCap(CollectionItem):
     brand = models.CharField(max_length=100, blank=True, verbose_name='Brand')
     product = models.CharField(max_length=100, blank=True, verbose_name='Product')
     variety = models.CharField(max_length=100, blank=True, verbose_name='Variety')
-    beverage_type = models.ForeignKey('BeverageType', on_delete=models.PROTECT, verbose_name="Beverage Type")
+    beverage_type = models.ForeignKey('BeverageType', blank=True, null=True, on_delete=models.PROTECT,
+                                      verbose_name="Beverage Type")
     text = models.CharField(max_length=200, blank=True, verbose_name='Text')
     region = models.CharField(max_length=100, blank=True, verbose_name='Region')
     underside = models.CharField(max_length=50, blank=True, verbose_name='Underside')

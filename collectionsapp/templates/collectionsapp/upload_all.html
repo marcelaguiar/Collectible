@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <form action="{% url 'upload_all' %}" method="POST" role="form" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <input type="file" name="images" multiple>
+
+        <button type="submit" class="btn btn-primary precedes-control save-button">GO</button>
+    </form>
+{% endblock %}

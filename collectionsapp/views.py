@@ -622,3 +622,106 @@ def get_all_beverage_types(request):
     data = BeverageType.objects.all().values('id', 'name')
 
     return JsonResponse(list(data), safe=False)
+
+
+def upload_all(request):
+    if request.method == "POST":
+
+        uploader = request.user
+        target_collection = Collection.objects.get(id=21)
+
+        for index, file in enumerate(request.FILES.getlist('images')):
+            # Create collection item
+            print("Creating item #" + str(index))
+            current_timestamp = datetime.datetime.now()
+
+            bc = BottleCap(
+                created_by=uploader,
+                modified_by=uploader,
+                date_acquired=current_timestamp.date(),
+                collection=target_collection
+            )
+            bc.save()
+            print('    cap saved.')
+
+            # Create image
+            i = CollectionItemImage(
+                created_by=uploader,
+                modified_by=uploader,
+                image=file,
+                collection_item=bc,
+                order_in_collection=1
+            )
+            i.save()
+            print('    image saved.')
+
+            # Create thumbnail
+            im = Image.open(storage.open(i.image.name, 'r'))
+
+            width, height = im.size
+
+            square_edge_length = 200
+            target_width = square_edge_length
+            target_height = square_edge_length
+
+            left = 0
+            top = 0
+            right = target_width
+            bottom = target_height
+
+            # get new dimensions to fit
+            if width > height:
+                resize_ratio = target_height / height
+                new_width = int(width * resize_ratio)
+                new_height = target_height
+            elif height > width:
+                resize_ratio = target_width / width
+                new_width = target_width
+                new_height = int(height * resize_ratio)
+            else:
+                new_width = target_width
+                new_height = target_height
+
+            # grow or shrink to new dimensions
+            if width >= target_width and height >= target_height:
+                im.thumbnail([new_width, new_height], Image.ANTIALIAS)
+            else:
+                im = im.resize((new_width, new_height))
+
+            # crop
+            if new_width > target_width:
+                left = int((new_width - target_width) / 2)
+                right = left + target_width
+            elif new_height > target_height:
+                top = int((new_height - target_height) / 2)
+                bottom = top + target_height
+
+            im = im.crop((left, top, right, bottom))
+
+            buffer = BytesIO()
+            im.save(fp=buffer, format='JPEG', quality=95)
+            pillow_image = ContentFile(buffer.getvalue())
+
+            thumbnail = CollectionItemImageThumbnail(
+                order_in_collection=1,
+                image=pillow_image,
+                collection_item=bc,
+                created_by=uploader,
+                modified_by=uploader
+            )
+
+            thumbnail.save()
+
+            thumbnail.image.save(
+                i.image.name.split("images/", 1)[1],
+                InMemoryUploadedFile(
+                    pillow_image,
+                    None,  # field_name
+                    'my_image.jpg',  # file name
+                    'image/jpeg',  # content_type
+                    pillow_image.tell,  # size
+                    None
+                )
+            )
+    print("Complete")
+    return render(request, 'collectionsapp/upload_all.html')
