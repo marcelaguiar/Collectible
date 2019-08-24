@@ -628,7 +628,7 @@ def upload_all(request):
     if request.method == "POST":
 
         uploader = request.user
-        target_collection = Collection.objects.get(id=21)
+        target_collection = Collection.objects.get(id=1)
 
         for index, file in enumerate(request.FILES.getlist('images')):
             # Create collection item
