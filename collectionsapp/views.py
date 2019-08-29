@@ -669,7 +669,6 @@ def create_collection_item_from_image(request):
         order_in_collection=1
     )
     i.save()
-    print('    image saved.')
 
     # Create thumbnail
     im = Image.open(storage.open(i.image.name, 'r'))
@@ -739,4 +738,3 @@ def create_collection_item_from_image(request):
             None
         )
     )
-    print("Complete")
