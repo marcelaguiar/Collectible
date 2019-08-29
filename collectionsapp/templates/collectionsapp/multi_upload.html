@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+    <div class="centered-panel">
+        <form id="image-select-form" method="POST" role="form" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <input type="file" name="images" class="spaced-control" multiple>
+
+            <div id="collectionSelectBox"></div>
+
+            <div>
+                <small>
+                *In Multi-upload, only images can be added. Adding details can be done on a case-by-case basis afterwards.
+            </small>
+            </div>
+
+            <input id="submit-button" class="btn btn-primary form-submit-button" type="submit" value="GO">
+        </form>
+
+        <div id="progressBarContainer"></div>
+    </div>
+
+    <input type="hidden" id="user_id" value="{{ user.id }}">
+
+{% endblock %}
+
+{% block dedicated_scripts %}
+    <script src="{% static "collectionsapp/javascript/multi_upload.js" %}"></script>
+{% endblock %}

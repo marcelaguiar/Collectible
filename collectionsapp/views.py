@@ -11,7 +11,7 @@ from django.db import Error
 from django.db.models import fields
 from django.db.models.fields import files
 from django.forms import modelformset_factory
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.decorators.http import require_POST
@@ -624,105 +624,119 @@ def get_all_beverage_types(request):
     return JsonResponse(list(data), safe=False)
 
 
-def upload_all(request):
+def get_users_collections(request, user_id):
+    data = Collection.objects.filter(owner_id=user_id).values('id', 'name')
+
+    return JsonResponse(list(data), safe=False)
+
+
+@login_required
+def multi_upload(request):
+    context = {}
+    return render(request, 'collectionsapp/multi_upload.html', context)
+
+
+def post_file(request):
     if request.method == "POST":
+        create_collection_item_from_image(request)
+    return HttpResponse("Post success")
 
-        uploader = request.user
-        target_collection = Collection.objects.get(id=1)
 
-        for index, file in enumerate(request.FILES.getlist('images')):
-            # Create collection item
-            print("Creating item #" + str(index))
-            current_timestamp = datetime.datetime.now()
+def create_collection_item_from_image(request):
+    uploader = request.user
+    collection_id = int(request.POST['collection_id'])
 
-            bc = BottleCap(
-                created_by=uploader,
-                modified_by=uploader,
-                date_acquired=current_timestamp.date(),
-                collection=target_collection,
-                description="unidentified"
-            )
-            bc.save()
-            print('    cap saved.')
+    target_collection = Collection.objects.get(id=collection_id)
 
-            # Create image
-            i = CollectionItemImage(
-                created_by=uploader,
-                modified_by=uploader,
-                image=file,
-                collection_item=bc,
-                order_in_collection=1
-            )
-            i.save()
-            print('    image saved.')
+    current_timestamp = datetime.datetime.now()
 
-            # Create thumbnail
-            im = Image.open(storage.open(i.image.name, 'r'))
+    # Create collection item
+    bc = BottleCap(
+        created_by=uploader,
+        modified_by=uploader,
+        date_acquired=current_timestamp.date(),
+        collection=target_collection,
+        company="unidentified"
+    )
+    bc.save()
 
-            width, height = im.size
+    # Create collection item image
+    i = CollectionItemImage(
+        created_by=uploader,
+        modified_by=uploader,
+        image=request.FILES['file'],
+        collection_item=bc,
+        order_in_collection=1
+    )
+    i.save()
+    print('    image saved.')
 
-            square_edge_length = 200
-            target_width = square_edge_length
-            target_height = square_edge_length
+    # Create thumbnail
+    im = Image.open(storage.open(i.image.name, 'r'))
 
-            left = 0
-            top = 0
-            right = target_width
-            bottom = target_height
+    width, height = im.size
 
-            # get new dimensions to fit
-            if width > height:
-                resize_ratio = target_height / height
-                new_width = int(width * resize_ratio)
-                new_height = target_height
-            elif height > width:
-                resize_ratio = target_width / width
-                new_width = target_width
-                new_height = int(height * resize_ratio)
-            else:
-                new_width = target_width
-                new_height = target_height
+    square_edge_length = 200
+    target_width = square_edge_length
+    target_height = square_edge_length
 
-            # grow or shrink to new dimensions
-            if width >= target_width and height >= target_height:
-                im.thumbnail([new_width, new_height], Image.ANTIALIAS)
-            else:
-                im = im.resize((new_width, new_height))
+    left = 0
+    top = 0
+    right = target_width
+    bottom = target_height
 
-            # crop
-            if new_width > target_width:
-                left = int((new_width - target_width) / 2)
-                right = left + target_width
-            elif new_height > target_height:
-                top = int((new_height - target_height) / 2)
-                bottom = top + target_height
+    # get new dimensions to fit
+    if width > height:
+        resize_ratio = target_height / height
+        new_width = int(width * resize_ratio)
+        new_height = target_height
+    elif height > width:
+        resize_ratio = target_width / width
+        new_width = target_width
+        new_height = int(height * resize_ratio)
+    else:
+        new_width = target_width
+        new_height = target_height
 
-            im = im.crop((left, top, right, bottom))
+    # grow or shrink to new dimensions
+    if width >= target_width and height >= target_height:
+        im.thumbnail([new_width, new_height], Image.ANTIALIAS)
+    else:
+        im = im.resize((new_width, new_height))
 
-            buffer = BytesIO()
-            im.save(fp=buffer, format='JPEG', quality=95)
-            pillow_image = ContentFile(buffer.getvalue())
+    # crop
+    if new_width > target_width:
+        left = int((new_width - target_width) / 2)
+        right = left + target_width
+    elif new_height > target_height:
+        top = int((new_height - target_height) / 2)
+        bottom = top + target_height
 
-            thumbnail = CollectionItemImageThumbnail(
-                order_in_collection=1,
-                image=pillow_image,
-                collection_item=bc,
-                created_by=uploader,
-                modified_by=uploader
-            )
+    im = im.crop((left, top, right, bottom))
 
-            thumbnail.save()
+    buffer = BytesIO()
+    im.save(fp=buffer, format='JPEG', quality=95)
+    pillow_image = ContentFile(buffer.getvalue())
 
-            thumbnail.image.save(
-                i.image.name.split("images/", 1)[1],
-                InMemoryUploadedFile(
-                    pillow_image,
-                    None,  # field_name
-                    'my_image.jpg',  # file name
-                    'image/jpeg',  # content_type
-                    pillow_image.tell,  # size
-                    None
-                )
-            )
+    thumbnail = CollectionItemImageThumbnail(
+        order_in_collection=1,
+        image=pillow_image,
+        collection_item=bc,
+        created_by=uploader,
+        modified_by=uploader
+    )
+
+    thumbnail.save()
+
+    thumbnail.image.save(
+        i.image.name.split("images/", 1)[1],
+        InMemoryUploadedFile(
+            pillow_image,
+            None,  # field_name
+            'my_image.jpg',  # file name
+            'image/jpeg',  # content_type
+            pillow_image.tell,  # size
+            None
+        )
+    )
     print("Complete")
-    return render(request, 'collectionsapp/upload_all.html')

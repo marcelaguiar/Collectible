@@ -135,11 +135,20 @@ li.no-bullets {
 }
 
 .save-button {
-    width: 300px;
     float: right;
 }
 
 #navbar.navbar-collapse.collapse.show > form {
     margin-bottom: 8px;
+}
+
+.form-submit-button {
+    max-width: 200px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.margin-top {
+    margin-top: 20px;
 }
 
