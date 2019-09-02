@@ -13,4 +13,14 @@
             </div>
         {% endfor %}
     </div>
+    <div style="text-align: center; padding: 10px;">
+        <div id="dxLoadIndicator"></div>
+    </div>
+
+
+    <input type="hidden" id="initial_load_quantity" value="{{ initial_load_quantity }}">
+{% endblock %}
+
+{% block dedicated_scripts %}
+    <script src="{% static "collectionsapp/javascript/image_grid.js" %}"></script>
 {% endblock %}

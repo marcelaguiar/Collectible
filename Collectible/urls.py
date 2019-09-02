@@ -28,6 +28,7 @@ urlpatterns = [
     path('get_all_bottle_caps/', views.get_all_bottle_caps),
     path('get_all_bottle_caps_by_collection/<int:collection_id>/', views.get_all_bottle_caps_by_collection,
          name='get_all_bottle_caps_by_collection'),
+    path('get_n_thumbnails/<int:start>/<int:end>', views.get_n_thumbnails, name='get_n_thumbnails'),
     path('get_users_collections/<int:user_id>/', views.get_users_collections),
     path('my_collections/', views.my_collections, name='my_collections'),
     path('password-reset/', auth_views.PasswordResetView.as_view(template_name='registration/password_reset.html'),

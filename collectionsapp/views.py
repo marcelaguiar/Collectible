@@ -67,10 +67,34 @@ def add_to_collection(request, collection_id):
 
 
 def home(request):
+    initial_load_quantity = 100
+
     context = {
-        'items': CollectionItemImageThumbnail.objects.filter(order_in_collection=1).order_by('-created')
+        'items': CollectionItemImageThumbnail.objects.filter(order_in_collection=1)
+                     .order_by('-created')[:initial_load_quantity],
+        'initial_load_quantity': initial_load_quantity
     }
     return render(request, 'collectionsapp/home.html', context)
+
+
+def get_n_thumbnails(request, start, end):
+    thumbnails = []
+
+    tqs = CollectionItemImageThumbnail.objects.filter(order_in_collection=1).order_by('-created')[start:end]
+
+    for thumbnail in tqs:
+        collection_item_url = reverse(viewname='bottle_cap', args=[thumbnail.id])
+        image_url = thumbnail.image.url
+        collection_item_name = str(thumbnail.collection_item)
+        thumbnails.append(
+            {
+                "collection_item_url": collection_item_url,
+                "image_url": image_url,
+                "collection_item_name": collection_item_name
+            }
+        )
+
+    return JsonResponse(thumbnails, safe=False)
 
 
 def collection_types(request):
