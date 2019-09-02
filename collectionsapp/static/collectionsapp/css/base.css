@@ -152,3 +152,7 @@ li.no-bullets {
     margin-top: 20px;
 }
 
+.load-indicator-container {
+    text-align: center;
+    padding: 10px;
+}

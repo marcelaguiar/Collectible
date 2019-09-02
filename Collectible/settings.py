@@ -163,3 +163,5 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 DEFAULT_LOGGING['handlers']['console']['filters'] = []
+
+IMG_GRID_INIT_LOAD_QTY = 100

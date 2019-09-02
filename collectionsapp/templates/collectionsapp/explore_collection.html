@@ -49,6 +49,11 @@
                     </div>
                 {% endfor %}
             </div>
+            <div class="load-indicator-container">
+                <div id="dxLoadIndicator"></div>
+            </div>
+
+            <input type="hidden" id="initial_load_quantity" value="{{ initial_load_quantity }}">
         {% endif %}
     {% elif view == 'imageanddetails' or view == 'details'%}
         <div id="gridContainer"></div>
@@ -58,13 +63,10 @@
     <input type="hidden" id="collection-id" value="{{ collection_id }}">
 {% endblock %}
 
-{% if view == 'imageanddetails' or view == 'details'%}
-    {% block dedicated_scripts %}
+{% block dedicated_scripts %}
+    {% if view == 'imageanddetails' or view == 'details'%}
         <script src="{% static "collectionsapp/javascript/search_collection.js" %}"></script>
-    {% endblock %}
-{% endif %}
-
-
-
-
-
+    {% elif view == "image" %}
+        <script src="{% static "collectionsapp/javascript/image_grid.js" %}"></script>
+    {% endif %}
+{% endblock %}

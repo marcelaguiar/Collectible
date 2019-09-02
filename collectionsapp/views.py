@@ -1,6 +1,7 @@
 from collectionsapp.forms import CollectionTypeForm, CollectionForm, BottleCapForm, UserRegisterForm
 from collectionsapp.models import BeverageType, BottleCap, CollectionType, Collection, CollectionItem, User,\
     CollectionItemImage, CollectionItemImageThumbnail
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -67,12 +68,11 @@ def add_to_collection(request, collection_id):
 
 
 def home(request):
-    initial_load_quantity = 100
-
     context = {
-        'items': CollectionItemImageThumbnail.objects.filter(order_in_collection=1)
-                     .order_by('-created')[:initial_load_quantity],
-        'initial_load_quantity': initial_load_quantity
+        'items': CollectionItemImageThumbnail.objects.filter(
+            order_in_collection=1
+        ).order_by('-created')[:settings.IMG_GRID_INIT_LOAD_QTY],
+        'initial_load_quantity': settings.IMG_GRID_INIT_LOAD_QTY
     }
     return render(request, 'collectionsapp/home.html', context)
 
@@ -83,7 +83,7 @@ def get_n_thumbnails(request, start, end):
     tqs = CollectionItemImageThumbnail.objects.filter(order_in_collection=1).order_by('-created')[start:end]
 
     for thumbnail in tqs:
-        collection_item_url = reverse(viewname='bottle_cap', args=[thumbnail.id])
+        collection_item_url = reverse(viewname='bottle_cap', args=[thumbnail.collection_item.id])
         image_url = thumbnail.image.url
         collection_item_name = str(thumbnail.collection_item)
         thumbnails.append(
@@ -237,7 +237,6 @@ def create_collection(request):
 
 
 def explore_collection(request, collection_id, view):
-
     collection = Collection.objects.get(id=collection_id)
     images = None
 
@@ -245,14 +244,15 @@ def explore_collection(request, collection_id, view):
         images = CollectionItemImageThumbnail.objects.filter(
             order_in_collection=1,
             collection_item__collection=collection
-        )
+        ).order_by('-created')[:settings.IMG_GRID_INIT_LOAD_QTY]
 
     context = {
         'collection_name': collection.name,
         'collection_id': collection_id,
         'is_owner': collection.created_by_id == request.user.id,
         'images': images,
-        'view': view
+        'view': view,
+        'initial_load_quantity': settings.IMG_GRID_INIT_LOAD_QTY
     }
     return render(request, 'collectionsapp/explore_collection.html', context)
 
