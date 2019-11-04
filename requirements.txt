@@ -10,7 +10,7 @@ django-taggit==0.23.0
 docutils==0.14
 gunicorn==19.9.0
 jmespath==0.9.4
-Pillow==6.1.0
+Pillow==6.2.0
 psycopg2==2.7.5
 psycopg2-binary==2.8.3
 python-dateutil==2.8.0
