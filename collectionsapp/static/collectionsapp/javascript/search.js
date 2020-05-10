@@ -61,7 +61,9 @@ function SetUpDataGrid() {
             },
             {
                 dataField: "company",
-                dataType: "string"
+                dataType: "string",
+                filterValue: "unidentified",
+                selectedFilterOperation: "<>"
             },
             {
                 dataField: "brand",
