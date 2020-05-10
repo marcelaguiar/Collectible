@@ -98,3 +98,12 @@ class MethodAcquired(CommonInfo):
 
     def __str__(self):
         return self.name
+
+
+class SearchAction(models.Model):
+    timestamp = models.DateField(verbose_name='Timestamp')
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='user', blank=True, null=True, verbose_name='User')
+    text = models.CharField(max_length=200, blank=True, verbose_name='Text')
+
+    def __str__(self):
+        return str(self.timestamp) + ': \"' + self.text + '\"'

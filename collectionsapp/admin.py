@@ -1,7 +1,6 @@
 from django.contrib import admin
 from .models import BeverageType, BottleCap, CollectionType, Collection, CollectionItemImage,\
-    CollectionItemImageThumbnail, MethodAcquired
-
+    CollectionItemImageThumbnail, MethodAcquired, SearchAction
 
 # Register your models here.
 admin.site.register(CollectionType)
@@ -11,3 +10,4 @@ admin.site.register(Collection)
 admin.site.register(CollectionItemImage)
 admin.site.register(CollectionItemImageThumbnail)
 admin.site.register(MethodAcquired)
+admin.site.register(SearchAction)

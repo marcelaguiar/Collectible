@@ -1,6 +1,6 @@
 from collectionsapp.forms import CollectionTypeForm, CollectionForm, BottleCapForm, UserRegisterForm
 from collectionsapp.models import BeverageType, BottleCap, CollectionType, Collection, CollectionItem, User,\
-    CollectionItemImage, CollectionItemImageThumbnail
+    CollectionItemImage, CollectionItemImageThumbnail, SearchAction
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -613,6 +613,14 @@ def delete_collection_item(request, collection_item_id):
 
 def search(request):
     criteria = request.GET.get('q')
+    
+    # log search
+    new_search_action = SearchAction(
+        timestamp=datetime.datetime.now(),
+        user=None if request.user.is_anonymous else request.user,
+        text=criteria
+    )
+    new_search_action.save()
 
     context = {
         'criteria': criteria if criteria is not None else ""
