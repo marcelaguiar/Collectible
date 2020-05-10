@@ -23,6 +23,29 @@ class CommonInfo(models.Model):
         abstract = True
 
 
+class CollectionType(CommonInfo):
+    name = models.CharField(max_length=100, verbose_name="Name")
+
+    def __str__(self):
+        return self.name
+
+
+class Collection(CommonInfo):
+    name = models.CharField(max_length=100, verbose_name="Name")
+    type = models.ForeignKey('CollectionType', on_delete=models.PROTECT, verbose_name="Collection Type")
+    description = models.TextField(max_length=1000, blank=True, verbose_name="Description")
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(app_label)s_%(class)s_owned',
+                              verbose_name="Owner")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['name', 'owner'], name='owner cannot repeat collection names')
+        ]
+
+
 class CollectionItem(CommonInfo):
     date_acquired = models.DateField(default=date.today, verbose_name='Date Acquired')
     method_acquired = models.ForeignKey('MethodAcquired', on_delete=models.PROTECT, blank=True, null=True,
@@ -34,28 +57,6 @@ class CollectionItem(CommonInfo):
 
     class Meta:
         abstract = True
-
-
-class CollectionType(CommonInfo):
-    name = models.CharField(max_length=100, verbose_name="Name")
-
-    def __str__(self):
-        return self.name
-
-
-class Collection(CommonInfo):
-    name = models.CharField(max_length=100, verbose_name="Name")
-    type = models.ForeignKey('CollectionType', on_delete=models.PROTECT, verbose_name="Collection Type")
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='%(app_label)s_%(class)s_owned',
-                              verbose_name="Owner")
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(fields=['name', 'owner'], name='owner cannot repeat collection names')
-        ]
 
 
 class CollectionItemImage(CommonInfo):

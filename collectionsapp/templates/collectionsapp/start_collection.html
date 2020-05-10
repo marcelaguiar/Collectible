@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
-
 
 {% block body %}
 <div class="centered-panel">
@@ -8,14 +8,7 @@
 
     <form action="{% url 'create_collection' %}" method="POST" role="form">
         {% csrf_token %}
-        <div class="container">
-            <div class="row spaced-control">
-                {{ collectionForm.name }}
-            </div>
-            <div class="row spaced-control">
-                {{ collectionForm.type }}
-            </div>
-        </div>
+        {{ collectionForm|crispy }}
         <button type="submit" class="btn btn-primary precedes-control">Create</button>
     </form>
 </div>

@@ -1,13 +1,15 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
 
 {% block body %}
+<div class="centered-panel">
+    <h4>Edit Collection</h4>
+
     <form action="{% url 'edit_collection' collection_id %}" method="POST" role="form">
         {% csrf_token %}
-
-        {{ collectionForm.name }}
-        {{ collectionForm.type.as_hidden }}
-
-        <button type="submit" class="btn btn-primary precedes-control save-button">Save changes</button>
+        {{ collectionForm|crispy }}
+        <button type="submit" class="btn btn-primary precedes-control">Save changes</button>
     </form>
+</div>
 {% endblock %}

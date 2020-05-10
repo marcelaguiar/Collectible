@@ -134,12 +134,13 @@ li.no-bullets {
     padding: 10px;
 }
 
-.save-button {
-    float: right;
-}
-
 #navbar.navbar-collapse.collapse.show > form {
     margin-bottom: 8px;
+}
+
+.submit-form-button {
+    margin-top: 20px;
+    float: right;
 }
 
 .form-submit-button {

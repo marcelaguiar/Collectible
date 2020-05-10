@@ -204,13 +204,16 @@ def select_fieldset(request):
 
     collection_name = request.POST['collection_name']
     collection_type_id = request.POST['collection_type']
+    collection_description = request.POST['collection_description']
 
     request.session['collection_name'] = collection_name
     request.session['collection_type_id'] = collection_type_id
+    request.session['collection_description'] = collection_description
 
     context = {
+        'collectionName': collection_name,
         'collectionType': CollectionType.objects.get(id=collection_type_id),
-        'collectionName': collection_name
+        'collectionDescription': collection_description
     }
     return render(request, 'collectionsapp/select_fieldset.html', context)
 
@@ -613,7 +616,7 @@ def delete_collection_item(request, collection_item_id):
 
 def search(request):
     criteria = request.GET.get('q')
-    
+
     # log search
     new_search_action = SearchAction(
         timestamp=datetime.datetime.now(),

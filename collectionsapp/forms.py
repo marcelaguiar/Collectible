@@ -8,18 +8,20 @@ from django.contrib.auth.forms import UserCreationForm
 class CollectionForm(forms.ModelForm):
     class Meta:
         model = Collection
-        fields = ['name', 'type']
+        fields = ['name', 'type', 'description']
 
     def __init__(self, *args, **kwargs):
         super(CollectionForm, self).__init__(*args, **kwargs)
 
-        # Add bootstrap styling to fields
-        for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
+        # disable type on edit
+        instance = getattr(self, 'instance', None)
+        if instance and instance.pk:
+            self.fields['type'].widget.attrs['disabled'] = True
 
         # Add placeholder text to fields
         self.fields['name'].widget.attrs.update({'placeholder': 'Name'})
         self.fields['type'].widget.attrs.update({'placeholder': 'Type'})
+        self.fields['description'].widget.attrs.update({'placeholder': 'Description'})
 
 
 class CollectionTypeForm(forms.ModelForm):
