@@ -2,14 +2,15 @@
 {% load static %}
 
 {% block body %}
-
     <div class="centered-panel">
+        <h4>Multi-upload</h4>
+
         <form id="image-select-form" method="POST" role="form" enctype="multipart/form-data">
             {% csrf_token %}
 
-            <input type="file" name="images" class="spaced-control" multiple>
+            <div id="collectionSelectBox" class="spaced-control" ></div>
 
-            <div id="collectionSelectBox"></div>
+            <input type="file" name="images" class="spaced-control" multiple>
 
             <div>
                 <small>
@@ -24,7 +25,6 @@
     </div>
 
     <input type="hidden" id="user_id" value="{{ user.id }}">
-
 {% endblock %}
 
 {% block dedicated_scripts %}
