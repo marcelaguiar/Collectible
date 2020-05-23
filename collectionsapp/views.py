@@ -445,7 +445,7 @@ def upload_image(request, collection_item_id):
 
                 # Save full-quality image
                 new_image.save()
-                im = Image.open(storage.open(new_image.image.name, 'r'))
+                im = Image.open(storage.open(new_image.image.name, 'rb'))
 
                 width, height = im.size
 
@@ -706,7 +706,7 @@ def create_collection_item_from_image(request):
     i.save()
 
     # Create thumbnail
-    im = Image.open(storage.open(i.image.name, 'r'))
+    im = Image.open(storage.open(i.image.name, 'rb'))
 
     width, height = im.size
 
