@@ -1,23 +1,29 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
 
-
 {% block body %}
-    <div class="centered-panel">
-        <form action="" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
+<div class="centered-panel">
+    <h4>Upload Image</h4>
 
-            {{ imageUploadFormSet.as_p }}
-            {% comment %}
-            {% for form in imageUploadFormSet %}
-                <div class="row">
-                    <div class="col-xs-6" style="margin-right: 5px;">{{ form.order_in_collection }}</div>
-                    <div class="col-xs-6">{{ form.image }}</div>
-                </div>
-            {% endfor %}
-            {% endcomment %}
-            <!--<button type="button" class="btn btn-outline-primary btn-sm">Add another image</button>-->
-            <button type="submit" class="btn btn-primary precedes-control" style="width: 100px;">Save</button>
-        </form>
-    </div>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ imageUploadFormSet.as_p }}
+        {% comment %}
+        {% for form in imageUploadFormSet %}
+            <div class="row">
+                <div class="col-xs-6" style="margin-right: 5px;">{{ form.order_in_collection }}</div>
+                <div class="col-xs-6">{{ form.image }}</div>
+            </div>
+        {% endfor %}
+        {% endcomment %}
+        <div class='form-button-bar clearfix'>
+            <div class="button-bar-right-elements">
+                <a class="btn btn-outline-secondary" href="{% url 'bottle_cap' collection_item_id %}">Cancel</a>
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </div>
+        </div>
+    </form>
+</div>
 {% endblock %}

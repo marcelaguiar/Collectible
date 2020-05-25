@@ -8,7 +8,7 @@
 
     <form action="{% url 'edit_collection' collection_id %}" method="POST" role="form">
         {% csrf_token %}
-        {{ collectionForm|crispy }}
+        {{ form|crispy }}
         <div class='form-button-bar clearfix'>
             {% if collection_owner == user%}
             <button type="button" class="btn btn-outline-danger button-bar-button-left" data-toggle="modal" data-target="#deleteConfirmationModal">Delete</button>

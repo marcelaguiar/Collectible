@@ -51,19 +51,18 @@ class BottleCapForm(forms.ModelForm):
     class Meta:
         model = BottleCap
         fields = [
-            'date_acquired',
-            'available_for_trade',
-            'description',
             'company',
             'brand',
             'product',
             'variety',
-            'text',
-            'region',
-            'underside',
             'beverage_type',
-            'collection',
+            'description',
+            'region',
+            'date_acquired',
             'method_acquired',
+            'available_for_trade',
+            'text',
+            'underside',
             'tags'
         ]
 
@@ -83,6 +82,9 @@ class BottleCapForm(forms.ModelForm):
         self.fields['region'].widget.attrs.update({'placeholder': 'Region'})
         self.fields['underside'].widget.attrs.update({'placeholder': 'Underside'})
         self.fields['description'].widget.attrs.update({'placeholder': 'Description'})
+
+        # Hide collection id value
+        #self.fields['collection'].widget = forms.HiddenInput()
 
     def clean_date_acquired(self):
         cleaned_data = super(BottleCapForm, self).clean()

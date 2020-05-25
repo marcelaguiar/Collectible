@@ -17,8 +17,13 @@
                 *In Multi-upload, only images can be added. Adding details can be done on a case-by-case basis afterwards.
             </small>
             </div>
-
-            <input id="submit-button" class="btn btn-primary form-submit-button" type="submit" value="GO">
+            
+            <div class='form-button-bar clearfix'>
+                <div class="button-bar-right-elements">
+                    <a class="btn btn-outline-secondary" href="{% url 'home' %}">Cancel</a>
+                    <input id="submit-button" class="btn btn-primary" style="width:100px;" type="submit" value="Go">
+                </div>
+            </div>
         </form>
 
         <div id="progressBarContainer"></div>

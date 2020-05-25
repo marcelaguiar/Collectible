@@ -8,8 +8,14 @@
 
     <form action="{% url 'create_collection' %}" method="POST" role="form">
         {% csrf_token %}
-        {{ collectionForm|crispy }}
-        <button type="submit" class="btn btn-primary precedes-control">Create</button>
+        {{ form|crispy }}
+
+        <div class='form-button-bar clearfix'>
+            <div class="button-bar-right-elements">
+                <a class="btn btn-outline-secondary" href="{% url 'home'%}">Cancel</a>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+        </div>
     </form>
 </div>
 {% endblock %}

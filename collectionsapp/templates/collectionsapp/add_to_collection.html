@@ -1,79 +1,22 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
 
 {% block body %}
+<div class="centered-panel">
+    <h4>Create Collection Item</h4>
 
     <form action="{% url 'add_to_collection' collection_id %}" method="POST" role="form">
         {% csrf_token %}
-        <div class="input-form centered-form">
-            <div style="width:800px">
-                <table style="width: 100%">
-                    <tr>
-                        <td>{{ collectionForm.company.label_tag }}</td>
-                        <td>{{ collectionForm.company }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ collectionForm.brand.label_tag }}</td>
-                        <td>{{ collectionForm.brand }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ collectionForm.product.label_tag }}</td>
-                        <td>{{ collectionForm.product }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ collectionForm.variety.label_tag }}</td>
-                        <td>{{ collectionForm.variety }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ collectionForm.text.label_tag }}</td>
-                        <td>{{ collectionForm.text }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ collectionForm.region.label_tag }}</td>
-                        <td>{{ collectionForm.region }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ collectionForm.underside.label_tag }}</td>
-                        <td>{{ collectionForm.underside }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ collectionForm.description.label_tag }}</td>
-                        <td>{{ collectionForm.description }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ collectionForm.beverage_type.label_tag }}</td>
-                        <td>{{ collectionForm.beverage_type }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ collectionForm.method_acquired.label_tag }}</td>
-                        <td>{{ collectionForm.method_acquired }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ collectionForm.date_acquired.label_tag }}</td>
-                        <td>{{ collectionForm.date_acquired }}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td>{{ collectionForm.date_acquired.errors }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ collectionForm.available_for_trade.label_tag }}</td>
-                        <td>{{ collectionForm.available_for_trade }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ collectionForm.tags.label_tag }}</td>
-                        <td>{{ collectionForm.tags }}</td>
-                    </tr>
-                </table>
-
-                {{ collectionForm.collection.as_hidden }}
-
-                <button type="submit" class="btn btn-primary precedes-control submit-form-button">Add to Collection</button>
+        {{ form|crispy }}
+        <div class='form-button-bar clearfix'>
+            <div class="button-bar-right-elements">
+                <a class="btn btn-outline-secondary" href="{% url 'explore_collection' collection_id 'image' %}">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save changes</button>
             </div>
         </div>
-
     </form>
-
+</div>
 {% endblock %}
 
 {% block dedicated_scripts %}

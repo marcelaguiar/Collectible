@@ -36,8 +36,11 @@ class FriendlyDataTypes:
 
 @login_required
 def add_to_collection(request, collection_id):
-    if Collection.objects.get(id=collection_id).owner != request.user:
-        return error(request, "You cannot add to other people's collections.")
+    collection = Collection.objects.get(id=collection_id)
+
+    if collection.owner != request.user:
+        messages.error(request, 'You cannot add to other peoples collections.')
+        return redirect('select_collection')
 
     if request.method == "POST":
         form = BottleCapForm(request.POST)
@@ -46,26 +49,23 @@ def add_to_collection(request, collection_id):
             new_bottle_cap = form.save(commit=False)
             new_bottle_cap.created_by = request.user
             new_bottle_cap.modified_by = request.user
+            new_bottle_cap.collection_id = collection_id
 
             new_bottle_cap.save()
 
             form.save_m2m()
 
-            return bottle_cap(request, new_bottle_cap.pk)
-        else:
-            context = {
-                'collectionForm': form,
-                'collection_id': collection_id
-            }
-            return render(request, 'collectionsapp/add_to_collection.html', context)
+            messages.success(request, 'Item added to collection.')
+            return redirect('bottle_cap', item_id=new_bottle_cap.pk)
     else:
-        collection_item_form = BottleCapForm(initial={'collection': collection_id})
+        form = BottleCapForm(initial={'collection': collection_id})
 
-        context = {
-            'collectionForm': collection_item_form,
-            'collection_id': collection_id
-        }
-        return render(request, 'collectionsapp/add_to_collection.html', context)
+    context = {
+        'form': form,
+        'collection_id': collection_id
+    }
+
+    return render(request, 'collectionsapp/add_to_collection.html', context)
 
 
 def home(request):
@@ -191,7 +191,7 @@ def my_collections(request):
 @login_required
 def start_collection(request):
     context = {
-        'collectionForm': CollectionForm
+        'form': CollectionForm
     }
     return render(request, 'collectionsapp/start_collection.html', context)
 
@@ -424,6 +424,12 @@ def tag_search_all_collection_types(request, collection_id, slug):
 
 @login_required
 def upload_image(request, collection_item_id):
+    collection_item = get_object_or_404(BottleCap, pk=collection_item_id)
+
+    if collection_item.collection.owner != request.user:
+        messages.error(request, 'You cannot edit other peoples collections.')
+        return redirect('home')
+
     collection_item_image_formset = modelformset_factory(
         model=CollectionItemImage,
         fields=('image', 'order_in_collection'),
@@ -526,14 +532,14 @@ def upload_image(request, collection_item_id):
                     )
                 )
 
-            return bottle_cap(request, collection_item_id)
+            return redirect('bottle_cap', item_id=collection_item_id)
         else:
             print(formset.errors)
     else:
         collection = BottleCap.objects.get(pk=collection_item_id).collection
 
         context = {
-            'collection': collection,
+            'collection_item_id': collection_item_id,
             'imageUploadFormSet': collection_item_image_formset(queryset=CollectionItemImage.objects.none())
         }
 
@@ -550,7 +556,6 @@ def edit_collection(request, collection_id):
 
     if request.method == "POST":
         form = CollectionEditForm(request.POST, instance=collection)
-        print(form)
 
         if form.is_valid():
             form_data = form.save(commit=False)
@@ -564,7 +569,7 @@ def edit_collection(request, collection_id):
         form = CollectionEditForm(instance=collection)
 
     context = {
-        'collectionForm': form,
+        'form': form,
         'collection_owner': collection.owner,
         'collection_id': collection_id
     }
@@ -577,7 +582,8 @@ def edit_collection_item(request, collection_item_id):
     collection_item = get_object_or_404(BottleCap, pk=collection_item_id)
 
     if collection_item.collection.owner != request.user:
-        return error(request, "You cannot edit other people's items.")
+        messages.error(request, 'You cannot edit other peoples collections.')
+        return redirect('home')
 
     if request.method == "POST":
         form = BottleCapForm(request.POST, instance=collection_item)
@@ -591,10 +597,10 @@ def edit_collection_item(request, collection_item_id):
 
             form.save_m2m()
 
-            return bottle_cap(request, form_data.pk)
+            return redirect('bottle_cap', item_id=form_data.pk)
     else:
         context = {
-            'collectionForm': BottleCapForm(instance=collection_item),
+            'form': BottleCapForm(instance=collection_item),
             'collection_item_id': collection_item_id
         }
         return render(request, 'collectionsapp/edit_collection_item.html', context)
