@@ -9,7 +9,34 @@
     <form action="{% url 'edit_collection' collection_id %}" method="POST" role="form">
         {% csrf_token %}
         {{ collectionForm|crispy }}
-        <button type="submit" class="btn btn-primary precedes-control">Save changes</button>
+        <div class='form-button-bar clearfix'>
+            {% if collection_owner == user%}
+            <button type="button" class="btn btn-outline-danger button-bar-button-left" data-toggle="modal" data-target="#deleteConfirmationModal">Delete</button>
+            <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteConfirmationModalLabel">Delete this collection?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Deleting this collection will permanantly delete all collection items and images.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <a class="btn btn-danger" href="{% url 'delete_collection' collection_id %}">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <div class="button-bar-right-elements">
+                <a class="btn btn-outline-secondary" href="javascript:window.history.back()">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
     </form>
 </div>
 {% endblock %}

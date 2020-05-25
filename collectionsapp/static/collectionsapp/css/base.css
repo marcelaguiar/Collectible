@@ -157,3 +157,18 @@ li.no-bullets {
     text-align: center;
     padding: 10px;
 }
+
+.button-bar-button-left {
+    float: left;
+}
+
+.button-bar-right-elements {
+    float: right;
+}
+
+.clearfix::after { 
+    content: "";
+    display: block; 
+    height: 0; 
+    clear: both;
+}

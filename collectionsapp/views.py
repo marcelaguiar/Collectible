@@ -20,6 +20,7 @@ from io import BytesIO
 from PIL import Image
 from taggit.managers import TaggableManager
 import datetime
+from collectionsapp.helpers import delete_helper
 
 
 class FriendlyDataTypes:
@@ -552,6 +553,7 @@ def edit_collection(request, collection_id):
 
     context = {
         'collectionForm': form,
+        'collection_owner': collection.owner,
         'collection_id': collection_id
     }
 
@@ -591,6 +593,18 @@ def error(request, description):
         'description': description
     }
     return render(request, 'collectionsapp/error.html', context)
+
+
+def delete_collection(request, collection_id):
+    instance = Collection.objects.get(id=collection_id)
+    
+    if instance.owner == request.user:
+        delete_helper.delete_collection_object(collection_id)
+        messages.success(request, 'Collection deleted.')
+    else:
+        messages.error(request, 'You must be the owner of this collection to delete.')
+
+    return redirect('my_collections')
 
 
 def delete_collection_item(request, collection_item_id):

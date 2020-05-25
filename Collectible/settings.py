@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import django_heroku
+from django.contrib.messages import constants as messages
 from django.utils.log import DEFAULT_LOGGING
 
 
@@ -169,3 +170,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 DEFAULT_LOGGING['handlers']['console']['filters'] = []
 
 IMG_GRID_INIT_LOAD_QTY = 100
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+}
