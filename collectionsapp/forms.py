@@ -1,4 +1,5 @@
 from collectionsapp.models import Collection, CollectionType, BottleCap, CollectionItemImage
+from crispy_forms.helper import FormHelper
 from datetime import date
 from django import forms
 from django.contrib.auth.models import User
@@ -114,3 +115,11 @@ class UserRegisterForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
+
+class AccountDeleteForm(forms.Form):
+    username = forms.CharField()
+
+    def __init__(self, *args, **kwargs):
+        super(AccountDeleteForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False 

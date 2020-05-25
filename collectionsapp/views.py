@@ -1,4 +1,4 @@
-from collectionsapp.forms import CollectionTypeForm, CollectionForm, CollectionEditForm, BottleCapForm, UserRegisterForm
+from collectionsapp.forms import CollectionTypeForm, CollectionForm, CollectionEditForm, BottleCapForm, UserRegisterForm, AccountDeleteForm
 from collectionsapp.models import BeverageType, BottleCap, CollectionType, Collection, CollectionItem, User,\
     CollectionItemImage, CollectionItemImageThumbnail, SearchAction
 from django.conf import settings
@@ -39,7 +39,7 @@ def add_to_collection(request, collection_id):
     collection = Collection.objects.get(id=collection_id)
 
     if collection.owner != request.user:
-        messages.error(request, 'You cannot add to other peoples collections.')
+        messages.warning(request, 'You cannot add to other peoples collections.')
         return redirect('select_collection')
 
     if request.method == "POST":
@@ -427,7 +427,7 @@ def upload_image(request, collection_item_id):
     collection_item = get_object_or_404(BottleCap, pk=collection_item_id)
 
     if collection_item.collection.owner != request.user:
-        messages.error(request, 'You cannot edit other peoples collections.')
+        messages.warning(request, 'You cannot edit other peoples collections.')
         return redirect('home')
 
     collection_item_image_formset = modelformset_factory(
@@ -551,7 +551,7 @@ def edit_collection(request, collection_id):
     collection = get_object_or_404(Collection, pk=collection_id)
 
     if collection.owner != request.user:
-        messages.error(request, "You cannot edit other people's collections.")
+        messages.warning(request, "You cannot edit other people's collections.")
         return redirect('home')
 
     if request.method == "POST":
@@ -582,7 +582,7 @@ def edit_collection_item(request, collection_item_id):
     collection_item = get_object_or_404(BottleCap, pk=collection_item_id)
 
     if collection_item.collection.owner != request.user:
-        messages.error(request, 'You cannot edit other peoples collections.')
+        messages.warning(request, 'You cannot edit other people\'s collections.')
         return redirect('home')
 
     if request.method == "POST":
@@ -601,16 +601,10 @@ def edit_collection_item(request, collection_item_id):
     else:
         context = {
             'form': BottleCapForm(instance=collection_item),
-            'collection_item_id': collection_item_id
+            'collection_item_id': collection_item_id,
+            'collection_owner': collection_item.collection.owner
         }
         return render(request, 'collectionsapp/edit_collection_item.html', context)
-
-
-def error(request, description):
-    context = {
-        'description': description
-    }
-    return render(request, 'collectionsapp/error.html', context)
 
 
 @login_required
@@ -621,7 +615,7 @@ def delete_collection(request, collection_id):
         delete_helper.delete_collection_object(collection_id)
         messages.success(request, 'Collection deleted.')
     else:
-        messages.error(request, 'You must be the owner of this collection to delete.')
+        messages.warning(request, 'You must be the owner of this collection to delete.')
 
     return redirect('my_collections')
 
@@ -635,7 +629,7 @@ def delete_collection_item(request, collection_item_id):
         delete_helper.delete_collection_item_object(collection_item_id)
         messages.success(request, 'Collection item deleted.')
     else:
-        messages.error(request, 'You must be the owner of this collection to delete.')
+        messages.warning(request, 'You must be the owner of this collection to delete.')
 
     return explore_collection(request, collection_id, "image")
 
@@ -799,3 +793,23 @@ def create_collection_item_from_image(request):
             None
         )
     )
+
+
+@login_required
+def manage_account(request):
+    context = {
+        'account_delete_form': AccountDeleteForm,
+        'target_user': request.user
+    }
+    return render(request, 'collectionsapp/manage_account.html', context)
+
+
+@login_required
+def delete_account(request, target_user_id):
+    if target_user_id == request.user.id:
+        delete_helper.delete_user_object(request.user.id)
+        messages.success(request, "Account deleted.")
+    else:
+        messages.warning(request, "Invalid action.")
+        
+    return redirect('logout')

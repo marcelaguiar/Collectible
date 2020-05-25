@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<h1>Manage Account</h1>
+
+<p>{{ user.username }}</p>
+
+<h4>Danger zone</h4>
+<button type="button" class="btn btn-outline-danger button-bar-button-left" data-toggle="modal" data-target="#deleteConfirmationModal">Delete Account</button>
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Delete your account?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>This action <strong>cannot</strong> be undone. This will permanantly delete your account, collections, collection items, and images.</p>
+                <p>Please type <strong>{{user.username}}</strong> to confirm:</p>
+                <form action="{% url 'delete_account' user.id %}" method="POST" role="form">
+                    {% csrf_token %}
+                    <div id="usernameConfirm" style="margin-bottom: 5px;"></div>
+                    <button type="submit" id="deleteButton" class="btn btn-outline-danger" style="width: 100%;" disabled>I understand the consequences, delete my account</button>
+                </form>
+                <input type="hidden" id="username-value" value="{{user.username}}">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block dedicated_scripts %}
+    <script src="{% static "collectionsapp/javascript/delete_account.js" %}"></script>
+{% endblock %}

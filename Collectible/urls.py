@@ -15,13 +15,13 @@ urlpatterns = [
     path('collection_types/', views.collection_types, name='collection_types'),
     path('create_collection/', views.create_collection, name='create_collection'),
     path('create_collection_type/', views.create_collection_type, name='create_collection_type'),
+    path('delete_account/<int:target_user_id>/', views.delete_account, name='delete_account'),
     path('delete_collection/<int:collection_id>', views.delete_collection, name='delete_collection'),
     path('delete_collection_item/<int:collection_item_id>', views.delete_collection_item,
          name='delete_collection_item'),
     path('design_fieldset', views.design_fieldset, name='design_fieldset'),
     path('edit_collection/<int:collection_id>/', views.edit_collection, name='edit_collection'),
     path('edit_collection_item/<int:collection_item_id>/', views.edit_collection_item, name='edit_collection_item'),
-    path('error/', views.error, name='error'),
     path('explore_collection/<int:collection_id>/<str:view>', views.explore_collection, name='explore_collection'),
     path('explore_collection_type/<int:collection_type_id>/', views.explore_collection_type,
          name='explore_collection_type'),
@@ -57,7 +57,8 @@ urlpatterns = [
     path('tag_search_collection/<int:collection_id>/<slug:slug>/', views.tag_search_collection, name='tag_search_collection'),
     path('tag_search_collection_type/<int:collection_id>/<slug:slug>/', views.tag_search_collection_type, name='tag_search_collection_type'),
     path('multi_upload/', views.multi_upload, name='multi_upload'),
-    path('upload_image/<int:collection_item_id>', views.upload_image, name='upload_image')
+    path('upload_image/<int:collection_item_id>', views.upload_image, name='upload_image'),
+    path('manage_account/', views.manage_account, name='manage_account')
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

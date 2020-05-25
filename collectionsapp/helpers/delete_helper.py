@@ -2,8 +2,12 @@ from collectionsapp.models import BottleCap, CollectionType, Collection, Collect
     CollectionItemImage, CollectionItemImageThumbnail
 
 
-def delete_user(user_id):
-    pass
+def delete_user_object(user_id):
+    user = User.objects.get(pk=user_id)
+    for collection in Collection.objects.filter(owner_id=user.id):
+        delete_collection_object(collection.id)
+    
+    user.delete()
 
 
 def delete_collection_object(collection_id):

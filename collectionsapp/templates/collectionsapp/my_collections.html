@@ -10,7 +10,7 @@
     {% else %}
         <ul>
             {% for collection in usersCollections %}
-                <li><a href={% url 'explore_collection' collection_id=collection.pk view='image'%}>{{ collection }}</a></li>
+                <li><a href="{% url 'explore_collection' collection_id=collection.pk view='image'%}">{{ collection }}</a></li>
             {% endfor %}
         </ul>
     {% endif %}
