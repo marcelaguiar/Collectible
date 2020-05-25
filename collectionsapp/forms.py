@@ -24,6 +24,19 @@ class CollectionForm(forms.ModelForm):
         self.fields['description'].widget.attrs.update({'placeholder': 'Description'})
 
 
+class CollectionEditForm(forms.ModelForm):
+    class Meta:
+        model = Collection
+        fields = ['name', 'description']
+
+    def __init__(self, *args, **kwargs):
+        super(CollectionEditForm, self).__init__(*args, **kwargs)
+
+        # Add placeholder text to fields
+        self.fields['name'].widget.attrs.update({'placeholder': 'Name'})
+        self.fields['description'].widget.attrs.update({'placeholder': 'Description'})
+
+
 class CollectionTypeForm(forms.ModelForm):
     class Meta:
         model: CollectionType

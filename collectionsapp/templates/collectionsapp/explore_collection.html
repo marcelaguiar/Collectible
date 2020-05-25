@@ -16,7 +16,13 @@
         {% endif %}
     </h1>
 
+    {% if has_description %}
+    <div>
+        <p>{{ collection_description }}</p>
+    </div>
 
+    {% endif %}
+    
     <!-- Check if logged in user is owner of this collection  -->
     {% if is_owner %}
         <a href="{% url 'add_to_collection' collection_id%}">

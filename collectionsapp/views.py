@@ -1,4 +1,4 @@
-from collectionsapp.forms import CollectionTypeForm, CollectionForm, BottleCapForm, UserRegisterForm
+from collectionsapp.forms import CollectionTypeForm, CollectionForm, CollectionEditForm, BottleCapForm, UserRegisterForm
 from collectionsapp.models import BeverageType, BottleCap, CollectionType, Collection, CollectionItem, User,\
     CollectionItemImage, CollectionItemImageThumbnail, SearchAction
 from django.conf import settings
@@ -225,18 +225,26 @@ def create_collection(request):
     if form.is_valid():
         name = request.POST.get('name')
         collection_type_id = request.POST.get('type')
+        description = request.POST.get('description')
         owner = request.user
         created_by = request.user
         modified_by = request.user
 
-        new_collection = Collection(name=name, type_id=collection_type_id, owner=owner,
-                                    created_by=created_by, modified_by=modified_by)
+        new_collection = Collection(
+            name=name,
+            type_id=collection_type_id,
+            description=description,
+            owner=owner,
+            created_by=created_by,
+            modified_by=modified_by
+        )
+
         try:
             new_collection.save()
-            messages.add_message(request, messages.SUCCESS, name + ' collection created')
+            messages.success(request, name + ' collection created')
             return redirect('explore_collection', collection_id=new_collection.pk, view='image')
         except Error:
-            messages.add_message(request, messages.ERROR, name + ' collection failed to create')
+            messages.error(request, name + ' collection failed to create')
             return redirect('my_collections')
 
 
@@ -252,7 +260,9 @@ def explore_collection(request, collection_id, view):
 
     context = {
         'collection_name': collection.name,
+        'collection_description': collection.description,
         'collection_id': collection_id,
+        'has_description': bool(collection.description.strip()),
         'is_owner': collection.created_by_id == request.user.id,
         'images': images,
         'view': view,
@@ -535,10 +545,12 @@ def edit_collection(request, collection_id):
     collection = get_object_or_404(Collection, pk=collection_id)
 
     if collection.owner != request.user:
-        return error(request, "You cannot edit other people's items.")
+        messages.error(request, "You cannot edit other people's collections.")
+        return redirect('home')
 
     if request.method == "POST":
-        form = CollectionForm(request.POST, instance=collection)
+        form = CollectionEditForm(request.POST, instance=collection)
+        print(form)
 
         if form.is_valid():
             form_data = form.save(commit=False)
@@ -549,7 +561,7 @@ def edit_collection(request, collection_id):
             form.save_m2m()
             return explore_collection(request, collection_id, 'image')
     else:
-        form = CollectionForm(instance=collection)
+        form = CollectionEditForm(instance=collection)
 
     context = {
         'collectionForm': form,
@@ -595,6 +607,7 @@ def error(request, description):
     return render(request, 'collectionsapp/error.html', context)
 
 
+@login_required
 def delete_collection(request, collection_id):
     instance = Collection.objects.get(id=collection_id)
     
@@ -607,23 +620,16 @@ def delete_collection(request, collection_id):
     return redirect('my_collections')
 
 
+@login_required
 def delete_collection_item(request, collection_item_id):
     instance = BottleCap.objects.get(id=collection_item_id)
     collection_id = instance.collection_id
 
     if instance.collection.owner == request.user:
-        related_images = CollectionItemImage.objects.filter(collection_item_id=instance.pk)
-        related_thumbnails = CollectionItemImageThumbnail.objects.filter(collection_item_id=instance.pk)
-
-        for item in related_images:
-            item.image.delete(save=False)
-            item.delete()
-
-        for item in related_thumbnails:
-            item.image.delete(save=False)
-            item.delete()
-
-        instance.delete()
+        delete_helper.delete_collection_item_object(collection_item_id)
+        messages.success(request, 'Collection item deleted.')
+    else:
+        messages.error(request, 'You must be the owner of this collection to delete.')
 
     return explore_collection(request, collection_id, "image")
 

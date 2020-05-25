@@ -2,6 +2,10 @@ from collectionsapp.models import BottleCap, CollectionType, Collection, Collect
     CollectionItemImage, CollectionItemImageThumbnail
 
 
+def delete_user(user_id):
+    pass
+
+
 def delete_collection_object(collection_id):
     collection = Collection.objects.get(pk=collection_id)
     collection_items = BottleCap.objects.filter(collection_id=collection.pk)
@@ -28,9 +32,11 @@ def delete_collection_item_object(item_id):
 
 def delete_image_object(item_id):
     image = CollectionItemImage.objects.get(pk=item_id)
+    image.image.delete(save=False)
     image.delete()
 
 
 def delete_thumbnail_object(item_id):
-    image = CollectionItemImageThumbnail.objects.get(pk=item_id)
-    image.delete()
+    thumbnail = CollectionItemImageThumbnail.objects.get(pk=item_id)
+    thumbnail.image.delete(save=False)
+    thumbnail.delete()

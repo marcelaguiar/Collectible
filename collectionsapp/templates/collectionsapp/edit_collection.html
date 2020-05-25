@@ -33,7 +33,7 @@
             </div>
             {% endif %}
             <div class="button-bar-right-elements">
-                <a class="btn btn-outline-secondary" href="javascript:window.history.back()">Cancel</a>
+                <a class="btn btn-outline-secondary" href="{% url 'explore_collection' collection_id 'image'%}">Cancel</a>
                 <button type="submit" class="btn btn-primary">Save changes</button>
             </div>
         </div>
