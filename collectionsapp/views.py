@@ -574,7 +574,7 @@ def delete_collection_item(request, collection_item_id):
     else:
         messages.warning(request, 'You must be the owner of this collection to delete.')
 
-    return explore_collection(request, collection_id, "image")
+    return redirect('explore_collection', collection_id=collection_id, view="image")
 
 
 def search(request):

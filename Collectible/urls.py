@@ -15,7 +15,6 @@ urlpatterns = [
     path('bottle_cap/<int:item_id>/', views.bottle_cap, name='bottle_cap'),
     path('collection_types/', views.collection_types, name='collection_types'),
     path('create_collection/', views.create_collection, name='create_collection'),
-    path('create_collection_type/', views.create_collection_type, name='create_collection_type'),
     path('delete_account/<int:target_user_id>/', views.delete_account, name='delete_account'),
     path('delete_collection/<int:collection_id>', views.delete_collection, name='delete_collection'),
     path('delete_collection_item/<int:collection_item_id>', views.delete_collection_item,

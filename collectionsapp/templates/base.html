@@ -90,7 +90,7 @@
         <main>
             <div class="body-wrapper">
                 {% if messages %}
-                <div class="messages">
+                <div id='messages-container' class="messages">
                     {% for message in messages %}
                     <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</div>
                     {% endfor %}
@@ -117,6 +117,7 @@
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
             <script type="text/javascript" src="https://cdn3.devexpress.com/jslib/19.1.4/js/dx.all.js"></script>
             <script src="{% static 'gijgo/js/gijgo.min.js' %}"></script>
+            <script src="{% static 'collectionsapp/javascript/base.js' %}"></script>
         {% endblock %}
 
         {% block dedicated_scripts %}
