@@ -138,26 +138,8 @@ def site_management(request):
     return render(request, 'collectionsapp/site_management.html', context)
 
 
-@require_POST
-def create_collection_type(request):
-    form = CollectionTypeForm(request.POST)
-
-    # TODO: Check that new collection type is unique
-    if form.is_valid():
-        name = request.POST['name']
-        created_by = request.user
-        modified_by = request.user
-        new_collection_type = CollectionType(name=name, created_by=created_by,
-                                             modified_by=modified_by)
-        new_collection_type.save()
-
-    return redirect('collection_types')
-
-
 def bottle_cap(request, item_id):
-
     bottle_cap_item = BottleCap.objects.get(id=item_id)
-
     collection = bottle_cap_item.collection
 
     context = {
@@ -170,7 +152,6 @@ def bottle_cap(request, item_id):
         'imageSet': CollectionItemImage.objects.filter(collection_item=bottle_cap_item).order_by('order_in_collection'),
         'collection_item_id': item_id
     }
-
     return render(request, 'collectionsapp/bottle_cap.html', context)
 
 
@@ -194,29 +175,6 @@ def start_collection(request):
         'form': CollectionForm
     }
     return render(request, 'collectionsapp/start_collection.html', context)
-
-
-@require_POST
-def select_fieldset(request):
-    form = CollectionForm(request.POST)
-
-    if not form.is_valid():
-        pass  # TODO: GO back to previous page
-
-    collection_name = request.POST['collection_name']
-    collection_type_id = request.POST['collection_type']
-    collection_description = request.POST['collection_description']
-
-    request.session['collection_name'] = collection_name
-    request.session['collection_type_id'] = collection_type_id
-    request.session['collection_description'] = collection_description
-
-    context = {
-        'collectionName': collection_name,
-        'collectionType': CollectionType.objects.get(id=collection_type_id),
-        'collectionDescription': collection_description
-    }
-    return render(request, 'collectionsapp/select_fieldset.html', context)
 
 
 def create_collection(request):
@@ -286,7 +244,6 @@ def explore_collection_type(request, collection_type_id):
 
 @login_required
 def select_collection(request):
-    # TODO: Check that the user is logged in
     collections_list = []
 
     for collection in Collection.objects.filter(owner=request.user).order_by('name'):
@@ -405,21 +362,7 @@ def tag_search_collection_type(request, collection_id, slug):
 
 
 def tag_search_all_collection_types(request, collection_id, slug):
-    collection = Collection.objects.get(id=collection_id)
-    collection_type = collection.type
-    collection_owner_username = collection.owner
-
-    context = {
-        'search_criteria': slug,
-        'collection_id': collection_id,
-        'collection_type_id': collection_type.id,
-        'collection_type_name': collection_type.name,
-        'collection_owner_username': collection_owner_username,
-        'search_results': CollectionItemImageThumbnail.objects.filter(
-            collection_item__tags__slug__exact=slug, collection_item__collection__type_id=collection_type.id)
-    }
-
-    return render(request, 'collectionsapp/tag_search_all_collection_types.html', context)
+    return tag_search_collection_type(request, collection_id, slug)
 
 
 @login_required
@@ -657,6 +600,7 @@ def multi_upload(request):
     return render(request, 'collectionsapp/multi_upload.html', context)
 
 
+@login_required
 def post_file(request):
     if request.method == "POST":
         create_collection_item_from_image(request)
