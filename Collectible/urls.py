@@ -4,6 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 from collectionsapp import views
+from collectionsapp.helpers import json_helper
 
 
 urlpatterns = [
@@ -25,12 +26,12 @@ urlpatterns = [
     path('explore_collection/<int:collection_id>/<str:view>', views.explore_collection, name='explore_collection'),
     path('explore_collection_type/<int:collection_type_id>/', views.explore_collection_type,
          name='explore_collection_type'),
-    path('get_all_beverage_types/', views.get_all_beverage_types),
-    path('get_all_bottle_caps/', views.get_all_bottle_caps),
-    path('get_all_bottle_caps_by_collection/<int:collection_id>/', views.get_all_bottle_caps_by_collection,
+    path('get_all_beverage_types/', json_helper.get_all_beverage_types),
+    path('get_all_bottle_caps/', json_helper.get_all_bottle_caps),
+    path('get_all_bottle_caps_by_collection/<int:collection_id>/', json_helper.get_all_bottle_caps_by_collection,
          name='get_all_bottle_caps_by_collection'),
     path('get_n_thumbnails/<int:start>/<int:end>', views.get_n_thumbnails, name='get_n_thumbnails'),
-    path('get_users_collections/<int:user_id>/', views.get_users_collections),
+    path('get_users_collections/<int:user_id>/', json_helper.get_users_collections),
     path('my_collections/', views.my_collections, name='my_collections'),
     path('password-reset/', auth_views.PasswordResetView.as_view(template_name='registration/password_reset.html'),
          name='password_reset'),
