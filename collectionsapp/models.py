@@ -93,12 +93,18 @@ class BeverageType(CommonInfo):
     def __str__(self):
         return self.name
 
+    class Meta:
+        ordering = ['name']
+
 
 class MethodAcquired(CommonInfo):
     name = models.CharField(max_length=100, blank=False, verbose_name='Method acquired')
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ['name']
 
 
 class SearchAction(models.Model):
