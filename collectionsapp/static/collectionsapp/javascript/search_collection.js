@@ -3,13 +3,13 @@ if(!!document.getElementById("gridContainer")) {
 }
 
 function SetUpDataGrid() {
-    var collection_id = 0;
+    let collection_id = 0;
 
     if(!!document.getElementById("collection-id")) {
         collection_id = document.getElementById("collection-id").value;
     }
 
-    var beverageTypeLookupDataSource = {
+    const beverageTypeLookupDataSource = {
         store: new DevExpress.data.CustomStore({
             key: "id",
             loadMode: "raw",

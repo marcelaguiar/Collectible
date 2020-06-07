@@ -33,8 +33,8 @@ function uploadFileToServer(fileToSubmit, collection_id, csrf_token) {
         contentType: false,
         processData: false,
         success: function () {
-            var progressBar = $("#progressBarContainer").dxProgressBar('instance');
-            var progressValue = progressBar.option('value');
+            let progressBar = $("#progressBarContainer").dxProgressBar('instance');
+            let progressValue = progressBar.option('value');
             progressBar.option("value", progressValue + 1);
         }
     });
@@ -46,7 +46,7 @@ function startProgressBar(fileCount) {
         max: fileCount,
         value: 0,
         onComplete: function(e){
-            inProgress = false;
+            inProgress = false;  // TODO: remove
             e.element.addClass("complete");
         },
         elementAttr: {
@@ -61,14 +61,14 @@ function startProgressBar(fileCount) {
 
 function submitButton() {
     $("#image-select-form").submit(function () {
-        var files = document.querySelector('input[type=file]').files;
-        var collection_id = $("#collectionSelectBox").dxSelectBox('instance').option('value');
-        var csrf_token = $('#image-select-form input[name=csrfmiddlewaretoken]').attr('value');
+        const files = document.querySelector('input[type=file]').files;
+        const collection_id = $("#collectionSelectBox").dxSelectBox('instance').option('value');
+        const csrf_token = $('#image-select-form input[name=csrfmiddlewaretoken]').attr('value');
 
         startProgressBar(files.length);
 
-        if(files != null &&  collection_id != null) {
-            var i;
+        if(files != null && collection_id != null) {
+            let i;
             for (i = 0; i < files.length; i++) {
                 uploadFileToServer(
                     files[i],
@@ -83,7 +83,7 @@ function submitButton() {
 }
 
 function setUpControls() {
-    var current_user_id = document.getElementById("user_id").value;
+    const current_user_id = document.getElementById("user_id").value;
 
     collectionSelectBox(current_user_id);
     submitButton();

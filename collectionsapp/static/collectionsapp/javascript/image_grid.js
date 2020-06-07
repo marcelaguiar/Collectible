@@ -1,6 +1,6 @@
-var scrollDebounce = true;
-var loadedThumbnailsCount = parseInt(document.getElementById("initial_load_quantity").value);
-var loadSize = 100;
+let scrollDebounce = true;
+let loadedThumbnailsCount = parseInt(document.getElementById("initial_load_quantity").value);
+const loadSize = 100;
 
 $("#dxLoadIndicator").dxLoadIndicator({
     height: 40,
@@ -14,8 +14,8 @@ function loadData() {
 
     $("#dxLoadIndicator").dxLoadIndicator('instance').option('visible', true);
 
-    var start = loadedThumbnailsCount;
-    var end = loadedThumbnailsCount + loadSize;
+    const start = loadedThumbnailsCount;
+    const end = loadedThumbnailsCount + loadSize;
 
     $.ajax({
         type: "GET",
@@ -23,7 +23,7 @@ function loadData() {
         success: function (data) {
             $("#dxLoadIndicator").dxLoadIndicator('instance').option('visible', false);
 
-            var i;
+            let i;
             for (i = 0; i < data.length; i++) {
                 $(".image-grid").append(
                     "<div class='grid-item'>" +
@@ -46,9 +46,9 @@ function loadData() {
 
 $(window).scroll(function() {
     if(scrollDebounce) {
-        var bottom = $("footer").offset().top;
-        var viewBottom = $(window).scrollTop() + $(window).height();
-        var distance = bottom - viewBottom;
+        const bottom = $("footer").offset().top;
+        const viewBottom = $(window).scrollTop() + $(window).height();
+        const distance = bottom - viewBottom;
 
         if (distance < 200) {
             loadData();

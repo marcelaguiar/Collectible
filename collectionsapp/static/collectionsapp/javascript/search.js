@@ -9,7 +9,7 @@ function SetUpDataGrid() {
         criteria = document.getElementById("search-criteria").value;
     }
 
-    var beverageTypeLookupDataSource = {
+    const beverageTypeLookupDataSource = {
         store: new DevExpress.data.CustomStore({
             key: "id",
             loadMode: "raw",
