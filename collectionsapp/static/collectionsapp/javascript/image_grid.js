@@ -27,7 +27,7 @@ function loadData() {
             for (i = 0; i < data.length; i++) {
                 $(".image-grid").append(
                     "<div class='grid-item'>" +
-                        "<a href='" + data[i].collection_item_url + "' >" +
+                        "<a href='" + data[i].collection_item_url + "' target='_blank' rel='noopener noreferrer'>" +
                             "<img src='" + data[i].image_url + "' alt='" + data[i].collection_item_name + "'>" +
                         "</a>" +
                     "</div>"
