@@ -42,10 +42,6 @@ class CollectionTypeForm(forms.ModelForm):
     class Meta:
         model: CollectionType
         fields = ['name']
-    # name = forms.CharField(max_length=100, widget=forms.TextInput(attrs={
-    #     'class': 'form-control',
-    #     'placeholder': 'Name',
-    # }))
 
 
 class BottleCapForm(forms.ModelForm):
@@ -70,10 +66,6 @@ class BottleCapForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(BottleCapForm, self).__init__(*args, **kwargs)
 
-        # Add bootstrap styling to fields
-        for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
-
         # Add placeholder text to fields
         self.fields['company'].widget.attrs.update({'placeholder': 'Company'})
         self.fields['brand'].widget.attrs.update({'placeholder': 'Brand'})
@@ -83,9 +75,6 @@ class BottleCapForm(forms.ModelForm):
         self.fields['region'].widget.attrs.update({'placeholder': 'Region'})
         self.fields['underside'].widget.attrs.update({'placeholder': 'Underside'})
         self.fields['description'].widget.attrs.update({'placeholder': 'Description'})
-
-        # Hide collection id value
-        #self.fields['collection'].widget = forms.HiddenInput()
 
     def clean_date_acquired(self):
         cleaned_data = super(BottleCapForm, self).clean()

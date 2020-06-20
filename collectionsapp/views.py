@@ -542,10 +542,13 @@ def edit_collection_item(request, collection_item_id):
 
             return redirect('bottle_cap', item_id=form_data.pk)
     else:
+        item_image = CollectionItemImage.objects.filter(collection_item__pk=collection_item_id).first()
+
         context = {
             'form': BottleCapForm(instance=collection_item),
             'collection_item_id': collection_item_id,
-            'collection_owner': collection_item.collection.owner
+            'collection_owner': collection_item.collection.owner,
+            'item_image': item_image
         }
         return render(request, 'collectionsapp/edit_collection_item.html', context)
 

@@ -1,0 +1,14 @@
+#edit-collection-item-ref-img {
+    object-fit: cover;
+    width: 100%;
+    height: auto;
+    max-height: 600px; /* workaround for transition use of auto */
+    transition: max-height 0.2s ease-out;
+}
+
+#sticky-header {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    background-color: #f4f4f4;
+}

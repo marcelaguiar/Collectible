@@ -1,10 +1,22 @@
 {% extends 'base.html' %}
+{% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
 {% load static %}
 
 {% block body %}
 <div class="centered-panel">
-    <h4>Edit Collection Item</h4>
+    <link rel="stylesheet" href="{% static 'collectionsapp/css/edit_collection_item.css' %}">
+    <div id="sticky-header">
+        <h4>Edit Collection Item</h4>
+        {% if item_image %}
+            <div id="shrinking-header" class="card">
+                <div class="card-body" style="text-align: center;">
+                    <img src="{{ item_image.image.url }}" id="edit-collection-item-ref-img" alt="img">
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
 
     <form action="{% url 'edit_collection_item' collection_item_id %}" method="POST" role="form">
         {% csrf_token %}
@@ -22,7 +34,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            This will permanantly delete collection item details and images.
+                            This will permanently delete collection item details and images.
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -39,4 +51,8 @@
         </div>
     </form>
 </div>
+{% endblock %}
+
+{% block dedicated_scripts %}
+    <script src="{% static "collectionsapp/javascript/edit_collection_item.js" %}"></script>
 {% endblock %}
