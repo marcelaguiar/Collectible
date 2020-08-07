@@ -736,6 +736,39 @@ def admin_tools(request):
 
 @staff_member_required
 def migrate_images(request):
-    records_updated = 0
-    print("a")
-    return JsonResponse({'records_updated': records_updated})
+    images_updated = 0
+    thumbnails_updated = 0
+
+    for item_image_record in CollectionItemImage.objects.all():
+        collection_item_id = item_image_record.collection_item_id
+
+        try:
+            cap = BottleCap.objects.get(pk=collection_item_id)
+            cap.image = item_image_record.image
+
+            print("updating cap " + str(cap.id))
+            try:
+                images_updated += 1
+                cap.save()
+            except:
+                images_updated -= 1
+        except BottleCap.DoesNotExist:
+            print("No cap for image " + str(item_image_record.id))
+
+    for item_thumbnail_record in CollectionItemImageThumbnail.objects.all():
+        collection_item_id = item_thumbnail_record.collection_item_id
+
+        try:
+            cap = BottleCap.objects.get(pk=collection_item_id)
+            cap.image_thumbnail = item_thumbnail_record.image
+
+            print("updating cap " + str(cap.id))
+            try:
+                thumbnails_updated += 1
+                cap.save()
+            except:
+                thumbnails_updated -= 1
+        except BottleCap.DoesNotExist:
+            print("No cap for thumbnail " + str(item_thumbnail_record.id))
+
+    return JsonResponse({'images_updated': images_updated, 'thumbnails_updated': thumbnails_updated})
