@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <h1>Admin Tools</h1>
+
+    <div id="image-migrate"></div>
+
+{% endblock %}
+
+{% block dedicated_scripts %}
+    <script src="{% static "collectionsapp/javascript/admin_tools.js" %}"></script>
+{% endblock %}

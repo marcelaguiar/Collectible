@@ -54,6 +54,8 @@ class CollectionItem(CommonInfo):
     tags = TaggableManager(verbose_name='Tags', blank=True)
     description = models.CharField(max_length=512, blank=True, verbose_name='Description')
     collection = models.ForeignKey('Collection', on_delete=models.CASCADE, verbose_name='Collection')
+    image = models.ImageField(verbose_name='Image', upload_to='images/', blank=True)
+    image_thumbnail = models.ImageField(verbose_name='ImageThumbnail', upload_to='thumbnails/', blank=True)
 
     class Meta:
         abstract = True

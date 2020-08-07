@@ -77,6 +77,9 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{% url 'my_collections' %}">My Collections</a>
                                 <a class="dropdown-item" href="{% url 'manage_account' %}">Manage Account</a>
+                                {% if user.is_staff %}
+                                    <a class="dropdown-item" href="{% url 'admin_tools' %}">Admin Tools</a>
+                                {% endif %}
                             </div>
                         </li>
                     </ul>

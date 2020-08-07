@@ -1,8 +1,11 @@
-from collectionsapp.forms import CollectionTypeForm, CollectionForm, CollectionEditForm, BottleCapForm, UserRegisterForm, AccountDeleteForm
-from collectionsapp.models import BeverageType, BottleCap, CollectionType, Collection, CollectionItem, User,\
+from collectionsapp.forms import CollectionTypeForm, CollectionForm, CollectionEditForm, BottleCapForm,\
+    UserRegisterForm, AccountDeleteForm
+from collectionsapp.helpers import delete_helper
+from collectionsapp.models import BottleCap, CollectionType, Collection, CollectionItem, User,\
     CollectionItemImage, CollectionItemImageThumbnail, SearchAction
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
@@ -15,12 +18,10 @@ from django.forms import modelformset_factory
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from django.views.decorators.http import require_POST
 from io import BytesIO
 from PIL import Image
 from taggit.managers import TaggableManager
 import datetime
-from collectionsapp.helpers import delete_helper
 
 
 class FriendlyDataTypes:
@@ -726,3 +727,15 @@ def delete_account(request, target_user_id):
         messages.warning(request, "Invalid action.")
         
     return redirect('logout')
+
+
+@staff_member_required
+def admin_tools(request):
+    return render(request, 'collectionsapp/admin_tools.html')
+
+
+@staff_member_required
+def migrate_images(request):
+    records_updated = 0
+    print("a")
+    return JsonResponse({'records_updated': records_updated})
