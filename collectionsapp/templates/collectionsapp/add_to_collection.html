@@ -1,24 +1,63 @@
 {% extends 'base.html' %}
+{% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
 {% load static %}
 
 {% block body %}
-<div class="centered-panel">
-    <h4>Create Collection Item</h4>
+    <link rel="stylesheet" href="{% static 'collectionsapp/css/add_collection_item.css' %}">
+    <link rel="stylesheet" href="{% static 'collectionsapp/css/collection_item_form_image_header.css' %}">
 
-    <form action="{% url 'add_to_collection' collection_id %}" method="POST" role="form">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <div class='form-button-bar clearfix'>
-            <div class="button-bar-right-elements">
-                <a class="btn btn-outline-secondary" href="{% url 'explore_collection' collection_id 'image' %}">Cancel</a>
-                <button type="submit" class="btn btn-primary">Save changes</button>
+    <div class="centered-panel">
+        <form enctype="multipart/form-data" method="post" action="{% url 'add_to_collection' collection_id %}" role="form">
+            {% csrf_token %}
+            <div id="selectImage" class="tab">
+                <h4>Select image</h4>
+                {{ form.image|as_crispy_field  }}
+                <div class='form-button-bar clearfix'>
+                    <div class="button-bar-right-elements">
+                        <a class="btn btn-outline-secondary" href="{% url 'explore_collection' collection_id 'image' %}">Cancel</a>
+                        <button type="button" id="btn-go-to-populate-fields" class="btn btn-outline-primary"
+                                onclick="goToPopulateFields()" disabled>Next</button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </form>
-</div>
+            <div id="populateFields" class="tab">
+                <link rel="stylesheet" href="{% static 'collectionsapp/css/collection_item_form_image_header.css' %}">
+                <div id="sticky-header">
+                    <h4>Populate fields</h4>
+                    <div id="shrinking-header" class="card">
+                        <div class="card-body" style="text-align: center;">
+                            <img src="#" id="collection-item-ref-img"  alt="your image" />
+                        </div>
+                    </div>
+                </div>
+
+                {{ form.company|as_crispy_field  }}
+                {{ form.brand|as_crispy_field  }}
+                {{ form.product|as_crispy_field  }}
+                {{ form.variety|as_crispy_field  }}
+                {{ form.beverage_type|as_crispy_field  }}
+                {{ form.description|as_crispy_field  }}
+                {{ form.region|as_crispy_field  }}
+                {{ form.date_acquired|as_crispy_field  }}
+                {{ form.method_acquired|as_crispy_field  }}
+                {{ form.available_for_trade|as_crispy_field  }}
+                {{ form.text|as_crispy_field  }}
+                {{ form.underside|as_crispy_field  }}
+                {{ form.tags|as_crispy_field  }}
+                <div class='form-button-bar clearfix'>
+                    <div class="button-bar-right-elements">
+                        <button type="button" class="btn btn-outline-secondary" onclick="goToSelectImage()">Back</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 {% endblock %}
 
 {% block dedicated_scripts %}
     <script src="{% static "collectionsapp/javascript/add_date_picker.js" %}"></script>
+    <script src="{% static "collectionsapp/javascript/add_collection_item.js" %}"></script>
+    <script src="{% static "collectionsapp/javascript/collection_item_form_image_header.js" %}"></script>
 {% endblock %}

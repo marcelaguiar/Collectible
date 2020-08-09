@@ -32,7 +32,6 @@ urlpatterns = [
          name='get_all_bottle_caps_by_collection'),
     path('get_n_thumbnails/<int:start>/<int:end>', views.get_n_thumbnails, name='get_n_thumbnails'),
     path('get_users_collections/<int:user_id>/', json_helper.get_users_collections),
-    path('migrate_images/', views.migrate_images, name='migrate_images'),
     path('my_collections/', views.my_collections, name='my_collections'),
     path('password-reset/', auth_views.PasswordResetView.as_view(template_name='registration/password_reset.html'),
          name='password_reset'),
@@ -54,14 +53,11 @@ urlpatterns = [
     path('select_collection/', views.select_collection, name='select_collection'),
     path('select_existing_fieldset', views.select_existing_fieldset, name='select_existing_fieldset'),
     path('start_collection/', views.start_collection, name='start_collection'),
-    path('tag_search_all_collection_types/<int:collection_id>/<slug:slug>/', views.tag_search_all_collection_types,
-         name='tag_search_all_collection_types'),
     path('tag_search_collection/<int:collection_id>/<slug:slug>/', views.tag_search_collection,
          name='tag_search_collection'),
     path('tag_search_collection_type/<int:collection_id>/<slug:slug>/', views.tag_search_collection_type,
          name='tag_search_collection_type'),
     path('multi_upload/', views.multi_upload, name='multi_upload'),
-    path('upload_image/<int:collection_item_id>', views.upload_image, name='upload_image'),
     path('manage_account/', views.manage_account, name='manage_account')
 ]
 

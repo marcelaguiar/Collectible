@@ -47,6 +47,7 @@ class Collection(CommonInfo):
 
 
 class CollectionItem(CommonInfo):
+    # TODO: Make image fields required
     date_acquired = models.DateField(default=date.today, verbose_name='Date Acquired')
     method_acquired = models.ForeignKey('MethodAcquired', on_delete=models.PROTECT, blank=True, null=True,
                                         verbose_name="Method Acquired")
@@ -55,13 +56,13 @@ class CollectionItem(CommonInfo):
     description = models.CharField(max_length=512, blank=True, verbose_name='Description')
     collection = models.ForeignKey('Collection', on_delete=models.CASCADE, verbose_name='Collection')
     image = models.ImageField(verbose_name='Image', upload_to='images/', blank=True)
-    image_thumbnail = models.ImageField(verbose_name='ImageThumbnail', upload_to='thumbnails/', blank=True)
+    image_thumbnail = models.ImageField(verbose_name='Image Thumbnail', upload_to='thumbnails/', blank=True)
 
     class Meta:
         abstract = True
 
 
-class CollectionItemImage(CommonInfo):
+'''class CollectionItemImage(CommonInfo):
     image = models.ImageField(verbose_name='Image', upload_to='images/')
     collection_item = models.ForeignKey('BottleCap', on_delete=models.CASCADE, verbose_name='Collection Item')
     order_in_collection = models.PositiveSmallIntegerField(verbose_name='Order', default=1)
@@ -70,7 +71,7 @@ class CollectionItemImage(CommonInfo):
 class CollectionItemImageThumbnail(CommonInfo):
     image = models.ImageField(verbose_name='ImageThumbnail', upload_to='thumbnails/')
     collection_item = models.ForeignKey('BottleCap', on_delete=models.CASCADE, verbose_name='Collection Item')
-    order_in_collection = models.PositiveSmallIntegerField(verbose_name='Order', default=1)
+    order_in_collection = models.PositiveSmallIntegerField(verbose_name='Order', default=1)'''
 
 
 class BottleCap(CollectionItem):

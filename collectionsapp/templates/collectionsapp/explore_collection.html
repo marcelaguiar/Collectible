@@ -43,15 +43,15 @@
     </div>
 
     {% if view == 'image' %}
-        {% if images.count <= 0 %}
+        {% if collection_items.count <= 0 %}
             <p>No items in collection</p>
         {% else %}
             <div class="image-grid">
-                {% for item in images %}
+                {% for collection_item in collection_items %}
                     <div class="grid-item">
-                        <a href="{% url 'bottle_cap' item.collection_item.id %}"
+                        <a href="{% url 'bottle_cap' collection_item.id %}"
                            target="_blank" rel="noopener noreferrer">
-                            <img src="{{ item.image.url }}" alt="{{ item.collection_item }}">
+                            <img src="{{ collection_item.image_thumbnail.url }}" alt="{{ collection_item }}">
                         </a>
                     </div>
                 {% endfor %}

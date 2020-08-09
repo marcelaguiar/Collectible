@@ -1,4 +1,4 @@
-from collectionsapp.models import Collection, CollectionType, BottleCap, CollectionItemImage
+from collectionsapp.models import Collection, CollectionType, BottleCap
 from crispy_forms.helper import FormHelper
 from datetime import date
 from django import forms
@@ -48,6 +48,7 @@ class BottleCapForm(forms.ModelForm):
     class Meta:
         model = BottleCap
         fields = [
+            'image',
             'company',
             'brand',
             'product',
@@ -67,6 +68,7 @@ class BottleCapForm(forms.ModelForm):
         super(BottleCapForm, self).__init__(*args, **kwargs)
 
         # Add placeholder text to fields
+        self.fields['image'].widget.attrs.update({'placeholder': 'Image'})
         self.fields['company'].widget.attrs.update({'placeholder': 'Company'})
         self.fields['brand'].widget.attrs.update({'placeholder': 'Brand'})
         self.fields['product'].widget.attrs.update({'placeholder': 'Product'})
@@ -85,7 +87,7 @@ class BottleCapForm(forms.ModelForm):
         return date_acquired
 
 
-class CollectionItemImageForm(forms.ModelForm):
+'''class CollectionItemImageForm(forms.ModelForm):
     class Meta:
         model = CollectionItemImage
         fields = ['image', 'collection_item', 'order_in_collection']
@@ -94,7 +96,7 @@ class CollectionItemImageForm(forms.ModelForm):
         super(CollectionItemImageForm, self).__init__(*args, **kwargs)
         self.fields['image'].widget.attrs.update({'class': 'form-control'})
         self.fields['collection_item'].widget.attrs.update({'class': 'form-control'})
-        self.fields['order_in_collection'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Order'})
+        self.fields['order_in_collection'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Order'})'''
 
 
 class UserRegisterForm(UserCreationForm):

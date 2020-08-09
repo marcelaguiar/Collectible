@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
 
-
 {% block body %}
-    <h3>Select collection to add to:</h3>
+<div class="centered-panel">
+    <h4>Select collection to add to:</h4>
 
     <ul>
         {% for collection in collections %}
-            <a href="{% url 'add_to_collection' collection.id %}"><li class="no-bullets">{{ collection.name }}</li></a>
+            <a href="{% url 'add_to_collection' collection.id %}"><li>{{ collection.name }}</li></a>
         {% endfor %}
     </ul>
 
     <p>...or <a href="{% url 'start_collection' %}">start new collection</a>.</p>
+</div>
 {% endblock %}

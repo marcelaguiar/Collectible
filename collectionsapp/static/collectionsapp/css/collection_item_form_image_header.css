@@ -1,7 +1,8 @@
-#edit-collection-item-ref-img {
+#collection-item-ref-img {
     object-fit: cover;
-    width: 100%;
+    width: auto;
     height: auto;
+    max-width: 100%;
     max-height: 600px; /* workaround for transition use of auto */
     transition: max-height 0.2s ease-out;
 }

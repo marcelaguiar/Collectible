@@ -7,16 +7,14 @@
         <a class="btn btn-secondary" href="{% url 'tag_search_collection' collection_id search_criteria %}">
             {{ collection_owner_username }}'s collection</a>
         <a class="btn btn-secondary active" href="#">All {{ collection_type_name }} collections</a>
-        <a class="btn btn-secondary" href="{% url 'tag_search_all_collection_types' collection_id search_criteria %}">
-            All collection types</a>
     </div>
 
     <link rel="stylesheet" href="{% static 'collectionsapp/css/image_grid.css' %}">
     <div class="image-grid">
-        {% for item in search_results %}
+        {% for collection_item in search_results %}
             <div class="grid-item">
-                <a href="{% url 'bottle_cap' item.collection_item.id %}">
-                    <img src="{{ item.image.url }}" alt="{{ item.collection_item }}">
+                <a href="{% url 'bottle_cap' collection_item.id %}">
+                    <img src="{{ collection_item.image_thumbnail.url }}" alt="{{ collection_item }}">
                 </a>
             </div>
         {% endfor %}

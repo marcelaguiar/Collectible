@@ -1,20 +1,17 @@
 from collectionsapp.forms import CollectionTypeForm, CollectionForm, CollectionEditForm, BottleCapForm,\
     UserRegisterForm, AccountDeleteForm
 from collectionsapp.helpers import delete_helper
-from collectionsapp.models import BottleCap, CollectionType, Collection, CollectionItem, User,\
-    CollectionItemImage, CollectionItemImageThumbnail, SearchAction
+from collectionsapp.models import BottleCap, CollectionType, Collection, CollectionItem, User, SearchAction
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.files.base import ContentFile
-from django.core.files.storage import default_storage as storage
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import Error
 from django.db.models import fields
 from django.db.models.fields import files
-from django.forms import modelformset_factory
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -35,6 +32,55 @@ class FriendlyDataTypes:
     TAG = 'tagging feature'
 
 
+def generate_thumbnail(i):
+    # Takes in an ImageFieldField
+    square_edge_length = 200
+    target_width = square_edge_length
+    target_height = square_edge_length
+
+    left = 0
+    top = 0
+    right = target_width
+    bottom = target_height
+
+    im = Image.open(i)
+    width, height = im.size
+
+    # get new dimensions to fit
+    if width > height:
+        resize_ratio = target_height / height
+        new_width = int(width * resize_ratio)
+        new_height = target_height
+    elif height > width:
+        resize_ratio = target_width / width
+        new_width = target_width
+        new_height = int(height * resize_ratio)
+    else:
+        new_width = target_width
+        new_height = target_height
+
+    # grow or shrink to new dimensions
+    if width >= target_width and height >= target_height:
+        im.thumbnail([new_width, new_height], Image.ANTIALIAS)
+    else:
+        im = im.resize((new_width, new_height))
+
+    # crop
+    if new_width > target_width:
+        left = int((new_width - target_width) / 2)
+        right = left + target_width
+    elif new_height > target_height:
+        top = int((new_height - target_height) / 2)
+        bottom = top + target_height
+
+    im = im.crop((left, top, right, bottom))
+
+    buffer = BytesIO()
+    im.save(fp=buffer, format='JPEG', quality=95)
+
+    return ContentFile(buffer.getvalue())
+
+
 @login_required
 def add_to_collection(request, collection_id):
     collection = Collection.objects.get(id=collection_id)
@@ -44,13 +90,27 @@ def add_to_collection(request, collection_id):
         return redirect('select_collection')
 
     if request.method == "POST":
-        form = BottleCapForm(request.POST)
+        form = BottleCapForm(request.POST, request.FILES)
 
         if form.is_valid():
             new_bottle_cap = form.save(commit=False)
+            uploaded_image = form.cleaned_data['image']
+            pillow_image = generate_thumbnail(uploaded_image)
             new_bottle_cap.created_by = request.user
             new_bottle_cap.modified_by = request.user
             new_bottle_cap.collection_id = collection_id
+
+            new_bottle_cap.image_thumbnail.save(
+                uploaded_image.name,
+                InMemoryUploadedFile(
+                    pillow_image,
+                    None,               # field_name
+                    'my_image.jpg',     # file name
+                    'image/jpeg',       # content_type
+                    pillow_image.tell,  # size
+                    None
+                )
+            )
 
             new_bottle_cap.save()
 
@@ -71,9 +131,7 @@ def add_to_collection(request, collection_id):
 
 def home(request):
     context = {
-        'items': CollectionItemImageThumbnail.objects.filter(
-            order_in_collection=1
-        ).order_by('-created')[:settings.IMG_GRID_INIT_LOAD_QTY],
+        'items': BottleCap.objects.all().order_by('-created')[:settings.IMG_GRID_INIT_LOAD_QTY],
         'initial_load_quantity': settings.IMG_GRID_INIT_LOAD_QTY
     }
     return render(request, 'collectionsapp/home.html', context)
@@ -82,16 +140,16 @@ def home(request):
 def get_n_thumbnails(request, start, end):
     thumbnails = []
 
-    tqs = CollectionItemImageThumbnail.objects.filter(order_in_collection=1).order_by('-created')[start:end]
+    collection_items = BottleCap.objects.all().order_by('-created')[start:end]
 
-    for thumbnail in tqs:
-        collection_item_url = reverse(viewname='bottle_cap', args=[thumbnail.collection_item.id])
-        image_url = thumbnail.image.url
-        collection_item_name = str(thumbnail.collection_item)
+    for collection_item in collection_items:
+        collection_item_url = reverse(viewname='bottle_cap', args=[collection_item.id])
+        thumbnail_url = collection_item.image_thumbnail.url
+        collection_item_name = str(collection_item)
         thumbnails.append(
             {
                 "collection_item_url": collection_item_url,
-                "image_url": image_url,
+                "image_url": thumbnail_url,
                 "collection_item_name": collection_item_name
             }
         )
@@ -145,13 +203,10 @@ def bottle_cap(request, item_id):
 
     context = {
         'bottle_cap': bottle_cap_item,
-        'itemsInCollection': BottleCap.objects.filter(collection=collection).count(),
         'collectionOwner': collection.created_by,
-        'collectionName': Collection.objects.get(id=collection.pk).name,
+        'collectionName': collection.name,
         'collectionTypeName': collection.type.name,
-        'tags': bottle_cap_item.tags.all(),
-        'imageSet': CollectionItemImage.objects.filter(collection_item=bottle_cap_item).order_by('order_in_collection'),
-        'collection_item_id': item_id
+        'tags': bottle_cap_item.tags.all()
     }
     return render(request, 'collectionsapp/bottle_cap.html', context)
 
@@ -209,21 +264,20 @@ def create_collection(request):
 
 def explore_collection(request, collection_id, view):
     collection = Collection.objects.get(id=collection_id)
-    images = None
+    collection_items = None
 
     if view == 'image':
-        images = CollectionItemImageThumbnail.objects.filter(
-            order_in_collection=1,
-            collection_item__collection=collection
+        collection_items = BottleCap.objects.filter(
+            collection=collection
         ).order_by('-created')[:settings.IMG_GRID_INIT_LOAD_QTY]
 
     context = {
         'collection_name': collection.name,
         'collection_description': collection.description,
-        'collection_id': collection_id,
+        'collection_id': collection.id,
         'has_description': bool(collection.description.strip()),
         'is_owner': collection.created_by_id == request.user.id,
-        'images': images,
+        'collection_items': collection_items,
         'view': view,
         'initial_load_quantity': settings.IMG_GRID_INIT_LOAD_QTY
     }
@@ -337,8 +391,8 @@ def tag_search_collection(request, collection_id, slug):
         'collection_type_id': collection_type.id,
         'collection_type_name': collection_type.name,
         'collection_owner_username': collection_owner_username,
-        'search_results': CollectionItemImageThumbnail.objects.filter(
-            collection_item__tags__slug__exact=slug, collection_item__collection_id=collection_id)
+        'search_results': BottleCap.objects.filter(
+            tags__slug__exact=slug, collection_id=collection_id)
     }
 
     return render(request, 'collectionsapp/tag_search_collection.html', context)
@@ -355,18 +409,14 @@ def tag_search_collection_type(request, collection_id, slug):
         'collection_type_id': collection_type.id,
         'collection_type_name': collection_type.name,
         'collection_owner_username': collection_owner_username,
-        'search_results': CollectionItemImageThumbnail.objects.filter(
-            collection_item__tags__slug__exact=slug, collection_item__collection__type_id=collection_type.id)
+        'search_results': BottleCap.objects.filter(
+            tags__slug__exact=slug, collection__type_id=collection_type.id)
     }
 
     return render(request, 'collectionsapp/tag_search_collection_type.html', context)
 
 
-def tag_search_all_collection_types(request, collection_id, slug):
-    return tag_search_collection_type(request, collection_id, slug)
-
-
-@login_required
+''''@login_required
 def upload_image(request, collection_item_id):
     collection_item = get_object_or_404(BottleCap, pk=collection_item_id)
 
@@ -487,7 +537,7 @@ def upload_image(request, collection_item_id):
             'imageUploadFormSet': collection_item_image_formset(queryset=CollectionItemImage.objects.none())
         }
 
-        return render(request, 'collectionsapp/upload_image.html', context)
+        return render(request, 'collectionsapp/upload_image.html', context)'''
 
 
 @login_required
@@ -543,13 +593,11 @@ def edit_collection_item(request, collection_item_id):
 
             return redirect('bottle_cap', item_id=form_data.pk)
     else:
-        item_image = CollectionItemImage.objects.filter(collection_item__pk=collection_item_id).first()
-
         context = {
             'form': BottleCapForm(instance=collection_item),
             'collection_item_id': collection_item_id,
             'collection_owner': collection_item.collection.owner,
-            'item_image': item_image
+            'item_image': collection_item.image
         }
         return render(request, 'collectionsapp/edit_collection_item.html', context)
 
@@ -614,90 +662,31 @@ def post_file(request):
 def create_collection_item_from_image(request):
     uploader = request.user
     collection_id = int(request.POST['collection_id'])
+    uploaded_image = request.FILES['file']
 
     target_collection = Collection.objects.get(id=collection_id)
 
     current_timestamp = datetime.datetime.now()
 
+    # Create thumbnail
+    pillow_image = generate_thumbnail(uploaded_image)
+
     # Create collection item
     bc = BottleCap(
+        company="unidentified",
+        image=request.FILES['file'],
+        image_thumbnail=pillow_image,
         created_by=uploader,
         modified_by=uploader,
         date_acquired=current_timestamp.date(),
-        collection=target_collection,
-        company="unidentified"
+        collection=target_collection
+
     )
     bc.save()
 
-    # Create collection item image
-    i = CollectionItemImage(
-        created_by=uploader,
-        modified_by=uploader,
-        image=request.FILES['file'],
-        collection_item=bc,
-        order_in_collection=1
-    )
-    i.save()
-
-    # Create thumbnail
-    im = Image.open(storage.open(i.image.name, 'rb'))
-
-    width, height = im.size
-
-    square_edge_length = 200
-    target_width = square_edge_length
-    target_height = square_edge_length
-
-    left = 0
-    top = 0
-    right = target_width
-    bottom = target_height
-
-    # get new dimensions to fit
-    if width > height:
-        resize_ratio = target_height / height
-        new_width = int(width * resize_ratio)
-        new_height = target_height
-    elif height > width:
-        resize_ratio = target_width / width
-        new_width = target_width
-        new_height = int(height * resize_ratio)
-    else:
-        new_width = target_width
-        new_height = target_height
-
-    # grow or shrink to new dimensions
-    if width >= target_width and height >= target_height:
-        im.thumbnail([new_width, new_height], Image.ANTIALIAS)
-    else:
-        im = im.resize((new_width, new_height))
-
-    # crop
-    if new_width > target_width:
-        left = int((new_width - target_width) / 2)
-        right = left + target_width
-    elif new_height > target_height:
-        top = int((new_height - target_height) / 2)
-        bottom = top + target_height
-
-    im = im.crop((left, top, right, bottom))
-
-    buffer = BytesIO()
-    im.save(fp=buffer, format='JPEG', quality=95)
-    pillow_image = ContentFile(buffer.getvalue())
-
-    thumbnail = CollectionItemImageThumbnail(
-        order_in_collection=1,
-        image=pillow_image,
-        collection_item=bc,
-        created_by=uploader,
-        modified_by=uploader
-    )
-
-    thumbnail.save()
-
-    thumbnail.image.save(
-        i.image.name.split("images/", 1)[1],
+    # TODO: Test this
+    bc.image_thumbnail.save(
+        uploaded_image.name,
         InMemoryUploadedFile(
             pillow_image,
             None,  # field_name
@@ -734,7 +723,7 @@ def admin_tools(request):
     return render(request, 'collectionsapp/admin_tools.html')
 
 
-@staff_member_required
+'''@staff_member_required
 def migrate_images(request):
     images_updated = 0
     thumbnails_updated = 0
@@ -771,4 +760,4 @@ def migrate_images(request):
         except BottleCap.DoesNotExist:
             print("No cap for thumbnail " + str(item_thumbnail_record.id))
 
-    return JsonResponse({'images_updated': images_updated, 'thumbnails_updated': thumbnails_updated})
+    return JsonResponse({'images_updated': images_updated, 'thumbnails_updated': thumbnails_updated})'''
