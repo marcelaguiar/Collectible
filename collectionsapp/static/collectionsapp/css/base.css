@@ -166,3 +166,12 @@ li.no-bullets {
     height: 0; 
     clear: both;
 }
+
+.card {
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.card-body {
+    padding: 0;
+}
