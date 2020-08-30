@@ -33,6 +33,7 @@ class FriendlyDataTypes:
 
 
 def generate_thumbnail(i):
+    print("Thumbnail generation: starting...")
     # Takes in an ImageFieldField
     square_edge_length = 200
     target_width = square_edge_length
@@ -78,6 +79,7 @@ def generate_thumbnail(i):
     buffer = BytesIO()
     im.save(fp=buffer, format='JPEG', quality=95)
 
+    print("Thumbnail generation: ending...")
     return ContentFile(buffer.getvalue())
 
 
@@ -86,21 +88,21 @@ def add_to_collection(request, collection_id):
     collection = Collection.objects.get(id=collection_id)
 
     if collection.owner != request.user:
-        messages.warning(request, 'You cannot add to other peoples collections.')
+        messages.warning(request, 'You cannot add to other people\'s collections.')
         return redirect('select_collection')
 
     if request.method == "POST":
         form = BottleCapForm(request.POST, request.FILES)
 
         if form.is_valid():
-            new_bottle_cap = form.save(commit=False)
+            collection_item = form.save(commit=False)
             uploaded_image = form.cleaned_data['image']
             pillow_image = generate_thumbnail(uploaded_image)
-            new_bottle_cap.created_by = request.user
-            new_bottle_cap.modified_by = request.user
-            new_bottle_cap.collection_id = collection_id
+            collection_item.created_by = request.user
+            collection_item.modified_by = request.user
+            collection_item.collection_id = collection_id
 
-            new_bottle_cap.image_thumbnail.save(
+            collection_item.image_thumbnail.save(
                 uploaded_image.name,
                 InMemoryUploadedFile(
                     pillow_image,
@@ -112,21 +114,21 @@ def add_to_collection(request, collection_id):
                 )
             )
 
-            new_bottle_cap.save()
+            collection_item.save()
 
             form.save_m2m()
 
             messages.success(request, 'Item added to collection.')
-            return redirect('bottle_cap', item_id=new_bottle_cap.pk)
+            return redirect('bottle_cap', item_id=collection_item.pk)
     else:
         form = BottleCapForm(initial={'collection': collection_id})
 
-    context = {
-        'form': form,
-        'collection_id': collection_id
-    }
+        context = {
+            'form': form,
+            'collection_id': collection_id
+        }
 
-    return render(request, 'collectionsapp/add_to_collection.html', context)
+        return render(request, 'collectionsapp/add_to_collection.html', context)
 
 
 def home(request):
@@ -580,18 +582,36 @@ def edit_collection_item(request, collection_item_id):
         return redirect('home')
 
     if request.method == "POST":
-        form = BottleCapForm(request.POST, instance=collection_item)
+        form = BottleCapForm(request.POST, request.FILES, instance=collection_item)
 
         if form.is_valid():
-            form_data = form.save(commit=False)
-            form_data.modified_by = request.user
-            form_data.created_by = collection_item.created_by
+            collection_item = form.save(commit=False)
+            collection_item.modified_by = request.user
+            collection_item.created_by = collection_item.created_by
 
-            form_data.save()
+            # TODO: if image changes...
+            if True:
+                new_image = form.cleaned_data['image']
+
+                pillow_image = generate_thumbnail(new_image)
+                collection_item.image_thumbnail.save(
+                    new_image.name,
+                    InMemoryUploadedFile(
+                        pillow_image,
+                        None,               # field_name
+                        'my_image.jpg',     # file name
+                        'image/jpeg',       # content_type
+                        pillow_image.tell,  # size
+                        None
+                    )
+                )
+
+            collection_item.save()
 
             form.save_m2m()
 
-            return redirect('bottle_cap', item_id=form_data.pk)
+            messages.success(request, 'Collection item updated.')
+            return redirect('bottle_cap', item_id=collection_item.pk)
     else:
         context = {
             'form': BottleCapForm(instance=collection_item),
@@ -721,43 +741,3 @@ def delete_account(request, target_user_id):
 @staff_member_required
 def admin_tools(request):
     return render(request, 'collectionsapp/admin_tools.html')
-
-
-'''@staff_member_required
-def migrate_images(request):
-    images_updated = 0
-    thumbnails_updated = 0
-
-    for item_image_record in CollectionItemImage.objects.all():
-        collection_item_id = item_image_record.collection_item_id
-
-        try:
-            cap = BottleCap.objects.get(pk=collection_item_id)
-            cap.image = item_image_record.image
-
-            print("updating cap " + str(cap.id))
-            try:
-                images_updated += 1
-                cap.save()
-            except:
-                images_updated -= 1
-        except BottleCap.DoesNotExist:
-            print("No cap for image " + str(item_image_record.id))
-
-    for item_thumbnail_record in CollectionItemImageThumbnail.objects.all():
-        collection_item_id = item_thumbnail_record.collection_item_id
-
-        try:
-            cap = BottleCap.objects.get(pk=collection_item_id)
-            cap.image_thumbnail = item_thumbnail_record.image
-
-            print("updating cap " + str(cap.id))
-            try:
-                thumbnails_updated += 1
-                cap.save()
-            except:
-                thumbnails_updated -= 1
-        except BottleCap.DoesNotExist:
-            print("No cap for thumbnail " + str(item_thumbnail_record.id))
-
-    return JsonResponse({'images_updated': images_updated, 'thumbnails_updated': thumbnails_updated})'''

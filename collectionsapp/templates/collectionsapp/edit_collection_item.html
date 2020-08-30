@@ -18,7 +18,7 @@
     </div>
 
 
-    <form action="{% url 'edit_collection_item' collection_item_id %}" method="POST" role="form">
+    <form enctype="multipart/form-data" method="POST" action="{% url 'edit_collection_item' collection_item_id %}"  role="form">
         {% csrf_token %}
         {{ form|crispy }}
         <div class='form-button-bar clearfix'>
@@ -54,5 +54,6 @@
 {% endblock %}
 
 {% block dedicated_scripts %}
+    <script src="{% static "collectionsapp/javascript/add_date_picker.js" %}"></script>
     <script src="{% static "collectionsapp/javascript/collection_item_form_image_header.js" %}"></script>
 {% endblock %}
