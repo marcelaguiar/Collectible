@@ -1,9 +1,10 @@
-import piexif
+from django.core.files.base import ContentFile
 from io import BytesIO
 from PIL import Image
+import piexif
+
 
 def generate_thumbnail(i):
-    print("Thumbnail generation: starting...")
     # Takes in an ImageFieldField
     square_edge_length = 200
     target_width = square_edge_length
@@ -15,9 +16,9 @@ def generate_thumbnail(i):
     bottom = target_height
 
     im = Image.open(i)
-    width, height = im.size
 
     # get new dimensions to fit
+    width, height = im.size
     if width > height:
         resize_ratio = target_height / height
         new_width = int(width * resize_ratio)
@@ -49,5 +50,4 @@ def generate_thumbnail(i):
     buffer = BytesIO()
     im.save(fp=buffer, format='JPEG', quality=95)
 
-    print("Thumbnail generation: ending...")
     return ContentFile(buffer.getvalue())

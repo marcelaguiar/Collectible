@@ -1,8 +1,9 @@
 from datetime import date
 from django.contrib.auth.models import User
 from django.db import models
-from taggit.managers import TaggableManager
+from django.dispatch.dispatcher import receiver
 from django.utils import timezone
+from taggit.managers import TaggableManager
 
 
 class CommonInfo(models.Model):
@@ -105,3 +106,12 @@ class SearchAction(models.Model):
 
     def __str__(self):
         return str(self.timestamp) + ': \"' + self.text + '\"'
+
+
+@receiver(signal=models.signals.pre_delete, sender=BottleCap)
+def bottlecap_delete(sender, instance, **kwargs):
+    # Pass false so FileField doesn't save the model.
+    if instance.image_thumbnail:
+        instance.image_thumbnail.delete(save=False)
+    if instance.image:
+        instance.image.delete(save=False)

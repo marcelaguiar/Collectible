@@ -1,13 +1,13 @@
 from collectionsapp.forms import CollectionTypeForm, CollectionForm, CollectionEditForm, BottleCapForm,\
     UserRegisterForm, AccountDeleteForm
-from collectionsapp.helpers import delete_helper
+from collectionsapp.helpers import delete_helper, image_helper
 from collectionsapp.models import BottleCap, CollectionType, Collection, CollectionItem, User, SearchAction
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.core.files.base import ContentFile
+
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import Error
 from django.db.models import fields
@@ -15,8 +15,8 @@ from django.db.models.fields import files
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from io import BytesIO
-from PIL import Image
+
+
 from taggit.managers import TaggableManager
 import datetime
 
@@ -30,57 +30,6 @@ class FriendlyDataTypes:
     DATETIME = 'date + time'
     IMAGE = 'image'
     TAG = 'tagging feature'
-
-
-def generate_thumbnail(i):
-    print("Thumbnail generation: starting...")
-    # Takes in an ImageFieldField
-    square_edge_length = 200
-    target_width = square_edge_length
-    target_height = square_edge_length
-
-    left = 0
-    top = 0
-    right = target_width
-    bottom = target_height
-
-    im = Image.open(i)
-    width, height = im.size
-
-    # get new dimensions to fit
-    if width > height:
-        resize_ratio = target_height / height
-        new_width = int(width * resize_ratio)
-        new_height = target_height
-    elif height > width:
-        resize_ratio = target_width / width
-        new_width = target_width
-        new_height = int(height * resize_ratio)
-    else:
-        new_width = target_width
-        new_height = target_height
-
-    # grow or shrink to new dimensions
-    if width >= target_width and height >= target_height:
-        im.thumbnail([new_width, new_height], Image.ANTIALIAS)
-    else:
-        im = im.resize((new_width, new_height))
-
-    # crop
-    if new_width > target_width:
-        left = int((new_width - target_width) / 2)
-        right = left + target_width
-    elif new_height > target_height:
-        top = int((new_height - target_height) / 2)
-        bottom = top + target_height
-
-    im = im.crop((left, top, right, bottom))
-
-    buffer = BytesIO()
-    im.save(fp=buffer, format='JPEG', quality=95)
-
-    print("Thumbnail generation: ending...")
-    return ContentFile(buffer.getvalue())
 
 
 @login_required
@@ -97,7 +46,7 @@ def add_to_collection(request, collection_id):
         if form.is_valid():
             collection_item = form.save(commit=False)
             uploaded_image = form.cleaned_data['image']
-            pillow_image = generate_thumbnail(uploaded_image)
+            pillow_image = image_helper.generate_thumbnail(uploaded_image)
             collection_item.created_by = request.user
             collection_item.modified_by = request.user
             collection_item.collection_id = collection_id
@@ -593,7 +542,7 @@ def edit_collection_item(request, collection_item_id):
             if True:
                 new_image = form.cleaned_data['image']
 
-                pillow_image = generate_thumbnail(new_image)
+                pillow_image = image_helper.generate_thumbnail(new_image)
                 collection_item.image_thumbnail.save(
                     new_image.name,
                     InMemoryUploadedFile(
@@ -689,7 +638,7 @@ def create_collection_item_from_image(request):
     current_timestamp = datetime.datetime.now()
 
     # Create thumbnail
-    pillow_image = generate_thumbnail(uploaded_image)
+    pillow_image = image_helper.generate_thumbnail(uploaded_image)
 
     # Create collection item
     bc = BottleCap(

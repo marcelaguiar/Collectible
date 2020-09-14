@@ -22,7 +22,9 @@ def delete_collection_object(collection_id):
 def delete_collection_item_object(item_id):
     collection_item = BottleCap.objects.get(pk=item_id)
 
-    collection_item.image.delete(save=False)
-    collection_item.image_thumbnail.delete(save=False)
+    if collection_item.image_thumbnail:
+        collection_item.image_thumbnail.delete(save=False)
+    if collection_item.image:
+        collection_item.image.delete(save=False)
 
     collection_item.delete()
