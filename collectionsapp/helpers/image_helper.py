@@ -1,7 +1,6 @@
 from django.core.files.base import ContentFile
 from io import BytesIO
 from PIL import Image
-import piexif
 
 
 def generate_thumbnail(i):
