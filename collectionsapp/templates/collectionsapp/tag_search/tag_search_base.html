@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <div>
+        <h3>Tags</h3>
+        <div class="tag-container">
+            {% for tag in tags %}
+                <span>
+                    <a href="{% url 'tag_search_collection' collection_id  tag.slug %}" class="badge badge-secondary tag">{{ tag.slug }} </a>
+                </span>&nbsp;x{{ tag.id__count }},
+            {% endfor %}
+        </div>
+    </div>
+
+    {% block tagsearch %}
+    {% endblock %}
+{% endblock %}
+
+
+

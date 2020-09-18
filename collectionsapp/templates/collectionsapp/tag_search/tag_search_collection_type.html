@@ -1,7 +1,7 @@
-{% extends 'base.html' %}
+{% extends 'collectionsapp/tag_search/tag_search_base.html' %}
 {% load static %}
 
-{% block body %}
+{% block tagsearch %}
     <p>Search <span class="badge badge-secondary">{{ search_criteria }}</span> within</p>
     <div class="btn-group" role="group">
         <a class="btn btn-secondary" href="{% url 'tag_search_collection' collection_id search_criteria %}">
@@ -20,6 +20,3 @@
         {% endfor %}
     </div>
 {% endblock %}
-
-
-

@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import Error
-from django.db.models import fields
+from django.db.models import fields, Count
 from django.db.models.fields import files
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -335,6 +335,7 @@ def tag_search_collection(request, collection_id, slug):
     collection = Collection.objects.get(id=collection_id)
     collection_type = collection.type
     collection_owner_username = collection.owner
+    tags = BottleCap.tags.all().annotate(Count('id')).order_by('-id__count')
 
     context = {
         'search_criteria': slug,
@@ -343,16 +344,18 @@ def tag_search_collection(request, collection_id, slug):
         'collection_type_name': collection_type.name,
         'collection_owner_username': collection_owner_username,
         'search_results': BottleCap.objects.filter(
-            tags__slug__exact=slug, collection_id=collection_id)
+            tags__slug__exact=slug, collection_id=collection_id),
+        'tags': tags
     }
 
-    return render(request, 'collectionsapp/tag_search_collection.html', context)
+    return render(request, 'collectionsapp/tag_search/tag_search_collection.html', context)
 
 
 def tag_search_collection_type(request, collection_id, slug):
     collection = Collection.objects.get(id=collection_id)
     collection_type = collection.type
     collection_owner_username = collection.owner
+    tags = BottleCap.tags.all().annotate(Count('id')).order_by('-id__count')
 
     context = {
         'search_criteria': slug,
@@ -361,10 +364,11 @@ def tag_search_collection_type(request, collection_id, slug):
         'collection_type_name': collection_type.name,
         'collection_owner_username': collection_owner_username,
         'search_results': BottleCap.objects.filter(
-            tags__slug__exact=slug, collection__type_id=collection_type.id)
+            tags__slug__exact=slug, collection__type_id=collection_type.id),
+        'tags': tags
     }
 
-    return render(request, 'collectionsapp/tag_search_collection_type.html', context)
+    return render(request, 'collectionsapp/tag_search/tag_search_collection_type.html', context)
 
 
 ''''@login_required
