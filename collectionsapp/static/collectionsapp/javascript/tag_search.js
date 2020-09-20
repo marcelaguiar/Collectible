@@ -12,6 +12,9 @@ function setUpControls() {
         dataSource: "/get_all_tags/",
         displayExpr: "name",
         valueExpr: "slug",
+        elementAttr: {
+            class: "spaced-control"
+        },
         placeholder: "Search & select...",
         searchEnabled: true,
         //width: "300px",
@@ -54,7 +57,6 @@ function setUpControls() {
 }
 
 function loadResults(slug, collectionId) {
-    alert(slug);
     // Clear container
     $(".image-grid").empty();
 
