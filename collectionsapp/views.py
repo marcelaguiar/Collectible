@@ -335,7 +335,7 @@ def tag_search(request, collection_id, slug):
     tags = BottleCap.tags.all().annotate(Count('id')).order_by('-id__count', 'slug')
 
     context = {
-        'search_criteria': slug,
+        'slug': slug,
         'collection_id': collection.id,
         'collection_type_name': collection.type.name,
         'collection_owner_username': collection.owner,

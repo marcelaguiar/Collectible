@@ -41,7 +41,7 @@ def get_users_collections(request, user_id):
 
 
 def get_all_tags(request):
-    tags = BottleCap.tags.all().annotate(count=Count('id')).values('name', 'count').order_by('-count', 'slug')
+    tags = BottleCap.tags.all().annotate(count=Count('id')).values('name', 'slug', 'count').order_by('-count', 'slug')
 
     return JsonResponse(list(tags), safe=False)
 

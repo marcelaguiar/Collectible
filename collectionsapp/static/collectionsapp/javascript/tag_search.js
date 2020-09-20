@@ -1,4 +1,4 @@
-let specifiedTag = document.getElementById("search-criteria").value;
+let specifiedTag = document.getElementById("slug").value;
 let specifiedCollectionId = document.getElementById("collection-id").value;
 let specifiedCollectionOwnerUserName = document.getElementById("collection-owner-username").value;
 let specifiedCollectionTypeName = document.getElementById("collection-type_name").value;
@@ -11,7 +11,7 @@ function setUpControls() {
     $("#tagSelector").dxSelectBox({
         dataSource: "/get_all_tags/",
         displayExpr: "name",
-        valueExpr: "name",
+        valueExpr: "slug",
         placeholder: "Search & select...",
         searchEnabled: true,
         //width: "300px",
