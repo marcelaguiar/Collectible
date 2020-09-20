@@ -26,7 +26,7 @@ function setUpControls() {
                 initialLoad = false;
             }
             else {
-                specifiedTag = e.selectedItem.name;
+                specifiedTag = e.selectedItem.slug;
                 loadResults(specifiedTag, specifiedCollectionId);
             }
         }
@@ -54,6 +54,7 @@ function setUpControls() {
 }
 
 function loadResults(slug, collectionId) {
+    alert(slug);
     // Clear container
     $(".image-grid").empty();
 

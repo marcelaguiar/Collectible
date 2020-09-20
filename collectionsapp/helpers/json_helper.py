@@ -48,8 +48,9 @@ def get_all_tags(request):
 
 def get_by_tag_and_collection(request, slug, collection_id):
     items = BottleCap.objects\
-               .filter(tags__slug__exact=slug, collection_id=collection_id)\
-               .values('id', relative_url=F('image_thumbnail'))
+        .filter(tags__slug__exact=slug, collection_id=collection_id)\
+        .values('id', relative_url=F('image_thumbnail'))
+    print(items)
 
     result_list = add_full_urls(items)
 
@@ -58,6 +59,7 @@ def get_by_tag_and_collection(request, slug, collection_id):
 
 def get_by_tag(request, slug):
     items = BottleCap.objects.filter(tags__slug__exact=slug).values('id', relative_url=F('image_thumbnail'))
+    print(items)
 
     result_list = add_full_urls(items)
 
