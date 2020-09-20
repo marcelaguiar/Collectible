@@ -92,7 +92,7 @@
                 <!-- Tags -->
                 <div class="tag-container">
                     {% for tag in tags %}
-                        <a href="{% url 'tag_search_collection' bottle_cap.collection.id  tag.slug %}" class="badge badge-secondary tag">{{ tag.slug }}</a>
+                        <a href="{% url 'tag_search' bottle_cap.collection.id  tag.slug %}" class="badge badge-secondary tag">{{ tag.slug }}</a>
                     {% endfor %}
                 </div>
             </div>

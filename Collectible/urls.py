@@ -30,6 +30,9 @@ urlpatterns = [
     path('get_all_bottle_caps/', json_helper.get_all_bottle_caps),
     path('get_all_bottle_caps_by_collection/<int:collection_id>/', json_helper.get_all_bottle_caps_by_collection,
          name='get_all_bottle_caps_by_collection'),
+    path('get_all_tags/', json_helper.get_all_tags),
+    path('get_by_tag_and_collection/<slug:slug>/<int:collection_id>/', json_helper.get_by_tag_and_collection),
+    path('get_by_tag/<slug:slug>/', json_helper.get_by_tag),
     path('get_n_thumbnails/<int:start>/<int:end>', views.get_n_thumbnails, name='get_n_thumbnails'),
     path('get_users_collections/<int:user_id>/', json_helper.get_users_collections),
     path('my_collections/', views.my_collections, name='my_collections'),
@@ -53,10 +56,8 @@ urlpatterns = [
     path('select_collection/', views.select_collection, name='select_collection'),
     path('select_existing_fieldset', views.select_existing_fieldset, name='select_existing_fieldset'),
     path('start_collection/', views.start_collection, name='start_collection'),
-    path('tag_search_collection/<int:collection_id>/<slug:slug>/', views.tag_search_collection,
-         name='tag_search_collection'),
-    path('tag_search_collection_type/<int:collection_id>/<slug:slug>/', views.tag_search_collection_type,
-         name='tag_search_collection_type'),
+    path('tag_search/<int:collection_id>/<slug:slug>/', views.tag_search,
+         name='tag_search'),
     path('multi_upload/', views.multi_upload, name='multi_upload'),
     path('manage_account/', views.manage_account, name='manage_account')
 ]

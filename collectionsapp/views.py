@@ -7,7 +7,6 @@ from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import Error
 from django.db.models import fields, Count
@@ -331,44 +330,20 @@ def profile(request, user_id):
     return render(request, 'collectionsapp/profile.html', context)
 
 
-def tag_search_collection(request, collection_id, slug):
+def tag_search(request, collection_id, slug):
     collection = Collection.objects.get(id=collection_id)
-    collection_type = collection.type
-    collection_owner_username = collection.owner
-    tags = BottleCap.tags.all().annotate(Count('id')).order_by('-id__count')
+    tags = BottleCap.tags.all().annotate(Count('id')).order_by('-id__count', 'slug')
 
     context = {
         'search_criteria': slug,
-        'collection_id': collection_id,
-        'collection_type_id': collection_type.id,
-        'collection_type_name': collection_type.name,
-        'collection_owner_username': collection_owner_username,
-        'search_results': BottleCap.objects.filter(
-            tags__slug__exact=slug, collection_id=collection_id),
+        'collection_id': collection.id,
+        'collection_type_name': collection.type.name,
+        'collection_owner_username': collection.owner,
+        'search_results': BottleCap.objects.filter(tags__slug__exact=slug, collection_id=collection.id),
         'tags': tags
     }
 
-    return render(request, 'collectionsapp/tag_search/tag_search_collection.html', context)
-
-
-def tag_search_collection_type(request, collection_id, slug):
-    collection = Collection.objects.get(id=collection_id)
-    collection_type = collection.type
-    collection_owner_username = collection.owner
-    tags = BottleCap.tags.all().annotate(Count('id')).order_by('-id__count')
-
-    context = {
-        'search_criteria': slug,
-        'collection_id': collection_id,
-        'collection_type_id': collection_type.id,
-        'collection_type_name': collection_type.name,
-        'collection_owner_username': collection_owner_username,
-        'search_results': BottleCap.objects.filter(
-            tags__slug__exact=slug, collection__type_id=collection_type.id),
-        'tags': tags
-    }
-
-    return render(request, 'collectionsapp/tag_search/tag_search_collection_type.html', context)
+    return render(request, 'collectionsapp/tag_search.html', context)
 
 
 ''''@login_required

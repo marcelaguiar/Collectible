@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <div>
+        <h3>Tags</h3>
+        <div>
+            <div style="display: inline-block">Search&nbsp;</div>
+            <div id="tagSelector" style="display: inline-block"></div>
+            <div style="display: inline-block">&nbsp;within&nbsp;</div>
+            <div id="collectionToggle" style="display: inline-block; vertical-align: top;"></div>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="{% static 'collectionsapp/css/image_grid.css' %}">
+    <div class="image-grid">
+        {% for collection_item in search_results %}
+            <div class="grid-item">
+                <a href="{% url 'bottle_cap' collection_item.id %}">
+                    <img src="{{ collection_item.image_thumbnail.url }}" alt="{{ collection_item }}">
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Initial values on page load -->
+    <input type="hidden" id="collection-owner-username" value="{{ collection_owner_username }}">
+    <input type="hidden" id="search-criteria" value="{{ search_criteria }}">
+    <input type="hidden" id="collection-id" value="{{ collection_id }}">
+    <input type="hidden" id="collection-type_name" value="{{ collection_type_name }}">
+{% endblock %}
+
+{% block dedicated_scripts %}
+    <script src="{% static "collectionsapp/javascript/tag_search.js" %}"></script>
+{% endblock %}
