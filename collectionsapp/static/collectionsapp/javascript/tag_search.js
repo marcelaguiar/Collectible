@@ -14,7 +14,7 @@ function setUpControls() {
         valueExpr: "name",
         placeholder: "Search & select...",
         searchEnabled: true,
-        width: "300px",
+        //width: "300px",
         itemTemplate: function (data) {
             return "<div style='display: flex; justify-content: space-between;'><div>"
                 + data.name + "</div><div style='color:silver'>"
