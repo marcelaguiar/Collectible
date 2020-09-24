@@ -44,34 +44,36 @@ li.no-bullets {
     display: flex;
 }
 
-.fixed-width{
+.fixed-width {
     width: 400px;
 }
 
-.flex-width{
+.flex-width {
     flex-grow: 1;
 }
 
 .item-display-form-container {
-    display: flex;
+    display: inline-flex;
     flex-wrap: wrap;
-    justify-content: center;
+    /*justify-content: center; would like to add this back in eventually*/
     align-items: flex-start;
 }
 
 .flex-item {
     margin: 7px;
-    width: 445px;
-    /*min-height: 445px;*/
+}
+
+.title-bar {
+    font-size: 1.8em;
+    width: 100%;
 }
 
 .item-image {
-    display:inline-block;
-    float:right;
+    width: 445px;
 }
 
 .item-details {
-    display:inline-block;
+    width: 445px;
 }
 
 .tag-container {
@@ -99,12 +101,6 @@ li.no-bullets {
 }
 
 .image-selector-container {
-    margin-bottom: 5px;
-}
-
-.title-bar {
-    padding-left: calc(50% - 445px);
-    font-size: 1.8em;
     margin-bottom: 5px;
 }
 

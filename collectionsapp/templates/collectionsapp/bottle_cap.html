@@ -3,18 +3,18 @@
 
 
 {% block body %}
-<div>
-    <div class="title-bar">
-        {{ bottle_cap }}
-        {% if user == collectionOwner %}
-            <a href="{% url 'edit_collection_item' bottle_cap.id %}">
-                <button type="button" class="btn btn-outline-secondary btn-sm">edit</button>
-            </a>
-        {% endif %}
+<div style="text-align: center">
+    <div class="item-display-form-container" style="text-align: left">
+        <!-- Title -->
+        <div class="title-bar flex-item">
+            {{ bottle_cap }}
+            {% if user == collectionOwner %}
+                <a href="{% url 'edit_collection_item' bottle_cap.id %}">
+                    <button type="button" class="btn btn-outline-secondary btn-sm">edit</button>
+                </a>
+            {% endif %}
 
-    </div>
-
-    <div class="item-display-form-container">
+        </div>
 
         <!-- Image -->
         <div class="item-image flex-item">
@@ -91,7 +91,6 @@
                 {% endfor %}
             </div>
         </div>
-
     </div>
 </div>
 {% endblock %}
