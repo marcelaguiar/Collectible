@@ -16,85 +16,79 @@
 
     <div class="item-display-form-container">
 
-        <!-- Left half -->
-        <div class="left-column">
-            <!-- Image -->
-            <div class="item-image">
-                <div style="width: 445px; min-height: 445px; text-align: center;" class="card" >
-                    <div class="card-body">
-                        <img src="{{ bottle_cap.image.url }}" class="d-block w-100" alt="{{ bottle_cap }}">
-                    </div>
+        <!-- Image -->
+        <div class="item-image flex-item">
+            <div class="card" >
+                <div class="card-body">
+                    <img src="{{ bottle_cap.image.url }}" class="d-block w-100" alt="{{ bottle_cap }}">
                 </div>
             </div>
         </div>
 
-        <!-- Right half -->
-        <div class="right-column">
-            <!-- Details -->
-            <div class="item-details">
-                <table class="table table-sm">
-                    <tbody>
-                        <tr>
-                            <th scope="row">Company</th>
-                            <td>{{ bottle_cap.company}}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Brand</th>
-                            <td>{{ bottle_cap.brand }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Product</th>
-                            <td>{{ bottle_cap.product}}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Variety</th>
-                            <td>{{ bottle_cap.variety }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Beverage Type</th>
-                            <td>{{ bottle_cap.beverage_type}}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Description</th>
-                            <td>{{ bottle_cap.description }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Region</th>
-                            <td>{{ bottle_cap.region }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Date Acquired</th>
-                            <td>{{ bottle_cap.date_acquired}}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Method Acquired</th>
-                            <td>{{ bottle_cap.method_acquired }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Available For Trade</th>
-                            <td>{{ bottle_cap.available_for_trade}}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Text</th>
-                            <td>{{ bottle_cap.text}}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Underside</th>
-                            <td>{{ bottle_cap.underside }}</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">Collection</th>
-                            <td><a href="{% url 'explore_collection' bottle_cap.collection.id 'details'%}">Link</a></td>
-                        </tr>
-                    </tbody>
-                </table>
+        <!-- Details -->
+        <div class="item-details flex-item">
+            <table class="table table-sm">
+                <tbody>
+                    <tr>
+                        <th scope="row">Company</th>
+                        <td>{{ bottle_cap.company}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Brand</th>
+                        <td>{{ bottle_cap.brand }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Product</th>
+                        <td>{{ bottle_cap.product}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Variety</th>
+                        <td>{{ bottle_cap.variety }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Beverage Type</th>
+                        <td>{{ bottle_cap.beverage_type}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Description</th>
+                        <td>{{ bottle_cap.description }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Region</th>
+                        <td>{{ bottle_cap.region }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Date Acquired</th>
+                        <td>{{ bottle_cap.date_acquired}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Method Acquired</th>
+                        <td>{{ bottle_cap.method_acquired }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Available For Trade</th>
+                        <td>{{ bottle_cap.available_for_trade}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Text</th>
+                        <td>{{ bottle_cap.text}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Underside</th>
+                        <td>{{ bottle_cap.underside }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Collection</th>
+                        <td><a href="{% url 'explore_collection' bottle_cap.collection.id 'details'%}">Link</a></td>
+                    </tr>
+                </tbody>
+            </table>
 
-                <!-- Tags -->
-                <div class="tag-container">
-                    {% for tag in tags %}
-                        <a href="{% url 'tag_search' bottle_cap.collection.id  tag.slug %}" class="badge badge-secondary tag">{{ tag.slug }}</a>
-                    {% endfor %}
-                </div>
+            <!-- Tags -->
+            <div class="tag-container">
+                {% for tag in tags %}
+                    <a href="{% url 'tag_search' bottle_cap.collection.id  tag.slug %}" class="badge badge-secondary tag">{{ tag.slug }}</a>
+                {% endfor %}
             </div>
         </div>
 

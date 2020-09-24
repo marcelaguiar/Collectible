@@ -54,14 +54,15 @@ li.no-bullets {
 
 .item-display-form-container {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
 }
 
-.left-column {
-    flex: 1;
-}
-
-.right-column {
-    flex: 1;
+.flex-item {
+    margin: 7px;
+    width: 445px;
+    /*min-height: 445px;*/
 }
 
 .item-image {
@@ -71,7 +72,6 @@ li.no-bullets {
 
 .item-details {
     display:inline-block;
-    margin: 0 0 0 20px;
 }
 
 .tag-container {
