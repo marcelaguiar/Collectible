@@ -1,23 +1,21 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
 {% block body %}
 <div style="text-align: center">
     <div class="item-display-form-container" style="text-align: left">
         <!-- Title -->
-        <div class="title-bar flex-item">
+        <div class="flex-item title-bar">
             {{ bottle_cap }}
             {% if user == collectionOwner %}
                 <a href="{% url 'edit_collection_item' bottle_cap.id %}">
                     <button type="button" class="btn btn-outline-secondary btn-sm">edit</button>
                 </a>
             {% endif %}
-
         </div>
 
         <!-- Image -->
-        <div class="item-image flex-item">
+        <div class="flex-item item-image">
             <div class="card" >
                 <div class="card-body">
                     <img src="{{ bottle_cap.image.url }}" class="d-block w-100" alt="{{ bottle_cap }}">
@@ -26,7 +24,7 @@
         </div>
 
         <!-- Details -->
-        <div class="item-details flex-item">
+        <div class="flex-item item-details">
             <table class="table table-sm">
                 <tbody>
                     <tr>
