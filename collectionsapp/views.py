@@ -247,6 +247,14 @@ def explore_collection_type(request, collection_type_id):
     return render(request, 'collectionsapp/explore_collection_type.html', context)
 
 
+def collections(request):
+    context = {
+        'collection_types': CollectionType.objects.all()
+    }
+
+    return render(request, 'collectionsapp/collections.html', context)
+
+
 @login_required
 def select_collection(request):
     collections_list = []

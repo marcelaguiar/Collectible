@@ -14,6 +14,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('admin_tools/', views.admin_tools, name='admin_tools'),
     path('bottle_cap/<int:item_id>/', views.bottle_cap, name='bottle_cap'),
+    path('collections/', views.collections, name='collections'),
     path('collection_types/', views.collection_types, name='collection_types'),
     path('create_collection/', views.create_collection, name='create_collection'),
     path('delete_account/<int:target_user_id>/', views.delete_account, name='delete_account'),

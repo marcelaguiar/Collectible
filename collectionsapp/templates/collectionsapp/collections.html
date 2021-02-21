@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block body %}
+<h1>Collections</h1>
+
+<ul>
+    {% for collection_type in collection_types %}
+        <li>
+            <h3>{{ collection_type }}</h3>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
