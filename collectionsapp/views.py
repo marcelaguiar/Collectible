@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import Error
-from django.db.models import fields, Count
+from django.db.models import fields, Count, Max
 from django.db.models.fields import files
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -248,7 +248,14 @@ def explore_collection_type(request, collection_type_id):
 
 
 def collections(request):
+    query = ''
+    with open('collectionsapp/static/collectionsapp/sql/get_collections.sql', 'r') as file:
+        query = file.read()
+
+    collection_objects = BottleCap.objects.raw(query)
+
     context = {
+        'collections': collection_objects,
         'collection_types': CollectionType.objects.all()
     }
 

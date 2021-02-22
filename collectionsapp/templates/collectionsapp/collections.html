@@ -3,13 +3,30 @@
 
 
 {% block body %}
-<h1>Collections</h1>
+    <link rel="stylesheet" href="{% static 'collectionsapp/css/collections.css' %}">
+    <h1>Collections</h1>
 
-<ul>
-    {% for collection_type in collection_types %}
-        <li>
-            <h3>{{ collection_type }}</h3>
-        </li>
+    <div class="collections-container">
+    {% for collection in collections %}
+        <a class="collection-card" href="{% url 'explore_collection' collection.id 'image' %}">
+            <div>
+                <img src="{{ collection.image_thumbnail.url }}" alt="{{ collection.name }}">
+                <div class="text-block">
+                    <div>
+                        {{ collection.name }}
+                    </div>
+                    <div>
+                        <span style="float: left">
+                            {{ collection.count }} items
+                        </span>
+                        <span style="float: right">
+                            <i class="dx-icon-user"></i>
+                            {{ collection.owner_username }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </a>
     {% endfor %}
-</ul>
+    </div>
 {% endblock %}
