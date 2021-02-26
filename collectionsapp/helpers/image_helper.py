@@ -1,6 +1,6 @@
 from django.core.files.base import ContentFile
 from io import BytesIO
-from PIL import Image
+from PIL import Image, ExifTags
 
 
 def generate_thumbnail(i):
@@ -15,6 +15,23 @@ def generate_thumbnail(i):
     bottom = target_height
 
     im = Image.open(i)
+
+    try:
+        for orientation in ExifTags.TAGS.keys():
+            if ExifTags.TAGS[orientation] == 'Orientation':
+                break
+
+        exif = im._getexif()
+
+        if exif[orientation] == 3:
+            im = im.rotate(180, expand=True)
+        elif exif[orientation] == 6:
+            im = im.rotate(270, expand=True)
+        elif exif[orientation] == 8:
+            im = im.rotate(90, expand=True)
+    except (AttributeError, KeyError, IndexError):
+        # cases: image don't have getexif
+        pass
 
     # get new dimensions to fit
     width, height = im.size
