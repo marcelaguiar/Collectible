@@ -21,7 +21,7 @@
                             </tr>
                             <tr>
                                 <td><i class="dx-icon-chart"></i></td>
-                                <td>{{ collection.count }} items</td>
+                                <td>{{ collection.count }} {% if collection.count == 1 %} item{% else %} items{% endif %}</td>
                             </tr>
                         </table>
                     </div>
