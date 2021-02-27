@@ -87,10 +87,13 @@ def home(request):
     return render(request, 'collectionsapp/home.html', context)
 
 
-def get_n_thumbnails(request, start, end):
+def get_n_thumbnails(request, start, end, collection_id):
     thumbnails = []
 
-    collection_items = BottleCap.objects.all().order_by('-created')[start:end]
+    if collection_id == 0:
+        collection_items = BottleCap.objects.all().order_by('-created')[start:end]
+    else:
+        collection_items = BottleCap.objects.filter(collection_id=collection_id).order_by('-created')[start:end]
 
     for collection_item in collection_items:
         collection_item_url = reverse(viewname='bottle_cap', args=[collection_item.id])

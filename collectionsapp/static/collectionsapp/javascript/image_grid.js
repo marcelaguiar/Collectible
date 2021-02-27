@@ -17,9 +17,16 @@ function loadData() {
     const start = loadedThumbnailsCount;
     const end = loadedThumbnailsCount + loadSize;
 
+    // Check if we are loading data for a specific collection or not
+    let collectionId = "0";
+    let element =  document.getElementById('collection-id');
+    if (typeof(element) != 'undefined' && element != null) {
+        collectionId = document.getElementById("collection-id").value;
+    }
+
     $.ajax({
         type: "GET",
-        url: "/get_n_thumbnails/" + String(start) + "/" + String(end),
+        url: "/get_n_thumbnails/" + String(start) + "/" + String(end) + "/" + String(collectionId),
         success: function (data) {
             $("#dxLoadIndicator").dxLoadIndicator('instance').option('visible', false);
 

@@ -12,17 +12,18 @@
             <div>
                 <img src="{{ collection.image_thumbnail.url }}" alt="{{ collection.name }}">
                 <div class="text-block">
-                    <div>
+                    <div class="truncate">
                         {{ collection.name }}
-                    </div>
-                    <div>
-                        <span style="float: left">
-                            {{ collection.count }} items
-                        </span>
-                        <span style="float: right">
-                            <i class="dx-icon-user"></i>
-                            {{ collection.owner_username }}
-                        </span>
+                        <table>
+                            <tr>
+                                <td><i class="dx-icon-user"></i></td>
+                                <td>{{ collection.owner_username }}</td>
+                            </tr>
+                            <tr>
+                                <td><i class="dx-icon-chart"></i></td>
+                                <td>{{ collection.count }} items</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>

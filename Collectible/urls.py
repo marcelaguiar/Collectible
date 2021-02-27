@@ -34,7 +34,7 @@ urlpatterns = [
     path('get_all_tags/', json_helper.get_all_tags),
     path('get_by_tag_and_collection/<slug:slug>/<int:collection_id>/', json_helper.get_by_tag_and_collection),
     path('get_by_tag/<slug:slug>/', json_helper.get_by_tag),
-    path('get_n_thumbnails/<int:start>/<int:end>', views.get_n_thumbnails, name='get_n_thumbnails'),
+    path('get_n_thumbnails/<int:start>/<int:end>/<int:collection_id>', views.get_n_thumbnails, name='get_n_thumbnails'),
     path('get_users_collections/<int:user_id>/', json_helper.get_users_collections),
     path('my_collections/', views.my_collections, name='my_collections'),
     path('password-reset/', auth_views.PasswordResetView.as_view(template_name='registration/password_reset.html'),
