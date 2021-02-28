@@ -11,6 +11,7 @@
                     <legend class="border-bottom mb-4">Register</legend>
                     {{ form|crispy }}
                 </fieldset>
+                <div class="g-recaptcha" data-sitekey="6Ler-WoaAAAAAOVNXXV1LyQG6neFrLP5Xb-MheAi" style="margin-bottom: 1rem;"></div>
                 <div class="form-group">
                     <button class="btn btn-outline-info" type="submit">Register</button>
                 </div>
@@ -20,4 +21,8 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block dedicated_scripts %}
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endblock %}

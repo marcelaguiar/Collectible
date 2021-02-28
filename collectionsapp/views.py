@@ -14,10 +14,11 @@ from django.db.models.fields import files
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-
-
 from taggit.managers import TaggableManager
 import datetime
+import json
+import os
+import requests
 
 
 class FriendlyDataTypes:
@@ -121,17 +122,32 @@ def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
 
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
+        captcha_response_token = request.POST.get("g-recaptcha-response")
+        verification_url = "https://www.google.com/recaptcha/api/siteverify"
+        secret_key = os.environ.get('reCAPTCHA_SECRET_KEY')
 
-            messages.success(request, f'Account created for {username} and signed in!')
+        payload = {
+            "secret": secret_key,
+            "response": captcha_response_token
+        }
 
-            user = authenticate(username=username, password=password)
-            login(request, user)
+        cap_server_response = requests.post(url=verification_url, data=payload)
+        cap_json = json.loads(cap_server_response.text)
 
-            return redirect('home')
+        if cap_json["success"]:
+            if form.is_valid():
+                form.save()
+                username = form.cleaned_data.get('username')
+                password = form.cleaned_data.get('password1')
+
+                messages.success(request, f'Account created for {username} and signed in!')
+
+                user = authenticate(username=username, password=password)
+                login(request, user)
+
+                return redirect('home')
+        else:
+            messages.error(request, 'Invalid captcha. Try again.')
     else:
         form = UserRegisterForm()
     context = {'form': form}
