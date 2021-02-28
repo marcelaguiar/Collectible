@@ -11,7 +11,7 @@
                     <legend class="border-bottom mb-4">Register</legend>
                     {{ form|crispy }}
                 </fieldset>
-                <div class="g-recaptcha" data-sitekey="6Ler-WoaAAAAAOVNXXV1LyQG6neFrLP5Xb-MheAi" style="margin-bottom: 1rem;"></div>
+                <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key }}" style="margin-bottom: 1rem;"></div>
                 <div class="form-group">
                     <button class="btn btn-outline-info" type="submit">Register</button>
                 </div>

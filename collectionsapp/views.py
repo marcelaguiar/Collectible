@@ -150,7 +150,10 @@ def register(request):
             messages.error(request, 'Invalid captcha. Try again.')
     else:
         form = UserRegisterForm()
-    context = {'form': form}
+    context = {
+        'form': form,
+        'recaptcha_site_key': os.environ.get('reCAPTCHA_SITE_KEY')
+    }
     return render(request, 'registration/register.html', context)
 
 
