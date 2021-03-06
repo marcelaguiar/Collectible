@@ -22,6 +22,8 @@ def delete_collection_object(collection_id):
 def delete_collection_item_object(item_id):
     collection_item = BottleCap.objects.get(pk=item_id)
 
+    if collection_item.image_thumbnail_tiny:
+        collection_item.image_thumbnail_tiny.delete(save=False)
     if collection_item.image_thumbnail:
         collection_item.image_thumbnail.delete(save=False)
     if collection_item.image:

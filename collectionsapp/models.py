@@ -57,6 +57,8 @@ class CollectionItem(CommonInfo):
     collection = models.ForeignKey('Collection', on_delete=models.CASCADE, verbose_name='Collection')
     image = models.ImageField(verbose_name='Image', upload_to='images/')
     image_thumbnail = models.ImageField(verbose_name='Image Thumbnail', upload_to='thumbnails/')
+    image_thumbnail_tiny = models.ImageField(verbose_name='Tiny Image Thumbnail', upload_to='thumbnails_tiny/',
+                                             blank=True, null=True)
 
     class Meta:
         abstract = True

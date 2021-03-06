@@ -46,7 +46,7 @@ def add_to_collection(request, collection_id):
         if form.is_valid():
             collection_item = form.save(commit=False)
             uploaded_image = form.cleaned_data['image']
-            pillow_image = image_helper.generate_thumbnail(uploaded_image)
+            thumbnail_set = image_helper.ThumbnailSet(uploaded_image)
             collection_item.created_by = request.user
             collection_item.modified_by = request.user
             collection_item.collection_id = collection_id
@@ -54,11 +54,23 @@ def add_to_collection(request, collection_id):
             collection_item.image_thumbnail.save(
                 uploaded_image.name,
                 InMemoryUploadedFile(
-                    pillow_image,
+                    thumbnail_set.thumbnail,
                     None,               # field_name
                     'my_image.jpg',     # file name
                     'image/jpeg',       # content_type
-                    pillow_image.tell,  # size
+                    thumbnail_set.thumbnail.tell,  # size
+                    None
+                )
+            )
+
+            collection_item.image_thumbnail_tiny.save(
+                uploaded_image.name,
+                InMemoryUploadedFile(
+                    thumbnail_set.thumbnail_tiny,
+                    None,               # field_name
+                    'my_image.jpg',     # file name
+                    'image/jpeg',       # content_type
+                    thumbnail_set.thumbnail_tiny.tell,  # size
                     None
                 )
             )
@@ -383,130 +395,6 @@ def tag_search(request, collection_id, slug):
     return render(request, 'collectionsapp/tag_search.html', context)
 
 
-''''@login_required
-def upload_image(request, collection_item_id):
-    collection_item = get_object_or_404(BottleCap, pk=collection_item_id)
-
-    if collection_item.collection.owner != request.user:
-        messages.warning(request, 'You cannot edit other peoples collections.')
-        return redirect('home')
-
-    collection_item_image_formset = modelformset_factory(
-        model=CollectionItemImage,
-        fields=('image', 'order_in_collection'),
-        extra=1,
-        max_num=5
-    )
-
-    if request.method == "POST":
-        formset = collection_item_image_formset(
-            request.POST,
-            request.FILES,
-            queryset=CollectionItemImage.objects.filter(collection_item_id=collection_item_id)
-        )
-
-        if formset.is_valid():
-            submit_time = datetime.datetime.now()
-
-            collection_item = BottleCap.objects.get(id=collection_item_id)
-
-            for f in formset:
-                new_image = CollectionItemImage(
-                    created=submit_time,
-                    modified=submit_time,
-                    order_in_collection=f.cleaned_data['order_in_collection'],
-                    image=f.cleaned_data['image'],
-                    collection_item=collection_item,
-                    created_by=request.user,
-                    modified_by=request.user
-                )
-
-                # Save full-quality image
-                new_image.save()
-                im = Image.open(storage.open(new_image.image.name, 'rb'))
-
-                width, height = im.size
-
-                square_edge_length = 200
-                target_width = square_edge_length
-                target_height = square_edge_length
-
-                left = 0
-                top = 0
-                right = target_width
-                bottom = target_height
-
-                # get new dimensions to fit
-                if width > height:
-                    resize_ratio = target_height / height
-                    new_width = int(width * resize_ratio)
-                    new_height = target_height
-                elif height > width:
-                    resize_ratio = target_width / width
-                    new_width = target_width
-                    new_height = int(height * resize_ratio)
-                else:
-                    new_width = target_width
-                    new_height = target_height
-
-                # grow or shrink to new dimensions
-                if width >= target_width and height >= target_height:
-                    im.thumbnail([new_width, new_height], Image.ANTIALIAS)
-                else:
-                    im = im.resize((new_width, new_height))
-
-                # crop
-                if new_width > target_width:
-                    left = int((new_width - target_width)/2)
-                    right = left + target_width
-                elif new_height > target_height:
-                    top = int((new_height - target_height)/2)
-                    bottom = top + target_height
-
-                im = im.crop((left, top, right, bottom))
-
-                buffer = BytesIO()
-                im.save(fp=buffer, format='JPEG', quality=95)
-                pillow_image = ContentFile(buffer.getvalue())
-
-                thumbnail = CollectionItemImageThumbnail(
-                    created=submit_time,
-                    modified=submit_time,
-                    order_in_collection=f.cleaned_data['order_in_collection'],
-                    image=pillow_image,
-                    collection_item=collection_item,
-                    created_by=request.user,
-                    modified_by=request.user
-                )
-
-                thumbnail.save()
-
-                thumbnail.image.save(
-                    new_image.image.name.split("images/", 1)[1],
-                    InMemoryUploadedFile(
-                        pillow_image,
-                        None,               # field_name
-                        'my_image.jpg',     # file name
-                        'image/jpeg',       # content_type
-                        pillow_image.tell,  # size
-                        None
-                    )
-                )
-
-            return redirect('bottle_cap', item_id=collection_item_id)
-        else:
-            print(formset.errors)
-    else:
-        collection = BottleCap.objects.get(pk=collection_item_id).collection
-
-        context = {
-            'collection_item_id': collection_item_id,
-            'imageUploadFormSet': collection_item_image_formset(queryset=CollectionItemImage.objects.none())
-        }
-
-        return render(request, 'collectionsapp/upload_image.html', context)'''
-
-
 @login_required
 def edit_collection(request, collection_id):
     collection = get_object_or_404(Collection, pk=collection_id)
@@ -558,15 +446,27 @@ def edit_collection_item(request, collection_item_id):
             if True:
                 new_image = form.cleaned_data['image']
 
-                pillow_image = image_helper.generate_thumbnail(new_image)
+                thumbnail_set = image_helper.ThumbnailSet(new_image)
                 collection_item.image_thumbnail.save(
                     new_image.name,
                     InMemoryUploadedFile(
-                        pillow_image,
+                        thumbnail_set.thumbnail,
                         None,               # field_name
                         'my_image.jpg',     # file name
                         'image/jpeg',       # content_type
-                        pillow_image.tell,  # size
+                        thumbnail_set.thumbnail.tell,  # size
+                        None
+                    )
+                )
+
+                collection_item.image_thumbnail_tiny.save(
+                    new_image.name,
+                    InMemoryUploadedFile(
+                        thumbnail_set.thumbnail_tiny,
+                        None,               # field_name
+                        'my_image.jpg',     # file name
+                        'image/jpeg',       # content_type
+                        thumbnail_set.thumbnail_tiny.tell,  # size
                         None
                     )
                 )
@@ -654,13 +554,14 @@ def create_collection_item_from_image(request):
     current_timestamp = datetime.datetime.now()
 
     # Create thumbnail
-    pillow_image = image_helper.generate_thumbnail(uploaded_image)
+    thumbnail_set = image_helper.ThumbnailSet(uploaded_image)
 
     # Create collection item
     bc = BottleCap(
         company="unidentified",
         image=request.FILES['file'],
-        image_thumbnail=pillow_image,
+        image_thumbnail=thumbnail_set.thumbnail,
+        image_thumbnail_tiny=thumbnail_set.thumbnail_tiny,
         created_by=uploader,
         modified_by=uploader,
         date_acquired=current_timestamp.date(),
@@ -673,11 +574,23 @@ def create_collection_item_from_image(request):
     bc.image_thumbnail.save(
         uploaded_image.name,
         InMemoryUploadedFile(
-            pillow_image,
+            thumbnail_set.thumbnail,
             None,  # field_name
             'my_image.jpg',  # file name
             'image/jpeg',  # content_type
-            pillow_image.tell,  # size
+            thumbnail_set.thumbnail.tell,  # size
+            None
+        )
+    )
+
+    bc.image_thumbnail_tiny.save(
+        uploaded_image.name,
+        InMemoryUploadedFile(
+            thumbnail_set.thumbnail_tiny,
+            None,  # field_name
+            'my_image.jpg',  # file name
+            'image/jpeg',  # content_type
+            thumbnail_set.thumbnail_tiny.tell,  # size
             None
         )
     )

@@ -55,6 +55,19 @@ function SetUpDataGrid() {
                 width: 20
             },
             {
+                cellTemplate: function (container, options) {
+                    $("<div>")
+                        .append($("<img>", {
+                            "src": options.data.full_url,
+                            "width": '100px'
+                        }))
+                        .appendTo(container);
+                },
+                allowFiltering: false,
+                allowSorting: false,
+                width: 116
+            },
+            {
                 dataField: "id",
                 dataType: "number",
                 visible: false

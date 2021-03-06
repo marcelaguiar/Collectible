@@ -7,10 +7,12 @@ from django.core.files.storage import get_storage_class
 
 
 def get_all_bottle_caps(request):
-    data = BottleCap.objects.all().values('id', 'company', 'brand', 'product', 'variety', 'beverage_type', 'region',
-                                          'date_acquired')
+    items = BottleCap.objects.all().values('id', 'company', 'brand', 'product', 'variety', 'beverage_type', 'region',
+                                           'date_acquired', relative_url=F('image_thumbnail_tiny'))
 
-    return JsonResponse(list(data), safe=False)
+    result_list = add_full_urls(items)
+
+    return JsonResponse(list(result_list), safe=False)
 
 
 def get_all_bottle_caps_by_collection(request, collection_id):
