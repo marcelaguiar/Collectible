@@ -619,3 +619,31 @@ def delete_account(request, target_user_id):
 @staff_member_required
 def admin_tools(request):
     return render(request, 'collectionsapp/admin_tools.html')
+
+
+@staff_member_required
+def refresh_thumbnails(request):
+    caps = BottleCap.objects.all()
+    print("Starting...")
+    total_count = caps.count()
+    i = 1
+    for cap in caps:
+        print(str(i) + "/" + str(total_count))
+
+        thumbnail_set = image_helper.ThumbnailSet(cap.image)
+
+        cap.image_thumbnail_tiny.save(
+            cap.image.name,
+            InMemoryUploadedFile(
+                thumbnail_set.thumbnail_tiny,
+                None,  # field_name
+                'my_image.jpg',  # file name
+                'image/jpeg',  # content_type
+                thumbnail_set.thumbnail_tiny.tell,  # size
+                None
+            )
+        )
+        i += 1
+
+    print("Done")
+    return render(request, 'collectionsapp/admin_tools.html')

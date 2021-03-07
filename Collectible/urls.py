@@ -13,6 +13,7 @@ urlpatterns = [
     path('add_to_collection/<int:collection_id>/', views.add_to_collection, name='add_to_collection'),
     path('admin/', admin.site.urls),
     path('admin_tools/', views.admin_tools, name='admin_tools'),
+    path('refresh_thumbnails/', views.refresh_thumbnails, name='refresh_thumbnails'),
     path('bottle_cap/<int:item_id>/', views.bottle_cap, name='bottle_cap'),
     path('collections/', views.collections, name='collections'),
     path('collection_types/', views.collection_types, name='collection_types'),
