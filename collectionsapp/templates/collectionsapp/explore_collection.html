@@ -34,10 +34,20 @@
         {% if view == "image" %}
             <div class="btn btn-outline-secondary active">Image</div>
             <a class="btn btn-outline-secondary"
+               href="{% url 'explore_collection' collection_id 'imagedetails' %}" role="button">Image & Details</a>
+            <a class="btn btn-outline-secondary"
+               href="{% url 'explore_collection' collection_id 'details' %}" role="button">Details</a>
+        {% elif view == "imagedetails" %}
+            <a class="btn btn-outline-secondary"
+               href="{% url 'explore_collection' collection_id 'image' %}" role="button">Image</a>
+            <div class="btn btn-outline-secondary active">Image & Details</div>
+            <a class="btn btn-outline-secondary"
                href="{% url 'explore_collection' collection_id 'details' %}" role="button">Details</a>
         {% else %}
             <a class="btn btn-outline-secondary"
                href="{% url 'explore_collection' collection_id 'image' %}" role="button">Image</a>
+            <a class="btn btn-outline-secondary"
+               href="{% url 'explore_collection' collection_id 'imagedetails' %}" role="button">Image & Details</a>
             <div class="btn btn-outline-secondary active">Details</div>
         {% endif %}
     </div>
@@ -62,7 +72,7 @@
 
             <input type="hidden" id="initial_load_quantity" value="{{ initial_load_quantity }}">
         {% endif %}
-    {% elif view == 'imageanddetails' or view == 'details'%}
+    {% elif view == 'imagedetails' or view == 'details' %}
         <div id="gridContainer"></div>
     {% else %}
     {% endif %}
@@ -71,7 +81,7 @@
 {% endblock %}
 
 {% block dedicated_scripts %}
-    {% if view == 'imageanddetails' or view == 'details'%}
+    {% if view == 'details' or view == "imagedetails" %}
         <script src="{% static "collectionsapp/javascript/search_collection.js" %}"></script>
     {% elif view == "image" %}
         <script src="{% static "collectionsapp/javascript/image_grid.js" %}"></script>

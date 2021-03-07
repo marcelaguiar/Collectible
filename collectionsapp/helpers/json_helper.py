@@ -1,5 +1,3 @@
-import os
-
 from collectionsapp.models import BeverageType, BottleCap, Collection
 from django.db.models import Count, F
 from django.http import JsonResponse
@@ -16,18 +14,22 @@ def get_all_bottle_caps(request):
 
 
 def get_all_bottle_caps_by_collection(request, collection_id):
+    print("A")
     data = BottleCap.objects.filter(collection_id=collection_id)\
         .values('id', 'company', 'brand', 'product', 'variety', 'beverage_type', 'region', 'date_acquired')
 
     return JsonResponse(list(data), safe=False)
 
 
-'''def get_all_bottle_caps_with_primary_image(request):
-    data = CollectionItemImage.objects.select_related(order_in_collection=1).values()
+def get_all_bottle_caps_with_image_by_collection(request, collection_id):
+    print("B")
+    items = BottleCap.objects.filter(collection_id=collection_id)\
+        .values('id', 'company', 'brand', 'product', 'variety', 'beverage_type', 'region', 'date_acquired',
+                relative_url=F('image_thumbnail_tiny'))
 
-    data = data.values('id', 'company', 'brand', 'product', 'variety', 'beverage_type', 'date_acquired')
+    result_list = add_full_urls(items)
 
-    return JsonResponse(list(data), safe=False)'''
+    return JsonResponse(list(result_list), safe=False)
 
 
 def get_all_beverage_types(request):
@@ -67,6 +69,7 @@ def get_by_tag(request, slug):
 
 
 def add_full_urls(items):
+    print("@")
     # instance of the current storage class
     media_storage = get_storage_class()()
 

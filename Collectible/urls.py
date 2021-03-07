@@ -32,6 +32,8 @@ urlpatterns = [
     path('get_all_bottle_caps/', json_helper.get_all_bottle_caps),
     path('get_all_bottle_caps_by_collection/<int:collection_id>/', json_helper.get_all_bottle_caps_by_collection,
          name='get_all_bottle_caps_by_collection'),
+    path('get_all_bottle_caps_with_image_by_collection/<int:collection_id>/',
+         json_helper.get_all_bottle_caps_with_image_by_collection, name='get_all_bottle_caps_with_image_by_collection'),
     path('get_all_tags/', json_helper.get_all_tags),
     path('get_by_tag_and_collection/<slug:slug>/<int:collection_id>/', json_helper.get_by_tag_and_collection),
     path('get_by_tag/<slug:slug>/', json_helper.get_by_tag),

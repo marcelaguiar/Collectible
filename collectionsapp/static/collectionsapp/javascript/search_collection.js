@@ -1,8 +1,10 @@
 if(!!document.getElementById("gridContainer")) {
-    SetUpDataGrid();
+    let urlStr = String(window.location);
+    let layout = urlStr.substring(urlStr.lastIndexOf("/") + 1, urlStr.length)
+    SetUpDataGrid(layout);
 }
 
-function SetUpDataGrid() {
+function SetUpDataGrid(layout) {
     let collection_id = 0;
 
     if(!!document.getElementById("collection-id")) {
@@ -20,8 +22,18 @@ function SetUpDataGrid() {
         sort: "name"
     };
 
+    // Set data source (more efficient in cases when we don't need images)
+    let dataSource = "";
+    if(layout === "details") {
+        dataSource = "/get_all_bottle_caps_by_collection/" + collection_id +"/"
+    }
+    else if(layout === "imagedetails") {
+        dataSource = "/get_all_bottle_caps_with_image_by_collection/" + collection_id +"/"
+    }
+
+    // Set up data grid
     $("#gridContainer").dxDataGrid({
-        dataSource: "/get_all_bottle_caps_by_collection/" + collection_id +"/",
+        dataSource: dataSource,
         searchPanel: {
             highlightCaseSensitive: false,
             highlightSearchText: true,
@@ -53,6 +65,20 @@ function SetUpDataGrid() {
                 allowSearch: false,
                 width: 20
             },
+            (layout == "imagedetails" ? {
+                cellTemplate: function (container, options) {
+                    $("<div>")
+                        .append($("<img>", {
+                            "src": options.data.full_url,
+                            "width": '100px'
+                        }))
+                        .appendTo(container);
+                },
+                allowFiltering: false,
+                allowSorting: false,
+                width: 116
+            } : {}
+            ),
             {
                 dataField: "id",
                 dataType: "number",
@@ -61,8 +87,6 @@ function SetUpDataGrid() {
             {
                 dataField: "company",
                 dataType: "string",
-                filterValue: "unidentified",
-                selectedFilterOperation: "<>"
             },
             {
                 dataField: "brand",
