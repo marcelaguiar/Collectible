@@ -626,14 +626,15 @@ def refresh_thumbnails(request, collection_item_id):
     # get cap
     cap = BottleCap.objects.get(pk=collection_item_id)
 
-    # generate thumbnail
+    # generate thumbnail set
     thumbnail_set = image_helper.ThumbnailSet(cap.image)
 
-    # add thumbnail to in-memory cap
+    # add thumbnails to in-memory cap
+    cap.image_thumbnail = thumbnail_set.thumbnail
     cap.image_thumbnail_tiny = thumbnail_set.thumbnail_tiny
 
-    # save thumbnail
-    cap.save(update_fields=['image_thumbnail_tiny'])
+    # save thumbnails
+    cap.save(update_fields=['image_thumbnail_tiny', 'image_thumbnail'])
 
     cap.image_thumbnail_tiny.save(
         os.path.basename(cap.image.name),
@@ -643,6 +644,18 @@ def refresh_thumbnails(request, collection_item_id):
             'my_image.jpg',  # name
             'image/jpeg',  # content_type
             thumbnail_set.thumbnail_tiny.tell,  # size
+            None  # charset
+        )
+    )
+
+    cap.image_thumbnail.save(
+        os.path.basename(cap.image.name),
+        InMemoryUploadedFile(
+            thumbnail_set.thumbnail,  # file
+            None,  # field_name
+            'my_image.jpg',  # name
+            'image/jpeg',  # content_type
+            thumbnail_set.thumbnail.tell,  # size
             None  # charset
         )
     )
