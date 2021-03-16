@@ -80,6 +80,6 @@ def add_full_urls(items):
 
 
 def get_all_collection_item_ids(request):
-    data = BottleCap.objects.all().values('id')
+    data = BottleCap.objects.filter(image_thumbnail_tiny__isnull=True).values('id')
 
     return JsonResponse(list(data), safe=False)
