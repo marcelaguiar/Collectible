@@ -520,7 +520,7 @@ def search(request):
 
     # log search
     new_search_action = SearchAction(
-        timestamp=datetime.datetime.now(),
+        timestamp=datetime.datetime.now(tz=datetime.timezone.utc),
         user=None if request.user.is_anonymous else request.user,
         text=criteria
     )
