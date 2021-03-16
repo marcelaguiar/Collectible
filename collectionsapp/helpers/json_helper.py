@@ -14,7 +14,6 @@ def get_all_bottle_caps(request):
 
 
 def get_all_bottle_caps_by_collection(request, collection_id):
-    print("A")
     data = BottleCap.objects.filter(collection_id=collection_id)\
         .values('id', 'company', 'brand', 'product', 'variety', 'beverage_type', 'region', 'date_acquired')
 
@@ -22,7 +21,6 @@ def get_all_bottle_caps_by_collection(request, collection_id):
 
 
 def get_all_bottle_caps_with_image_by_collection(request, collection_id):
-    print("B")
     items = BottleCap.objects.filter(collection_id=collection_id)\
         .values('id', 'company', 'brand', 'product', 'variety', 'beverage_type', 'region', 'date_acquired',
                 relative_url=F('image_thumbnail_tiny'))
@@ -69,7 +67,6 @@ def get_by_tag(request, slug):
 
 
 def add_full_urls(items):
-    print("@")
     # instance of the current storage class
     media_storage = get_storage_class()()
 

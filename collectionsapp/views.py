@@ -447,8 +447,9 @@ def edit_collection_item(request, collection_item_id):
                 new_image = form.cleaned_data['image']
 
                 thumbnail_set = image_helper.ThumbnailSet(new_image)
+
                 collection_item.image_thumbnail.save(
-                    new_image.name,
+                    os.path.basename(new_image.name),
                     InMemoryUploadedFile(
                         thumbnail_set.thumbnail,
                         None,               # field_name
@@ -460,7 +461,7 @@ def edit_collection_item(request, collection_item_id):
                 )
 
                 collection_item.image_thumbnail_tiny.save(
-                    new_image.name,
+                    os.path.basename(new_image.name),
                     InMemoryUploadedFile(
                         thumbnail_set.thumbnail_tiny,
                         None,               # field_name
@@ -570,7 +571,6 @@ def create_collection_item_from_image(request):
     )
     bc.save()
 
-    # TODO: Test this
     bc.image_thumbnail.save(
         uploaded_image.name,
         InMemoryUploadedFile(
@@ -623,20 +623,27 @@ def admin_tools(request):
 
 @staff_member_required
 def refresh_thumbnails(request, collection_item_id):
-    print(collection_item_id)
+    # get cap
     cap = BottleCap.objects.get(pk=collection_item_id)
 
+    # generate thumbnail
     thumbnail_set = image_helper.ThumbnailSet(cap.image)
 
+    # add thumbnail to in-memory cap
+    cap.image_thumbnail_tiny = thumbnail_set.thumbnail_tiny
+
+    # save thumbnail
+    cap.save(update_fields=['image_thumbnail_tiny'])
+
     cap.image_thumbnail_tiny.save(
-        cap.image.name,
+        os.path.basename(cap.image.name),
         InMemoryUploadedFile(
-            thumbnail_set.thumbnail_tiny,
+            thumbnail_set.thumbnail_tiny,  # file
             None,  # field_name
-            'my_image.jpg',  # file name
+            'my_image.jpg',  # name
             'image/jpeg',  # content_type
             thumbnail_set.thumbnail_tiny.tell,  # size
-            None
+            None  # charset
         )
     )
 
