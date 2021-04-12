@@ -103,10 +103,6 @@ function SetUpDataGrid() {
             {
                 dataField: "region",
                 dataType: "string"
-            },
-            {
-                dataField: "date_acquired",
-                dataType: "date"
             }
         ]
     });

@@ -6,7 +6,7 @@ from django.core.files.storage import get_storage_class
 
 def get_all_bottle_caps(request):
     items = BottleCap.objects.all().values('id', 'company', 'brand', 'product', 'variety', 'beverage_type', 'region',
-                                           'date_acquired', relative_url=F('image_thumbnail_tiny'))
+                                           relative_url=F('image_thumbnail_tiny'))
 
     result_list = add_full_urls(items)
 
@@ -15,14 +15,14 @@ def get_all_bottle_caps(request):
 
 def get_all_bottle_caps_by_collection(request, collection_id):
     data = BottleCap.objects.filter(collection_id=collection_id)\
-        .values('id', 'company', 'brand', 'product', 'variety', 'beverage_type', 'region', 'date_acquired')
+        .values('id', 'company', 'brand', 'product', 'variety', 'beverage_type', 'region')
 
     return JsonResponse(list(data), safe=False)
 
 
 def get_all_bottle_caps_with_image_by_collection(request, collection_id):
     items = BottleCap.objects.filter(collection_id=collection_id)\
-        .values('id', 'company', 'brand', 'product', 'variety', 'beverage_type', 'region', 'date_acquired',
+        .values('id', 'company', 'brand', 'product', 'variety', 'beverage_type', 'region',
                 relative_url=F('image_thumbnail_tiny'))
 
     result_list = add_full_urls(items)

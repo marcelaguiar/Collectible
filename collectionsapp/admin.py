@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import BeverageType, BottleCap, CollectionType, Collection, MethodAcquired, SearchAction
+from .models import BeverageType, BottleCap, CollectionType, Collection, SearchAction
 
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
@@ -19,5 +19,4 @@ admin.site.register(CollectionType)
 admin.site.register(BeverageType)
 admin.site.register(BottleCap)
 admin.site.register(Collection)
-admin.site.register(MethodAcquired)
 admin.site.register(SearchAction)

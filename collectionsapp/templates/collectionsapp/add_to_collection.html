@@ -39,8 +39,6 @@
                 {{ form.beverage_type|as_crispy_field  }}
                 {{ form.description|as_crispy_field  }}
                 {{ form.region|as_crispy_field  }}
-                {{ form.date_acquired|as_crispy_field  }}
-                {{ form.method_acquired|as_crispy_field  }}
                 {{ form.available_for_trade|as_crispy_field  }}
                 {{ form.text|as_crispy_field  }}
                 {{ form.underside|as_crispy_field  }}
@@ -57,7 +55,6 @@
 {% endblock %}
 
 {% block dedicated_scripts %}
-    <script src="{% static "collectionsapp/javascript/add_date_picker.js" %}"></script>
     <script src="{% static "collectionsapp/javascript/add_collection_item.js" %}"></script>
     <script src="{% static "collectionsapp/javascript/collection_item_form_image_header.js" %}"></script>
 {% endblock %}

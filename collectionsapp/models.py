@@ -48,9 +48,6 @@ class Collection(CommonInfo):
 
 
 class CollectionItem(CommonInfo):
-    date_acquired = models.DateField(default=date.today, verbose_name='Date Acquired')
-    method_acquired = models.ForeignKey('MethodAcquired', on_delete=models.PROTECT, blank=True, null=True,
-                                        verbose_name="Method Acquired")
     available_for_trade = models.BooleanField(default=False, verbose_name='Available For Trade')
     tags = TaggableManager(verbose_name='Tags', blank=True)
     description = models.CharField(max_length=512, blank=True, verbose_name='Description')
@@ -82,16 +79,6 @@ class BottleCap(CollectionItem):
 
 class BeverageType(CommonInfo):
     name = models.CharField(max_length=100, blank=False, verbose_name='Beverage type')
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        ordering = ['name']
-
-
-class MethodAcquired(CommonInfo):
-    name = models.CharField(max_length=100, blank=False, verbose_name='Method acquired')
 
     def __str__(self):
         return self.name

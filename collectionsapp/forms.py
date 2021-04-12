@@ -56,8 +56,6 @@ class BottleCapForm(forms.ModelForm):
             'beverage_type',
             'description',
             'region',
-            'date_acquired',
-            'method_acquired',
             'available_for_trade',
             'text',
             'underside',
@@ -77,14 +75,6 @@ class BottleCapForm(forms.ModelForm):
         self.fields['region'].widget.attrs.update({'placeholder': 'Region'})
         self.fields['underside'].widget.attrs.update({'placeholder': 'Underside'})
         self.fields['description'].widget.attrs.update({'placeholder': 'Description'})
-
-    def clean_date_acquired(self):
-        cleaned_data = super(BottleCapForm, self).clean()
-        date_acquired = cleaned_data.get("date_acquired")
-
-        if date_acquired > date.today():
-            raise forms.ValidationError("Date time cannot be in future")
-        return date_acquired
 
 
 '''class CollectionItemImageForm(forms.ModelForm):

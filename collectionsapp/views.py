@@ -565,7 +565,6 @@ def create_collection_item_from_image(request):
         image_thumbnail_tiny=thumbnail_set.thumbnail_tiny,
         created_by=uploader,
         modified_by=uploader,
-        date_acquired=current_timestamp.date(),
         collection=target_collection
 
     )
