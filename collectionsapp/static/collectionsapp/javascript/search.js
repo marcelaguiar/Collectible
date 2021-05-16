@@ -59,7 +59,8 @@ function SetUpDataGrid() {
                     $("<div>")
                         .append($("<img>", {
                             "src": options.data.full_url,
-                            "width": '100px'
+                            "width": '100px',
+                            "height": '100px'
                         }))
                         .appendTo(container);
                 },
