@@ -1,4 +1,4 @@
-asgiref==3.2.10
+asgiref==3.5.2
 astroid==2.4.1
 boto3==1.13.6
 botocore==1.16.6
@@ -6,7 +6,7 @@ certifi==2020.12.5
 chardet==4.0.0
 colorama==0.4.3
 dj-database-url==0.5.0
-Django==3.1.13
+Django==4.0.6
 django-crispy-forms==1.9.0
 django-eav2==0.11.1
 django-heroku==0.3.1
@@ -15,14 +15,15 @@ django-taggit==1.2.0
 docutils==0.14
 gunicorn==19.9.0
 idna==2.10
+image==1.5.33
 isort==4.3.21
 jmespath==0.9.4
 lazy-object-proxy==1.4.3
 mccabe==0.6.1
 piexif==1.1.3
-Pillow==9.0.0
-psycopg2==2.8.5
-psycopg2-binary==2.8.4
+Pillow==9.2.0
+psycopg2==2.8.6
+psycopg2-binary==2.8.6
 pylint==2.5.2
 python-dateutil==2.8.1
 pytz==2020.1
@@ -32,6 +33,7 @@ six==1.14.0
 sqlparse==0.3.1
 toml==0.10.0
 typed-ast==1.4.1
+tzdata==2022.1
 urllib3==1.26.5
 whitenoise==5.0.1
 wrapt==1.12.1
