@@ -15,6 +15,13 @@ import django_heroku
 from django.contrib.messages import constants as messages
 from django.utils.log import DEFAULT_LOGGING
 
+# REMOVE THIS AFTER PACKAGES SUPPORT DJANGO 4 BETTER #
+import django
+from django.utils.encoding import force_str, smart_str
+django.utils.encoding.force_text = force_str
+django.utils.encoding.smart_text = smart_str
+# REMOVE THIS AFTER PACKAGES SUPPORT DJANGO 4 BETTER #
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
