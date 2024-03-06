@@ -1,3 +1,5 @@
+Heroku is now dead. This project will be revived with fly.io railway.
+
 # Collectible
 A site for collections! Search, filter, sort, and tag collection items. Aimed at using machine learning to leverage image recognition for auto-suggestions of collection item details.
 
